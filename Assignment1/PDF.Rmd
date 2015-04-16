@@ -1,0 +1,38 @@
+---
+title: "Analise de gastos de parlamentares do congresso"
+author: "Rodolfo Viana"
+date: "15-04-2015"
+output: html_document
+---
+Ao analisar o documento de cota para exercicio da ativdade parlamentar, é possivel notar que algumas despesas são negativas ou tem o valor igual a zero. O que em outros casos poderia significar algum erro nos dados, nesse caso especifico isso acontece pois se trata de um bilhete de compensação. Significado que foi emitido um bilhete e não foi utilizado pelo deputado. 
+O caso de despesa negativa ocorre para a emissão de bilhete aéreo. Já o caso de despesa igual a zero ocorre quando o tipo é telefonia, significando que a despesa foi franqueada. 
+
+Já que em apenas um tipo de despesa pode ser negativo o mais indicado é que se tenha maior atenação para essa depensa, pois algumas metricas serão prejudicadas, como por exemplo, media, desvio padrão, variancia. Seria interesante tambem fazer dois tipos de analise, uma com todos os valores e uma segunda analise retirando os valores negativos. 
+
+Um outro fator que chamou minha atenação foi a quantidade de partidos politicos que tem representantes eleitos, um total de 28. Alem disso, existe deputados sem partidos. Falta descorbrir se isso é realmente possivel ou se é algum erro nos dados. 
+
+As despesas podem ser de 17 tipos diferentes. 
+
+```{r}
+
+library(dplyr)
+library(ggplot2) 
+
+file <- read.csv("Projetos/DataAnalysis/Assignment1/AnoAtual.csv")
+
+
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Fonte do documento:
+http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/dados-abertos-cota-parlamentar
+
+Mais explicações sobre o documento:
+http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/explicacoes-sobre-o-formato-dos-arquivos-xml

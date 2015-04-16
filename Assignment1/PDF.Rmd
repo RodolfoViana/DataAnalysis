@@ -4,32 +4,47 @@ author: "Rodolfo Viana"
 date: "15-04-2015"
 output: html_document
 ---
-Ao analisar o documento de cota para exercicio da ativdade parlamentar, é possivel notar que algumas despesas são negativas ou tem o valor igual a zero. O que em outros casos poderia significar algum erro nos dados, nesse caso especifico isso acontece pois se trata de um bilhete de compensação. Significado que foi emitido um bilhete e não foi utilizado pelo deputado. 
+Ao analisar o documento de cota para exercicio da ativdade parlamentar, é possivel notar que algumas despesas são negativas ou tem o valor igual a zero. O que em outros casos poderia significar algum erro nos dados, nesse caso especifico isso acontece pois se trata de um bilhete de compensação. Significando que foi emitido um bilhete e não foi utilizado pelo deputado. 
 O caso de despesa negativa ocorre para a emissão de bilhete aéreo. Já o caso de despesa igual a zero ocorre quando o tipo é telefonia, significando que a despesa foi franqueada. 
 
-Já que em apenas um tipo de despesa pode ser negativo o mais indicado é que se tenha maior atenação para essa depensa, pois algumas metricas serão prejudicadas, como por exemplo, media, desvio padrão, variancia. Seria interesante tambem fazer dois tipos de analise, uma com todos os valores e uma segunda analise retirando os valores negativos. 
+Já que apenas um tipo de despesa pode ter valor negativo o mais indicado é que se tenha maior atenação para essa depensa, pois algumas metricas serão prejudicadas, como por exemplo, media, desvio padrão, variancia. Seria interesante tambem fazer dois tipos de analise, uma com todos os valores e uma segunda analise retirando os valores negativos. 
 
 Um outro fator que chamou minha atenação foi a quantidade de partidos politicos que tem representantes eleitos, um total de 28. Alem disso, existe deputados sem partidos. Falta descorbrir se isso é realmente possivel ou se é algum erro nos dados. 
 
 As despesas podem ser de 17 tipos diferentes. 
 
 ```{r}
-
 library(dplyr)
 library(ggplot2) 
-
-file <- read.csv("Projetos/DataAnalysis/Assignment1/AnoAtual.csv")
-
-
+file <- read.csv("AnoAtual.csv")
+itemDescricao <- select(file, numSubCota, txtDescricao)
+itemDescricao <- itemDescricao[!duplicated(itemDescricao),]
+itemDescricao <- itemDescricao[order(itemDescricao$numSubCota), ]
+colnames(itemDescricao) <- c("Tipo", "Despesa")
+itemDescricao
 ```
 
-You can also embed plots, for example:
+É possivel notar que os nossos parlamentares gastam mais recuros da cota nos itens: **DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR**, **LOCAÇÃO OU FRETAMENTO DE VEÍCULOS AUTOMOTORES** e **MANUTENÇÃO DE ESCRITÓRIO DE APOIO À ATIVIDADE PARLAMENTAR**
 
 ```{r, echo=FALSE}
-plot(cars)
+groupedByNumSubCota <- group_by(file, numSubCota)
+valorLiquido <- summarise(groupedByNumSubCota, sum(vlrLiquido))
+colnames(valorLiquido) <- c("Tipo", "Descricao")
+valorLiquido <- valorLiquido[order(valorLiquido$Descricao), ]
+valorLiquido$Tipo <- as.character(valorLiquido$Tipo)
+ggplot(valorLiquido, aes(x=reorder(Tipo, -Descricao), y=Descricao)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Valor dos Gastos em Reais')
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Os tipos de despesas que mais variam e que portanto são mais desiguais são: **DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR**, **CONSULTORIAS  PESQUISAS E TRABALHOS TÉCNICOS** e **LOCAÇÃO OU FRETAMENTO DE AERONAVES** o valor ficou alto para esses tipos de despesas pois a variação dos valores dos gastos dessas despesas são altos. Quanto mais proximo de zero mais uniforme são os gastos.
+
+```{r}
+desvio <- summarise(groupedByNumSubCota, sd(vlrLiquido))
+colnames(desvio) <- c("Tipo", "Desvio")
+desvio$Tipo <- as.character(desvio$Tipo)
+ggplot(desvio, aes(x=reorder(Tipo, -Desvio), y=Desvio)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Variação em reais')  
+```
+
 
 Fonte do documento:
 http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/dados-abertos-cota-parlamentar

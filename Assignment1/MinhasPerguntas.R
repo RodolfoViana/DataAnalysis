@@ -12,13 +12,8 @@ txtPassageiro
 file <- read.csv("Projetos/DataAnalysis/Assignment1/AnoAtual.csv")
 fileBeneficiario <- select(file, txtDescricao, numSubCota, txtCNPJCPF, txtDescricaoEspecificacao, txtDescricao, txtBeneficiario)
 
-verificar o cnpj dessas empresas
+# Verificar o cnpj dessas empresas
 itemDescricao <- filter(fileBeneficiario, numSubCota == 999)
 
-numSubCota9 <- filter(fileBeneficiario, numSubCota == 9)
-
-test <- filter(fileBeneficiario, numSubCota == 9)
-tabelaCNPJAviao <- select(test, txtCNPJCPF, txtBeneficiario)
-tabelaCNPJAviaoUnique <- unique(tabelaCNPJAviao)
-cnpjcpg <- unique(test$txtCNPJCPF)
+ggplot(itemDescricao, aes(x=reorder(Tipo, -Descricao), y=Descricao)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Valor dos Gastos em Reais') + geom_bar(stat='identity',data=subset(valorLiquido,valorLiquido$Tipo==5),fill='blue') + scale_y_continuous(breaks = c(0,2000000,4000000,6000000))
 

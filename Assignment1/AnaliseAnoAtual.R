@@ -38,4 +38,3 @@ desvio <- summarise(groupedByNumSubCota, sd(vlrLiquido))
 desvio$Tipo <- as.character(desvio$Tipo)
 ggplot(desvio, aes(x=reorder(Tipo, -Desvio), y=Desvio)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Variação em reais') 
 
-# + scale_y_continuous(trans = "log")

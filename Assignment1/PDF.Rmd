@@ -4,7 +4,7 @@ author: "Rodolfo Viana"
 date: "15-04-2015"
 output: html_document
 ---
-```{r}
+```{r, message=FALSE}
 library(dplyr)
 library(ggplot2)
 ```

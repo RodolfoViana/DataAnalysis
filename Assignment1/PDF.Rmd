@@ -4,29 +4,31 @@ author: "Rodolfo Viana"
 date: "15-04-2015"
 output: html_document
 ---
-Ao analisar o documento de cota para exercicio da ativdade parlamentar, é possivel notar que algumas despesas são negativas ou tem o valor igual a zero. O que em outros casos poderia significar algum erro nos dados, nesse caso especifico isso acontece pois se trata de um bilhete de compensação. Significando que foi emitido um bilhete e não foi utilizado pelo deputado. 
-O caso de despesa negativa ocorre para a emissão de bilhete aéreo. Já o caso de despesa igual a zero ocorre quando o tipo é telefonia, significando que a despesa foi franqueada. 
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+Ao analisar o documento de cota para exercicio da ativdade parlamentar, é possivel notar que algumas despesas são negativas ou tem o valor igual a zero. O que em outros casos poderia significar algum erro nos dados, nesse caso especifico, isso acontece pois se trata de um bilhete de compensação. Significa que foi emitido um bilhete e não foi utilizado pelo deputado. 
+O caso de despesa negativa ocorre para a emissão de bilhete aéreo. Já o caso de despesa igual a zero ocorre quando o tipo é telefonia, o que significa que a despesa foi franqueada. 
 
-Já que apenas um tipo de despesa pode ter valor negativo o mais indicado é que se tenha maior atenação para essa depensa, pois algumas metricas serão prejudicadas, como por exemplo, media, desvio padrão, variancia. Seria interesante tambem fazer dois tipos de analise, uma com todos os valores e uma segunda analise retirando os valores negativos. 
+Já que apenas um tipo de despesa pode ter valor negativo o mais indicado é que se tenha maior atenação para esse tipo de depensa, pois algumas metricas serão "prejudicadas", como por exemplo, media, desvio padrão, variancia. Seria interesante tambem fazer dois tipos de analise, uma com todos os valores e uma segunda analise retirando os valores negativos. 
 
 Um outro fator que chamou minha atenação foi a quantidade de partidos politicos que tem representantes eleitos, um total de 28. Alem disso, existe deputados sem partidos. Falta descorbrir se isso é realmente possivel ou se é algum erro nos dados. 
 
 As despesas podem ser de 17 tipos diferentes. 
 
 ```{r}
-library(dplyr)
-library(ggplot2) 
 file <- read.csv("AnoAtual.csv")
-itemDescricao <- select(file, numSubCota, txtDescricao)
-itemDescricao <- itemDescricao[!duplicated(itemDescricao),]
-itemDescricao <- itemDescricao[order(itemDescricao$numSubCota), ]
-colnames(itemDescricao) <- c("Tipo", "Despesa")
-itemDescricao
+itemDescricao <- select(file, txtDescricao, numSubCota)
+itemDescricaoOrder <- itemDescricao[!duplicated(itemDescricao),]
+itemDescricaoOrder <- itemDescricaoOrder[order(itemDescricaoOrder$numSubCota), ]
+colnames(itemDescricaoOrder) <- c("Despesa", "Tipo")
+itemDescricaoOrder
 ```
 
 É possivel notar que os nossos parlamentares gastam mais recuros da cota nos itens: **DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR**, **LOCAÇÃO OU FRETAMENTO DE VEÍCULOS AUTOMOTORES** e **MANUTENÇÃO DE ESCRITÓRIO DE APOIO À ATIVIDADE PARLAMENTAR**
 
-```{r, echo=FALSE}
+```{r}
 groupedByNumSubCota <- group_by(file, numSubCota)
 valorLiquido <- summarise(groupedByNumSubCota, sum(vlrLiquido))
 colnames(valorLiquido) <- c("Tipo", "Descricao")
@@ -36,7 +38,7 @@ ggplot(valorLiquido, aes(x=reorder(Tipo, -Descricao), y=Descricao)) + geom_bar(s
 ```
 
 
-Os tipos de despesas que mais variam e que portanto são mais desiguais são: **DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR**, **CONSULTORIAS  PESQUISAS E TRABALHOS TÉCNICOS** e **LOCAÇÃO OU FRETAMENTO DE AERONAVES** o valor ficou alto para esses tipos de despesas pois a variação dos valores dos gastos dessas despesas são altos. Quanto mais proximo de zero mais uniforme são os gastos.
+Os tipos de despesas que mais variam e que portanto são mais desiguais são: **DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR**, **CONSULTORIAS  PESQUISAS E TRABALHOS TÉCNICOS** e **LOCAÇÃO OU FRETAMENTO DE AERONAVES** 
 
 ```{r}
 desvio <- summarise(groupedByNumSubCota, sd(vlrLiquido))
@@ -44,6 +46,8 @@ colnames(desvio) <- c("Tipo", "Desvio")
 desvio$Tipo <- as.character(desvio$Tipo)
 ggplot(desvio, aes(x=reorder(Tipo, -Desvio), y=Desvio)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Variação em reais')  
 ```
+
+O valor ficou alto para esses tipos de despesas pois a variação dos valores dos gastos dessas despesas são altos. Quanto mais proximo de zero mais uniforme são os gastos.
 
 
 Fonte do documento:

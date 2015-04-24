@@ -13,9 +13,10 @@ itemDescricao <- filter(fileIdBeneficiario, numSubCota == 999)
 empresaAerea <- itemDescricao$txtBeneficiario
 empresaAerea <- as.character(empresaAerea)
 frameEmpresaAerea <- as.data.frame(table(empresaAerea))
-ggplot(frameEmpresaAerea, aes(x=reorder(empresaAerea, -Freq), y=Freq, fill = empresaAerea)) + geom_bar(stat="identity") + labs(x='Empresas Aéreas', y='Quantidade de bilhetes emitidos') + 
+ggplot(frameEmpresaAerea, aes(x=reorder(empresaAerea, -Freq), y=Freq, fill = empresaAerea)) + geom_bar(stat="identity") + labs(y='Quantidade de bilhetes emitidos') + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.background=element_blank(),  
-        legend.title=element_blank(), axis.text.x=element_blank(), axis.line=element_blank()) 
+        legend.title=element_blank(), axis.text.x=element_blank(), axis.line=element_blank(), axis.title.x=element_blank(), axis.ticks=element_blank()) + 
+  scale_x_discrete(breaks = 1:5) 
 # geom_bar(stat='identity',data=subset(valorLiquido,valorLiquido$Tipo==5),fill='blue') 
 #grafico de pizza para comparar azul com avianca e as D+
 

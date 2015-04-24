@@ -24,12 +24,17 @@ fileIdBeneficiario <- filter(fileIdBeneficiario, numSubCota == 999)
 empresaAerea <- fileIdBeneficiario$txtBeneficiario
 empresaAerea <- as.character(empresaAerea)
 frameEmpresaAerea <- as.data.frame(table(empresaAerea))
-ggplot(frameEmpresaAerea, aes(x=reorder(empresaAerea, -Freq), y=Freq)) + geom_bar(stat="identity") + labs(x='Empresas Aéreas', y='Quantidade de bilhetes emitidos') + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggplot(frameEmpresaAerea, aes(x=reorder(empresaAerea, -Freq), y=Freq, fill = empresaAerea)) + 
+  geom_bar(stat="identity") + 
+  labs(y='Quantidade de bilhetes emitidos') + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.background=element_blank(),  
+  legend.title=element_blank(), axis.text.x=element_blank(), axis.line=element_blank(), axis.title.x=element_blank(), axis.ticks=element_blank()) + 
+  scale_x_discrete(breaks = 1:5) 
 ```
 
 É possivel notar que a grande favorita pelos nossos parlamentares é a empresa aérea Avianca, seguida pela empresa Azul. Um fator interesante nessa analise foi o surgimento da empresa PASSAREDO em quarto lugar e a empresa TAM que é considerada a maior empresa aérea do Brasil ocupando o quinto lugar. Nenhuma outra empresa aérea apareceu nos dados analisados. 
 
-```{r}
+```{r, fig.align='center'}
 
 frameEmpresaAerea$Freq <- as.numeric(frameEmpresaAerea$Freq)
 ggplot(frameEmpresaAerea, aes(x = "", y = Freq, fill = empresaAerea)) +
@@ -41,6 +46,47 @@ ggplot(frameEmpresaAerea, aes(x = "", y = Freq, fill = empresaAerea)) +
 ```
 
 É possivel notar no grafico acima que as empresas Avianca e Azul praticamente dominam a preferencia dos parlamentares.
+
+
+Ainda levando em conta os bilhetes aéreos, fiz uma analise para saber quais são os 10 parlamentares que mais utilizaram esse recurso. Levando em consideração os dados que estão no portal da transparência da câmara dos deputados do ano de 2015.
+
+```{r, fig.align='center'}
+fileparlamentar <- select(file, numSubCota, txNomeParlamentar)
+bilheteaereo <- filter(fileparlamentar, numSubCota == 999)
+
+bilheteaereo <- bilheteaereo$txNomeParlamentar
+bilheteaereo <- as.character(bilheteaereo)
+bilheteaereo <- as.data.frame(table(bilheteaereo))
+bilheteaereo <- bilheteaereo[order(-bilheteaereo$Freq),] 
+bilheteaereohead <- head(bilheteaereo, 10)
+ggplot(bilheteaereohead, aes(x=reorder(bilheteaereo, -Freq), y=Freq)) + 
+  geom_bar(stat="identity") + 
+  labs(x='Nome do parlamentar', y='Quantidade de bilhetes emitidos') + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.background=element_blank())
+```
+
+É possivel notar que os parlamentares Aureo e Paulo Freire já emitiram mais de 60 bilhetes aéreos cada. O parlamentar Aureo até o momento tem 69 bilhetes e o parlamentar Paulo Freire tem 65.
+
+Para se ter uma visão geral da quantidade de bilhetes aéreos emitidos por cada parlamentar é importante observar o proximo gráfico. Onde cada ponto no grafico representa um parlamentar. 
+
+```{r, fig.align='center'}
+ggplot(bilheteaereo, aes(x=bilheteaereo, y=Freq)) + geom_boxplot( stat = "boxplot")
+```
+
+Com esse gráfico acima é possivel notar que a maioria dos parlamentares, sendo mais exato 75%, comprou menos de 14 bilhetes aéreos em 2015.  Podemos observar também que apenas 27 parlamentares compraram mais de 30 bilhetes aéreos. 
+
+
+Para se ter uma melhor visão desses dados, observe o proximo gráfico. 
+
+
+```{r}
+boxbilhete <- bilheteaereo
+boxbilhete["Col"] <- "Parlamentar"
+boxbilhete$bilheteaereo <- NULL
+boxplot(Freq~Col,data=boxbilhete)
+ggplot(boxbilhete, aes(y=Freq, x=Col)) + geom_boxplot( stat = "boxplot")
+```
+
 
 
 

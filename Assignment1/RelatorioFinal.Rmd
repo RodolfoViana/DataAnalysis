@@ -11,7 +11,7 @@ empresasAerea <- data.frame(Rank = c(1, 2, 3, 4, 5),  Empresa = c("TAM", "GOL", 
 print(empresasAerea, row.names = FALSE)
 ```
 
-Por esse motivo investiquei se esse os nosso parlamentares compram passagens apenas de uma ou outra empresa aérea ou se todas as grandes empresas aéreas são beneficiadas. 
+Por esse motivo investiquei se os nosso parlamentares compram passagens apenas de uma ou outra empresa aérea ou se todas as grandes empresas aéreas são beneficiadas. 
 Para isso utilizei os dados disponiveis no portal da transparência da câmara dos deputados do ano de 2015. 
 
 ```{r, message=FALSE, fig.align='center'}
@@ -29,9 +29,18 @@ ggplot(frameEmpresaAerea, aes(x=reorder(empresaAerea, -Freq), y=Freq)) + geom_ba
 
 É possivel notar que a grande favorita pelos nossos parlamentares é a empresa aérea Avianca, seguida pela empresa Azul. Um fator interesante nessa analise foi o surgimento da empresa PASSAREDO em quarto lugar e a empresa TAM que é considerada a maior empresa aérea do Brasil ocupando o quinto lugar. Nenhuma outra empresa aérea apareceu nos dados analisados. 
 
+```{r}
 
+frameEmpresaAerea$Freq <- as.numeric(frameEmpresaAerea$Freq)
+ggplot(frameEmpresaAerea, aes(x = "", y = Freq, fill = empresaAerea)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 90, direction = 1) +
+  labs(title = "Empresas Aérea") +
+  theme(axis.text.x=element_blank(), legend.title=element_blank(), axis.title.x=element_blank(), axis.title.y=element_blank(), panel.background=element_blank())
 
+```
 
+É possivel notar no grafico acima que as empresas Avianca e Azul praticamente dominam a preferencia dos parlamentares.
 
 
 

@@ -1,0 +1,83 @@
+---
+title: "RelatorioFinal"
+author: "Rodolfo Viana"
+date: "23-04-2015"
+output: html_document
+---
+Segundo a Agência Nacional de Aviação Civil (Anac), às 5 maiores companhias aéreas do Brasil são: 
+
+```{r, message=FALSE}
+empresasAerea <- data.frame(Rank = c(1, 2, 3, 4, 5),  Empresa = c("TAM", "GOL", "Azul", "Avianca Brasil", "Trip"))
+print(empresasAerea, row.names = FALSE)
+```
+
+Por esse motivo investiquei se esse os nosso parlamentares compram passagens apenas de uma ou outra empresa aérea ou se todas as grandes empresas aéreas são beneficiadas. 
+Para isso utilizei os dados disponiveis no portal da transparência da câmara dos deputados do ano de 2015. 
+
+```{r, message=FALSE, fig.align='center'}
+library(dplyr)
+library(ggplot2)
+file <- read.csv("AnoAtual.csv")
+
+fileIdBeneficiario <- select(file, numSubCota, txtBeneficiario)
+fileIdBeneficiario <- filter(fileIdBeneficiario, numSubCota == 999)
+empresaAerea <- fileIdBeneficiario$txtBeneficiario
+empresaAerea <- as.character(empresaAerea)
+frameEmpresaAerea <- as.data.frame(table(empresaAerea))
+ggplot(frameEmpresaAerea, aes(x=reorder(empresaAerea, -Freq), y=Freq)) + geom_bar(stat="identity") + labs(x='Empresas Aéreas', y='Quantidade de bilhetes emitidos') + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+É possivel notar que a grande favorita pelos nossos parlamentares é a empresa aérea Avianca, seguida pela empresa Azul. Um fator interesante nessa analise foi o surgimento da empresa PASSAREDO em quarto lugar e a empresa TAM que é considerada a maior empresa aérea do Brasil ocupando o quinto lugar. Nenhuma outra empresa aérea apareceu nos dados analisados. 
+
+
+
+
+
+
+
+Ao analisar o documento de cota para exercicio da ativdade parlamentar, é possivel notar que algumas despesas são negativas ou tem o valor igual a zero. O que em outros casos poderia significar algum erro nos dados, nesse caso especifico, isso acontece pois se trata de um bilhete de compensação. Significa que foi emitido um bilhete e não foi utilizado pelo deputado. 
+O caso de despesa negativa ocorre para a emissão de bilhete aéreo. Já o caso de despesa igual a zero ocorre quando o tipo é telefonia, o que significa que a despesa foi franqueada. 
+
+Já que apenas um tipo de despesa pode ter valor negativo o mais indicado é que se tenha maior atenação para esse tipo de depensa, pois algumas metricas serão "prejudicadas", como por exemplo, media, desvio padrão, variancia. Seria interesante tambem fazer dois tipos de analise, uma com todos os valores e uma segunda analise retirando os valores negativos. 
+
+Um outro fator que chamou minha atenação foi a quantidade de partidos politicos que tem representantes eleitos, um total de 28. Alem disso, existe deputados sem partidos. Falta descorbrir se isso é realmente possivel ou se é algum erro nos dados. 
+
+As despesas podem ser de 17 tipos diferentes. 
+```{r, message=FALSE}
+itemDescricao <- select(file, txtDescricao, numSubCota)
+itemDescricaoOrder <- itemDescricao[!duplicated(itemDescricao),]
+itemDescricaoOrder <- itemDescricaoOrder[order(itemDescricaoOrder$numSubCota), ]
+colnames(itemDescricaoOrder) <- c("Despesa", "Tipo")
+itemDescricaoOrder <- select(itemDescricaoOrder, Tipo, Despesa)
+print(itemDescricaoOrder, row.names = FALSE)
+```
+
+É possivel notar que os nossos parlamentares gastam mais recuros da cota nos itens: **DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR**, **LOCAÇÃO OU FRETAMENTO DE VEÍCULOS AUTOMOTORES** e **MANUTENÇÃO DE ESCRITÓRIO DE APOIO À ATIVIDADE PARLAMENTAR**
+
+```{r, fig.align='center'}
+groupedByNumSubCota <- group_by(file, numSubCota)
+valorLiquido <- summarise(groupedByNumSubCota, sum(vlrLiquido))
+colnames(valorLiquido) <- c("Tipo", "Descricao")
+valorLiquido <- valorLiquido[order(valorLiquido$Descricao), ]
+valorLiquido$Tipo <- as.character(valorLiquido$Tipo)
+ggplot(valorLiquido, aes(x=reorder(Tipo, -Descricao), y=Descricao)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Valor dos Gastos em Reais')
+```
+
+
+Os tipos de despesas que mais variam e que portanto são mais desiguais são: **DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR**, **CONSULTORIAS  PESQUISAS E TRABALHOS TÉCNICOS** e **LOCAÇÃO OU FRETAMENTO DE AERONAVES** 
+
+```{r, fig.align='center'}
+desvio <- summarise(groupedByNumSubCota, sd(vlrLiquido))
+colnames(desvio) <- c("Tipo", "Desvio")
+desvio$Tipo <- as.character(desvio$Tipo)
+ggplot(desvio, aes(x=reorder(Tipo, -Desvio), y=Desvio)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Variação em reais')  
+```
+
+O valor ficou alto para esses tipos de despesas pois a variação dos valores dos gastos dessas despesas são altos. Quanto mais proximo de zero mais uniforme são os gastos.
+
+
+Fonte do documento:
+<http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/dados-abertos-cota-parlamentar>
+
+Mais explicações sobre o documento:
+<http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/explicacoes-sobre-o-formato-dos-arquivos-xml>

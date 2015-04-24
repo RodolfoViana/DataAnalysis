@@ -70,7 +70,7 @@ ggplot(bilheteaereohead, aes(x=reorder(bilheteaereo, -Freq), y=Freq)) +
 Para se ter uma visão geral da quantidade de bilhetes aéreos emitidos por cada parlamentar é importante observar o proximo gráfico. Onde cada ponto no grafico representa um parlamentar. 
 
 ```{r, fig.align='center'}
-ggplot(bilheteaereo, aes(x=bilheteaereo, y=Freq)) + geom_boxplot( stat = "boxplot")
+
 ```
 
 Com esse gráfico acima é possivel notar que a maioria dos parlamentares, sendo mais exato 75%, comprou menos de 14 bilhetes aéreos em 2015.  Podemos observar também que apenas 27 parlamentares compraram mais de 30 bilhetes aéreos. 
@@ -79,12 +79,16 @@ Com esse gráfico acima é possivel notar que a maioria dos parlamentares, sendo
 Para se ter uma melhor visão desses dados, observe o proximo gráfico. 
 
 
-```{r}
+```{r, fig.align='center'}
 boxbilhete <- bilheteaereo
 boxbilhete["Col"] <- "Parlamentar"
 boxbilhete$bilheteaereo <- NULL
-boxplot(Freq~Col,data=boxbilhete)
-ggplot(boxbilhete, aes(y=Freq, x=Col)) + geom_boxplot( stat = "boxplot")
+ggplot(boxbilhete, aes(y=Freq, x=Col)) + geom_boxplot( stat = "boxplot")  + 
+  theme(panel.background=element_blank(),  
+        legend.title=element_blank(), axis.text.x=element_blank(), axis.title.y=element_blank(), axis.line=element_blank(), 
+        axis.title.x=element_blank(), axis.ticks=element_blank()) + 
+  scale_y_continuous(breaks = round(seq(min(boxbilhete$Freq), max(boxbilhete$Freq), by = 10),))
+
 ```
 
 

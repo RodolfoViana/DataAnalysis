@@ -63,7 +63,8 @@ colnames(parlamentarVlrGlosa) <- c("Parlamentar", "glosa")
 
 parlamentarVlrGlosaOrder <- parlamentarVlrGlosa[order(-parlamentarVlrGlosa$glosa),] 
 parlamentarVlrGlosaHead <- head(parlamentarVlrGlosaOrder, 10)
-ggplot(parlamentarVlrGlosaHead, aes(x=reorder(Parlamentar, -glosa), y=glosa)) + geom_bar(stat="identity") + labs(x='Nome do Parlamentar', y='Valor Pago Pelo Parlamentar') + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggplot(parlamentarVlrGlosaHead, aes(x=reorder(Parlamentar, -glosa), y=glosa)) + geom_bar(stat="identity") + 
+  labs(x='Nome do Parlamentar', y='Valor Pago Pelo Parlamentar') + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
 ggplot(parlamentarVlrGlosa, aes(x=Parlamentar, y=glosa)) + geom_boxplot( stat = "boxplot")
@@ -90,7 +91,8 @@ frameEscritorio <- as.data.frame(table(escritorio))
 frameEscritorio <- frameEscritorio[order(-frameEscritorio$Freq),] 
 frameEscritorioHead <- head(frameEscritorio, 10)
 frameEscritorioHead["Id"] <- c(1:10)
-ggplot(frameEscritorioHead, aes(x=reorder(Id, -Freq), y=Freq)) + geom_bar(stat="identity") + labs(x='Tipo da Despesa Pro Escritorio', y='Quantidade de Vezes Dessa Despesa') 
+ggplot(frameEscritorioHead, aes(x=reorder(Id, -Freq), y=Freq)) + geom_bar(stat="identity") + 
+  labs(x='Tipo da Despesa Pro Escritorio', y='Quantidade de Vezes Dessa Despesa') 
 frameEscritorioId <- select(frameEscritorioHead, Id, escritorio)
 print(frameEscritorioId, row.names = FALSE)
 

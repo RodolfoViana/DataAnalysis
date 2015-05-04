@@ -67,7 +67,10 @@ ggplot(parlamentarVlrGlosaHead, aes(x=reorder(Parlamentar, -glosa), y=glosa)) + 
   labs(x='Nome do Parlamentar', y='Valor Pago Pelo Parlamentar') + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-ggplot(parlamentarVlrGlosa, aes(x=Parlamentar, y=glosa)) + geom_boxplot( stat = "boxplot")
+ggplot(parlamentarVlrGlosa, aes(x=Parlamentar, y=glosa)) + geom_boxplot( stat = "boxplot") +
+  theme(panel.background=element_blank(),  
+        legend.title=element_blank(), axis.line=element_blank(), axis.text.x=element_blank(), axis.title.x=element_blank(), axis.ticks=element_blank()) +
+  scale_y_continuous(breaks = round(seq(min(bilheteaereo$Freq), max(bilheteaereo$Freq))))
 
 boxvlrGlosa <- parlamentarVlrGlosa
 boxvlrGlosa["Col"] <- "Parlamentar"

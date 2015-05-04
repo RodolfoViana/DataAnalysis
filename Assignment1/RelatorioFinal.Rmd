@@ -2,21 +2,26 @@
 title: "RelatorioFinal"
 author: "Rodolfo Viana"
 date: "23-04-2015"
-output: html_document
+output: pdf_document
 ---
 Segundo a Agência Nacional de Aviação Civil (Anac), às 5 maiores companhias aéreas do Brasil são: 
 
-```{r, message=FALSE}
+```{r, message=FALSE, fig.align='center'}
+library(gridExtra)
+library(dplyr)
+library(ggplot2)
 empresasAerea <- data.frame(Rank = c(1, 2, 3, 4, 5),  Empresa = c("TAM", "GOL", "Azul", "Avianca Brasil", "Trip"))
-print(empresasAerea, row.names = FALSE)
+qplot(1:5, 1:5, geom = "blank") + 
+  theme_bw() +
+  theme(line = element_blank(),
+        text = element_blank()) +
+ annotation_custom(grob = tableGrob(empresasAerea, gpar.coltext = gpar(cex = 1.2), gpar.rowtext = gpar(cex = 1.2)), xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) + coord_fixed()
 ```
 
 Por esse motivo investiquei se os nosso parlamentares compram passagens apenas de uma ou outra empresa aérea ou se todas as grandes empresas aéreas são beneficiadas. 
-Para isso utilizei os dados disponiveis no portal da transparência da câmara dos deputados do ano de 2015. 
+Para isso utilizei os dados disponíveis no portal da transparência da câmara dos deputados do ano de 2015. 
 
 ```{r, message=FALSE, fig.align='center'}
-library(dplyr)
-library(ggplot2)
 file <- read.csv("AnoAtual.csv")
 
 fileIdBeneficiario <- select(file, numSubCota, txtBeneficiario)
@@ -32,7 +37,7 @@ ggplot(frameEmpresaAerea, aes(x=reorder(empresaAerea, -Freq), y=Freq, fill = emp
   scale_x_discrete(breaks = 1:5) 
 ```
 
-É possivel notar que a grande favorita pelos nossos parlamentares é a empresa aérea Avianca, seguida pela empresa Azul. Um fator interesante nessa analise foi o surgimento da empresa PASSAREDO em quarto lugar e a empresa TAM que é considerada a maior empresa aérea do Brasil ocupando o quinto lugar. Nenhuma outra empresa aérea apareceu nos dados analisados. 
+É possivel notar que a grande favorita pelos nossos parlamentares é a empresa aérea Avianca, seguida pela empresa Azul. Um fator interesante nessa analise foi o aparecimento da empresa PASSAREDO em quarto lugar. Já a empresa TAM que é considerada a maior empresa aérea do Brasil ocupando apenas o quinto lugar. Nenhuma outra empresa aérea apareceu nos dados analisados. 
 
 ```{r, fig.align='center'}
 
@@ -40,12 +45,12 @@ frameEmpresaAerea$Freq <- as.numeric(frameEmpresaAerea$Freq)
 ggplot(frameEmpresaAerea, aes(x = "", y = Freq, fill = empresaAerea)) +
   geom_bar(width = 1, stat = "identity") +
   coord_polar("y", start = 90, direction = 1) +
-  labs(title = "Empresas Aérea") +
+  labs(title = "Empresas Aéreas") +
   theme(axis.text.x=element_blank(), legend.title=element_blank(), axis.title.x=element_blank(), axis.title.y=element_blank(), panel.background=element_blank())
 
 ```
 
-É possivel notar no grafico acima que as empresas Avianca e Azul praticamente dominam a preferencia dos parlamentares.
+É possivel notar no gráfico acima que as empresas Avianca e Azul dominam a preferência dos parlamentares.
 
 
 Ainda levando em conta os bilhetes aéreos, fiz uma analise para saber quais são os 10 parlamentares que mais utilizaram esse recurso. Levando em consideração os dados que estão no portal da transparência da câmara dos deputados do ano de 2015.
@@ -67,17 +72,19 @@ ggplot(bilheteaereohead, aes(x=reorder(bilheteaereo, -Freq), y=Freq)) +
 
 É possivel notar que os parlamentares Aureo e Paulo Freire já emitiram mais de 60 bilhetes aéreos cada. O parlamentar Aureo até o momento tem 69 bilhetes e o parlamentar Paulo Freire tem 65.
 
-Para se ter uma visão geral da quantidade de bilhetes aéreos emitidos por cada parlamentar é importante observar o proximo gráfico. Onde cada ponto no grafico representa um parlamentar. 
+Para se ter uma visão geral da quantidade de bilhetes aéreos emitidos por cada parlamentar é importante observar o próximo gráfico. Onde cada ponto no gráfico representa um parlamentar. 
 
 ```{r, fig.align='center'}
-
+ggplot(bilheteaereo, aes(x=bilheteaereo, y=Freq)) + geom_boxplot( stat = "boxplot") +
+  labs(x='Parlamentar', y='Quantidade de bilhetes emitidos') +
+  theme(panel.background=element_blank(),  
+        legend.title=element_blank(), axis.line=element_blank(), axis.text.x=element_blank(), axis.title.x=element_blank(), axis.ticks=element_blank()) +
+  scale_y_continuous(breaks = round(seq(min(bilheteaereo$Freq), max(bilheteaereo$Freq), by = 10),))
 ```
 
-Com esse gráfico acima é possivel notar que a maioria dos parlamentares, sendo mais exato 75%, comprou menos de 14 bilhetes aéreos em 2015.  Podemos observar também que apenas 27 parlamentares compraram mais de 30 bilhetes aéreos. 
+Com esse gráfico acima é possível notar que a grande maioria dos parlamentares compraram menos de 11 bilhetes aéreos em 2015. Podemos observar também que apenas 27 parlamentares compraram mais de 30 bilhetes aéreos. 
 
-
-Para se ter uma melhor visão desses dados, observe o proximo gráfico. 
-
+Para se ter uma melhor visão desses dados, observe o próximo gráfico. 
 
 ```{r, fig.align='center'}
 boxbilhete <- bilheteaereo
@@ -88,20 +95,47 @@ ggplot(boxbilhete, aes(y=Freq, x=Col)) + geom_boxplot( stat = "boxplot")  +
         legend.title=element_blank(), axis.text.x=element_blank(), axis.title.y=element_blank(), axis.line=element_blank(), 
         axis.title.x=element_blank(), axis.ticks=element_blank()) + 
   scale_y_continuous(breaks = round(seq(min(boxbilhete$Freq), max(boxbilhete$Freq), by = 10),))
+```
 
+No boxplot acima é possível ter uma melhor visão dos bilhetes emitidios. Podemos afimar que a maioria dos parlamentares, 75%, comparam menos de 14 bilhetes cada. 
+
+Para tirar mais informações sobre esse gráfico acima é necessário fazer um "zoom"
+
+```{r, fig.align='center', warning=FALSE}
+ggplot(boxbilhete, aes(y=Freq, x=Col)) + geom_boxplot( stat = "boxplot")  + 
+  theme(panel.background=element_blank(),  
+        legend.title=element_blank(), axis.text.x=element_blank(), axis.title.y=element_blank(), axis.line=element_blank(), axis.title.x=element_blank(), axis.ticks=element_blank()) +
+  scale_y_continuous(breaks = round(seq(0, 30, by = 4),), limits = c(0, 29))
+```
+
+Agora podemos afirmar que 25% dos nossos parlamentares tem até 4 bilhetes emitidos e que 50% dos nossos parlamentares tem até 8 bilhetes emitidos.  
+
+Quando um parlamentar estoura a sua cota mensal ele paga o valor que ecedeu do proprio bolso. Fiquei curioso em saber se normalmente um parlamentar estoura a sua cota ou não, em caso positivo quanto que ele já gastou em 2015.  Abaixo a lista dos 15 parlamentares que mais ecederam a cota mensal e tiveram que gastar dinheiro do proprio bolso. 
+
+```{r, fig.align='center'}
+filevlrGlosa <- select(file, vlrGlosa, txNomeParlamentar)
+groupbyParlamentar <-  group_by(filevlrGlosa, txNomeParlamentar)
+parlamentarVlrGlosa <- summarise(groupbyParlamentar, sum(vlrGlosa))
+colnames(parlamentarVlrGlosa) <- c("Parlamentar", "glosa")
+
+parlamentarVlrGlosaOrder <- parlamentarVlrGlosa[order(-parlamentarVlrGlosa$glosa),] 
+parlamentarVlrGlosaHead <- head(parlamentarVlrGlosaOrder, 15)
+ggplot(parlamentarVlrGlosaHead, aes(x=reorder(Parlamentar, -glosa), y=glosa)) + geom_bar(stat="identity") + 
+  labs(x='Nome do Parlamentar', y='Valor Pago Pelo Parlamentar em Reais') + 
+  theme(panel.background=element_blank()) +
+  coord_flip()
+```
+
+Com mais algumas analises é possivel notar que esses parlamantares na verdade são exceção. Até 25% dos parlamentares gastaram 0 reais, até 50% dos parlamentares gastaram 34,01 reais. A media geral de todos os parlamentares é igual a 272,70. 
+
+
+```{r}
+summary(parlamentarVlrGlosa$glosa)
 ```
 
 
+Ao analisar o documento de cota para exercicio da ativdade parlamentar, é possivel notar que as despesas podem ser de 17 tipos diferentes: 
 
-
-Ao analisar o documento de cota para exercicio da ativdade parlamentar, é possivel notar que algumas despesas são negativas ou tem o valor igual a zero. O que em outros casos poderia significar algum erro nos dados, nesse caso especifico, isso acontece pois se trata de um bilhete de compensação. Significa que foi emitido um bilhete e não foi utilizado pelo deputado. 
-O caso de despesa negativa ocorre para a emissão de bilhete aéreo. Já o caso de despesa igual a zero ocorre quando o tipo é telefonia, o que significa que a despesa foi franqueada. 
-
-Já que apenas um tipo de despesa pode ter valor negativo o mais indicado é que se tenha maior atenação para esse tipo de depensa, pois algumas metricas serão "prejudicadas", como por exemplo, media, desvio padrão, variancia. Seria interesante tambem fazer dois tipos de analise, uma com todos os valores e uma segunda analise retirando os valores negativos. 
-
-Um outro fator que chamou minha atenação foi a quantidade de partidos politicos que tem representantes eleitos, um total de 28. Alem disso, existe deputados sem partidos. Falta descorbrir se isso é realmente possivel ou se é algum erro nos dados. 
-
-As despesas podem ser de 17 tipos diferentes. 
 ```{r, message=FALSE}
 itemDescricao <- select(file, txtDescricao, numSubCota)
 itemDescricaoOrder <- itemDescricao[!duplicated(itemDescricao),]
@@ -119,9 +153,42 @@ valorLiquido <- summarise(groupedByNumSubCota, sum(vlrLiquido))
 colnames(valorLiquido) <- c("Tipo", "Descricao")
 valorLiquido <- valorLiquido[order(valorLiquido$Descricao), ]
 valorLiquido$Tipo <- as.character(valorLiquido$Tipo)
-ggplot(valorLiquido, aes(x=reorder(Tipo, -Descricao), y=Descricao)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Valor dos Gastos em Reais')
+ggplot(valorLiquido, aes(x=reorder(Tipo, -Descricao), y=Descricao)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Valor dos Gastos em Reais') + theme(panel.background=element_blank())
 ```
 
+
+Como **MANUTENÇÃO DE ESCRITÓRIO DE APOIO À ATIVIDADE PARLAMENTAR** é dos itens que os parlamentares gastam mais recursos da cota, achei esencial investigar isso melhor. Segundo o portal da transparência o parlamentar pode gastar esse recurso da seguinte forma: compreendendo locação de imóveis, pagamento de taxa de condomínio, IPTU, energia elétrica, água e esgoto, locação de móveis e equipamentos, material de expediente e suprimentos de informática, acesso à internet, assinatura de TV a cabo ou similar, locação ou aquisição de licença de uso de software, assinatura de publicações. A lista das 10 empresas que mais lucraram com esse recurso foram:
+
+```{r, fig.align='center'}
+fileEscritorioValor <- select(file, numSubCota, txtBeneficiario, vlrLiquido)
+fileEscritorioValor <- filter(fileEscritorioValor, numSubCota == 1)
+
+groupbyEscritorioValor <-  group_by(fileEscritorioValor, txtBeneficiario)
+tipoDespesaVlrliquido <- summarise(groupbyEscritorioValor, sum(vlrLiquido))
+colnames(tipoDespesaVlrliquido) <- c("Beneficiario", "Valor")
+tipoDespesaVlrliquido <- tipoDespesaVlrliquido[order(-tipoDespesaVlrliquido$Valor),] 
+tipoDespesaVlrliquidoHead <- head(tipoDespesaVlrliquido, 10)
+tipoDespesaVlrliquidoHead["Id"] <- c(1:10)
+
+frameBeneficiarioId <- select(tipoDespesaVlrliquidoHead, Id, Beneficiario)
+qplot(1:10, 1:10, geom = "blank") + 
+  theme_bw() +
+  theme(line = element_blank(),
+        text = element_blank()) +
+ annotation_custom(grob = tableGrob(frameBeneficiarioId,
+                                   gpar.coltext = gpar(cex = 1.2),
+                                   gpar.rowtext = gpar(cex = 1.2)),
+                  xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) 
+```
+
+
+O valor que cada uma dessas empresas lucraram em 2015, são: 
+
+
+```{r, fig.align='center'}
+ggplot(tipoDespesaVlrliquidoHead, aes(x=reorder(Id, -Valor), y=Valor)) + geom_bar(stat="identity") + labs(x='Empresa', y='Valor Recebido em Reais') +
+  theme(panel.background=element_blank()) + theme(panel.background=element_blank())
+```
 
 Os tipos de despesas que mais variam e que portanto são mais desiguais são: **DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR**, **CONSULTORIAS  PESQUISAS E TRABALHOS TÉCNICOS** e **LOCAÇÃO OU FRETAMENTO DE AERONAVES** 
 
@@ -129,7 +196,7 @@ Os tipos de despesas que mais variam e que portanto são mais desiguais são: **
 desvio <- summarise(groupedByNumSubCota, sd(vlrLiquido))
 colnames(desvio) <- c("Tipo", "Desvio")
 desvio$Tipo <- as.character(desvio$Tipo)
-ggplot(desvio, aes(x=reorder(Tipo, -Desvio), y=Desvio)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Variação em reais')  
+ggplot(desvio, aes(x=reorder(Tipo, -Desvio), y=Desvio)) + geom_bar(stat = "identity") + labs(x='Tipo da Despesa', y='Variação em reais') + theme(panel.background=element_blank()) 
 ```
 
 O valor ficou alto para esses tipos de despesas pois a variação dos valores dos gastos dessas despesas são altos. Quanto mais proximo de zero mais uniforme são os gastos.

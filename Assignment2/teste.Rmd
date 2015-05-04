@@ -1,0 +1,178 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+Para a realização dessa atividade eu utilizei os dados sobre os gastos dos parlamentares disponíveis no site de transparência do congresso nacional do ano de 2015.
+Utilizando apenas os gastos em **COMBUSTÍVEIS E LUBRIFICANTES** dos nossos parlamantares obtemos as seguintes informações:
+
+
+```{r, message=FALSE}
+library(dplyr)
+library(ggplot2)
+
+# Dados da câmara dos deputados
+file <- read.csv("AnoAtual.csv")
+
+# Selecionando apenas os gastos de combustíveis e lubrificantes
+vlrCombustiveis <- file %>% 
+  filter(txtDescricao == "COMBUSTÍVEIS E LUBRIFICANTES.") %>% 
+  select(vlrLiquido, numSubCota)
+
+# Sumarry dos valores de combustíveis e lubrificantes
+summary(vlrCombustiveis$vlrLiquido)
+```
+
+Considerando os dados fornecidos como sendo a população temos que a média desse gasto é de 247.40. 
+Para se ter uma visão mais geral da distribuição desse gasto observe o gráfico abaixo. 
+
+```{r, message=FALSE, fig.align='center'}
+# função de distribuição de probabilidade da variavel combustíveis e lubrificantes
+ggplot(vlrCombustiveis, aes(vlrLiquido)) + 
+  geom_density() + 
+  labs(x='Valor liquido', y='Probablidade') + 
+  theme_bw()
+```
+
+Para uma melhor visualização observe o mesmo gráfico agora com um "zoom"
+
+```{r, message=FALSE, fig.align='center', warning=FALSE}
+# função de distribuição de probabilidade da variavel combustíveis e lubrificantes
+ggplot(vlrCombustiveis, aes(vlrLiquido)) + 
+  xlim(0, 1000) +
+  geom_density() + 
+  labs(x='Valor liquido', y='Probablidade') + 
+  theme_bw()
+```
+
+Agora irei selecionar 10 amostras de tamanho 100 (escolhidos aleatoriamente) para verificar o valor da média dessas amostras. Para cada amostra 
+irei verificar a média. O resultado das 100 médias estão mostradas no gráfico abaixo:
+
+```{r,  message=FALSE, fig.align='center', warning=FALSE}
+
+mediaAmostra <- function(original, samplesSize, numSamples) {
+  dist_original <- original
+  sample_size <- samplesSize
+  num_samples <- numSamples
+  
+  samples_means <- c()
+  for(i in seq(1, num_samples)){
+    a_sample <- sample(dist_original, sample_size)
+    samples_means[i] <- mean(a_sample)
+    }
+  samples_means
+  }
+
+samplesMeans <- mediaAmostra(vlrCombustiveis$vlrLiquido, 100, 10)
+
+ggplot(data.frame(samplesMeans), aes(samplesMeans)) +
+  geom_histogram() +
+  theme_bw() + 
+  labs(x='Média das amostras', y='Ocorrência') + ggtitle("10 Amostras")
+```
+
+É possível notas que a maioria dos valores não ficaram tão próximos da média da população. Por esse motivo irei repetir o experimento e dessa vez aumentar o número de amostras mantendo o número de observações de dentro das amostras contante (tamanho 100).
+
+Para a média de 20 amostras temos:
+
+```{r,  message=FALSE, fig.align='center', warning=FALSE}
+# Média de 20 amostras com n = 100
+samplesMeans <- mediaAmostra(vlrCombustiveis$vlrLiquido, 100, 20)
+g1 <- ggplot(data.frame(samplesMeans), aes(samplesMeans)) + geom_histogram() +  theme_bw() + 
+  labs(x='Média das amostras', y='Ocorrência') + ggtitle("20 Amostras")
+g1
+```
+
+Para a média de 40 amostras temos:
+
+```{r,  message=FALSE, fig.align='center', warning=FALSE}
+# Média de 40 amostras com n = 100
+samplesMeans <- mediaAmostra(vlrCombustiveis$vlrLiquido, 100, 40)
+ggplot(data.frame(samplesMeans), aes(samplesMeans)) + geom_histogram() +  theme_bw() + 
+  labs(x='Média das amostras', y='Ocorrência') + ggtitle("40 Amostras")
+```
+
+Para a média de 80 amostras temos:
+
+```{r,  message=FALSE, fig.align='center', warning=FALSE}
+# Média de 80 amostras com n = 100
+samplesMeans <- mediaAmostra(vlrCombustiveis$vlrLiquido, 100, 80)
+ggplot(data.frame(samplesMeans), aes(samplesMeans)) + geom_histogram() +  theme_bw() + 
+  labs(x='Média das amostras', y='Ocorrência') + ggtitle("80 Amostras")
+```
+
+Para a média de 160 amostras temos:
+
+```{r,  message=FALSE, fig.align='center', warning=FALSE}
+# Média de 160 amostras com n = 100
+samplesMeans <- mediaAmostra(vlrCombustiveis$vlrLiquido, 100, 160)
+g2 <- ggplot(data.frame(samplesMeans), aes(samplesMeans)) + geom_histogram() +  theme_bw() + 
+  labs(x='Média das amostras', y='Ocorrência') + ggtitle("160 Amostras")
+g2 
+```
+
+
+Para a média de 320 amostras temos:
+
+```{r,  message=FALSE, fig.align='center', warning=FALSE}
+# Média de 320 amostras com n = 100
+samplesMeans <- mediaAmostra(vlrCombustiveis$vlrLiquido, 100, 320)
+ggplot(data.frame(samplesMeans), aes(samplesMeans)) + geom_histogram() +  theme_bw() + 
+  labs(x='Média das amostras', y='Ocorrência') + ggtitle("320 Amostras")
+```
+
+Para a média de 640 amostras temos:
+
+```{r,  message=FALSE, fig.align='center', warning=FALSE}
+# Média de 640 amostras com n = 100
+samplesMeans <- mediaAmostra(vlrCombustiveis$vlrLiquido, 100, 640)
+g3 <- ggplot(data.frame(samplesMeans), aes(samplesMeans)) + geom_histogram() +  theme_bw() + 
+  labs(x='Média das amostras', y='Ocorrência') + ggtitle("640 Amostras")
+g3
+```
+
+
+É possível notar que quanto maior for o número das amostras mais próximo a distribuição se parece com a distribuição normal (confirmando assim o teorema do limite central). Sendo o valor com maior número de ocorrência o valor bastante próximo do valor da média da população. Para uma melhor visualização da evolução observe os três gráficos abaixo. 
+
+
+```{r,  message=FALSE, fig.align='center', warning=FALSE}
+
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  require(grid)
+
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                    ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+
+ if (numPlots==1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+
+multiplot(g1, g2, g3)
+```
+

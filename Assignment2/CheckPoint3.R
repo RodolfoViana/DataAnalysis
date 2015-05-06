@@ -1,20 +1,35 @@
 library(dplyr)
 library(ggplot2)
+library("Rmisc", quietly = T)
 
 
 file <- read.table("Projetos/DataAnalysis/Assignment2/students.data", header=TRUE)
 
-
-# Qual é a média de acerto de cada questão?
+# Qual é a média de tentativas das 10 questões (top 10 de submissão)?
 
 mediaQuestoes <- file %>% 
-  select(question, attempt, result, student) %>% 
-  group_by(question) %>%
-  summarise(median(attempt))
+  select(question) %>%
+  table() %>%
+  as.data.frame()
 
-ggplot(mediaQuestoes, aes(x=question, y="median(attempt)")) + geom_point(position = "jitter") 
+colnames(mediaQuestoes) <- c("Questao", "Frequencia")
+newdata <- mediaQuestoes[order(-mediaQuestoes$Frequencia),] 
 
-# Qual é a média de acerto de cada aluno?
+condition <- head(newdata)$Questao
+
+subset <- filter(file, student %in% condition)
+
+CI(mediaQuestoes, ci = 0.95)
+
+
+# Qual é a média de acerto de cada grupo de aluno (dividir os alunos em 3 grupos)?
+
+alunos <- file %>% 
+  select(student) %>%
+  table() %>%
+  as.data.frame()
+
+summary(alunos$Freq)
 
 mediaAluno <- file %>% 
   select(question, attempt, result, student) %>% 

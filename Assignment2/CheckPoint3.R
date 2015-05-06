@@ -15,9 +15,9 @@ mediaQuestoes <- file %>%
 colnames(mediaQuestoes) <- c("Questao", "Frequencia")
 newdata <- mediaQuestoes[order(-mediaQuestoes$Frequencia),] 
 
-condition <- head(newdata)$Questao
+condition <- head(newdata, n = 10)$Questao
 
-subset <- filter(file, student %in% condition)
+subset <- filter(file, question %in% condition)
 
 CI(mediaQuestoes, ci = 0.95)
 

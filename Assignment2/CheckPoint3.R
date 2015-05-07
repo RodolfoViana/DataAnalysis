@@ -34,8 +34,16 @@ summary(alunos$Freq)
 mediaAluno <- file %>% 
   select(question, attempt, result, student) %>% 
   group_by(student) %>%
-  summarise(median(as.numeric(attempt)))
+  summarise(mean(attempt))
 
+f <- select(file, question, attempt, student)
+g <- group_by(f, student)
+summarise(g, mean(attempt))
+
+mediaQuestoes <- file %>% 
+    select(question, attempt, result, student) %>% 
+    group_by(question) %>%
+    summarise(median(attempt))
 
 # Qual questão que teve a maior variação nas submissões?
 

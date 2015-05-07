@@ -2,7 +2,7 @@
 title: "RelatorioFinal"
 author: "Rodolfo Viana"
 date: "23-04-2015"
-output: pdf_document
+output: html_document
 ---
 Segundo a Agência Nacional de Aviação Civil (Anac), às 5 maiores companhias aéreas do Brasil são: 
 

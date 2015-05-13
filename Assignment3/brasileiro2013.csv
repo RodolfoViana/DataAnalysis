@@ -1,0 +1,974 @@
+id_jogo;time_a;time_b;tempo_gol;time_gol;placar_time_a;placar_time_b
+1;Vasco da Gama;Portuguesa;47;Vasco da Gama;1;0
+2;Vitória;Internacional;2;Vitória;1;0
+2;Vitória;Internacional;11;Vitória;2;0
+2;Vitória;Internacional;29;Internacional;2;1
+2;Vitória;Internacional;63;Internacional;2;2
+3;Corinthians;Botafogo;24;Botafogo;0;1
+3;Corinthians;Botafogo;73;Corinthians;1;1
+4;Grêmio;Náutico;15;Grêmio;1;0
+4;Grêmio;Náutico;70;Grêmio;2;0
+5;Ponte Preta;São Paulo;9;São Paulo;0;1
+5;Ponte Preta;São Paulo;44;São Paulo;0;2
+6;Criciúma;Bahia;45;Criciúma;1;0
+6;Criciúma;Bahia;46;Criciúma;2;0
+6;Criciúma;Bahia;72;Bahia;2;1
+6;Criciúma;Bahia;82;Criciúma;3;1
+7;Santos;Flamengo;None;None;0;0
+8;Fluminense;Atlético/PR;15;Fluminense;1;0
+8;Fluminense;Atlético/PR;28;Atlético/PR;1;1
+8;Fluminense;Atlético/PR;53;Fluminense;2;1
+9;Cruzeiro;Goiás;5;Cruzeiro;1;0
+9;Cruzeiro;Goiás;30;Cruzeiro;2;0
+9;Cruzeiro;Goiás;40;Cruzeiro;3;0
+9;Cruzeiro;Goiás;42;Cruzeiro;4;0
+9;Cruzeiro;Goiás;79;Cruzeiro;5;0
+10;Coritiba;Atlético/MG;51;Atlético/MG;0;1
+10;Coritiba;Atlético/MG;53;Coritiba;1;1
+10;Coritiba;Atlético/MG;90;Coritiba;2;1
+11;Botafogo;Santos;14;Botafogo;1;0
+11;Botafogo;Santos;21;Botafogo;2;0
+11;Botafogo;Santos;74;Santos;2;1
+12;Atlético/PR;Cruzeiro;6;Atlético/PR;1;0
+12;Atlético/PR;Cruzeiro;28;Atlético/PR;2;0
+12;Atlético/PR;Cruzeiro;43;Cruzeiro;2;1
+12;Atlético/PR;Cruzeiro;46;Cruzeiro;2;2
+13;Náutico;Vitória;12;Vitória;0;1
+13;Náutico;Vitória;45;Vitória;0;2
+13;Náutico;Vitória;49;Vitória;0;3
+14;Bahia;Coritiba;None;None;0;0
+15;Flamengo;Ponte Preta;25;Ponte Preta;0;1
+15;Flamengo;Ponte Preta;73;Ponte Preta;0;2
+16;Goiás;Corinthians;37;Goiás;1;0
+16;Goiás;Corinthians;86;Corinthians;1;1
+17;São Paulo;Vasco da Gama;60;São Paulo;1;0
+17;São Paulo;Vasco da Gama;68;São Paulo;2;0
+17;São Paulo;Vasco da Gama;72;São Paulo;3;0
+17;São Paulo;Vasco da Gama;74;São Paulo;4;0
+17;São Paulo;Vasco da Gama;82;Vasco da Gama;4;1
+17;São Paulo;Vasco da Gama;84;São Paulo;5;1
+18;Internacional;Criciúma;13;Internacional;1;0
+18;Internacional;Criciúma;16;Internacional;2;0
+19;Atlético/MG;Grêmio;59;Atlético/MG;1;0
+19;Atlético/MG;Grêmio;90;Atlético/MG;2;0
+20;Portuguesa;Fluminense;22;Portuguesa;1;0
+20;Portuguesa;Fluminense;37;Fluminense;1;1
+20;Portuguesa;Fluminense;82;Portuguesa;2;1
+21;Botafogo;Cruzeiro;6;Botafogo;1;0
+21;Botafogo;Cruzeiro;24;Cruzeiro;1;1
+21;Botafogo;Cruzeiro;56;Botafogo;2;1
+22;Atlético/PR;Flamengo;32;Atlético/PR;1;0
+22;Atlético/PR;Flamengo;71;Atlético/PR;2;0
+22;Atlético/PR;Flamengo;77;Flamengo;2;1
+22;Atlético/PR;Flamengo;80;Flamengo;2;2
+23;Vitória;Vasco da Gama;31;Vitória;1;0
+23;Vitória;Vasco da Gama;58;Vitória;2;0
+24;Goiás;Coritiba;33;Coritiba;0;1
+24;Goiás;Coritiba;75;Goiás;1;1
+25;Santos;Grêmio;11;Grêmio;0;1
+25;Santos;Grêmio;78;Santos;1;1
+26;Corinthians;Ponte Preta;73;Corinthians;1;0
+27;Atlético/MG;São Paulo;None;None;0;0
+28;Fluminense;Criciúma;25;Fluminense;1;0
+28;Fluminense;Criciúma;33;Fluminense;2;0
+28;Fluminense;Criciúma;80;Fluminense;3;0
+29;Internacional;Bahia;9;Bahia;0;1
+29;Internacional;Bahia;61;Bahia;0;2
+29;Internacional;Bahia;64;Internacional;1;2
+30;Náutico;Portuguesa;15;Náutico;1;0
+30;Náutico;Portuguesa;31;Portuguesa;1;1
+30;Náutico;Portuguesa;81;Portuguesa;1;2
+30;Náutico;Portuguesa;90;Náutico;2;2
+31;São Paulo;Goiás;2;Goiás;0;1
+32;Criciúma;Santos;14;Criciúma;1;0
+32;Criciúma;Santos;56;Criciúma;2;0
+32;Criciúma;Santos;65;Criciúma;3;0
+32;Criciúma;Santos;90;Santos;3;1
+33;Portuguesa;Internacional;24;Internacional;0;1
+33;Portuguesa;Internacional;54;Portuguesa;1;1
+34;Ponte Preta;Atlético/PR;23;Ponte Preta;1;0
+34;Ponte Preta;Atlético/PR;35;Atlético/PR;1;1
+34;Ponte Preta;Atlético/PR;46;Ponte Preta;2;1
+34;Ponte Preta;Atlético/PR;56;Atlético/PR;2;2
+34;Ponte Preta;Atlético/PR;63;Atlético/PR;2;3
+34;Ponte Preta;Atlético/PR;85;Ponte Preta;3;3
+34;Ponte Preta;Atlético/PR;90;Atlético/PR;3;4
+35;Vasco da Gama;Atlético/MG;69;Vasco da Gama;1;0
+35;Vasco da Gama;Atlético/MG;90;Vasco da Gama;2;0
+36;Grêmio;Vitória;69;Grêmio;1;0
+37;Bahia;Botafogo;7;Botafogo;0;1
+37;Bahia;Botafogo;39;Bahia;1;1
+37;Bahia;Botafogo;68;Bahia;2;1
+38;Flamengo;Náutico;83;Náutico;0;1
+39;Cruzeiro;Corinthians;83;Cruzeiro;1;0
+40;Coritiba;Fluminense;15;Coritiba;1;0
+40;Coritiba;Fluminense;22;Fluminense;1;1
+40;Coritiba;Fluminense;87;Coritiba;2;1
+41;Criciúma;Flamengo;37;Flamengo;0;1
+41;Criciúma;Flamengo;52;Flamengo;0;2
+41;Criciúma;Flamengo;78;Flamengo;0;3
+42;Cruzeiro;Internacional;23;Internacional;0;1
+42;Cruzeiro;Internacional;37;Cruzeiro;1;1
+42;Cruzeiro;Internacional;52;Cruzeiro;2;1
+42;Cruzeiro;Internacional;73;Internacional;2;2
+43;Corinthians;Portuguesa;None;None;0;0
+44;Vasco da Gama;Bahia;7;Bahia;0;1
+44;Vasco da Gama;Bahia;21;Vasco da Gama;1;1
+45;Ponte Preta;Botafogo;31;Botafogo;0;1
+45;Ponte Preta;Botafogo;35;Botafogo;0;2
+46;Vitória;Atlético/PR;27;Vitória;1;0
+46;Vitória;Atlético/PR;29;Atlético/PR;1;1
+46;Vitória;Atlético/PR;35;Vitória;2;1
+46;Vitória;Atlético/PR;80;Atlético/PR;2;2
+46;Vitória;Atlético/PR;86;Vitória;3;2
+47;Fluminense;Goiás;70;Goiás;0;1
+47;Fluminense;Goiás;82;Fluminense;1;1
+47;Fluminense;Goiás;86;Fluminense;2;1
+48;Coritiba;Náutico;1;Coritiba;1;0
+49;Grêmio;São Paulo;41;São Paulo;0;1
+49;Grêmio;São Paulo;86;Grêmio;1;1
+50;Santos;Atlético/MG;3;Santos;1;0
+51;Flamengo;Coritiba;8;Flamengo;1;0
+51;Flamengo;Coritiba;48;Flamengo;2;0
+51;Flamengo;Coritiba;52;Coritiba;2;1
+51;Flamengo;Coritiba;60;Coritiba;2;2
+52;Atlético/PR;Grêmio;78;Atlético/PR;1;0
+52;Atlético/PR;Grêmio;83;Grêmio;1;1
+53;Náutico;Ponte Preta;10;Ponte Preta;0;1
+53;Náutico;Ponte Preta;43;Ponte Preta;0;2
+53;Náutico;Ponte Preta;56;Ponte Preta;0;3
+53;Náutico;Ponte Preta;72;Náutico;1;3
+54;Portuguesa;Cruzeiro;4;Portuguesa;1;0
+54;Portuguesa;Cruzeiro;17;Cruzeiro;1;1
+55;Goiás;Vitória;52;Goiás;1;0
+56;São Paulo;Santos;57;Santos;0;1
+56;São Paulo;Santos;82;Santos;0;2
+57;Bahia;Corinthians;33;Corinthians;0;1
+57;Bahia;Corinthians;42;Corinthians;0;2
+58;Internacional;Vasco da Gama;16;Internacional;1;0
+58;Internacional;Vasco da Gama;38;Internacional;2;0
+58;Internacional;Vasco da Gama;45;Vasco da Gama;2;1
+58;Internacional;Vasco da Gama;55;Internacional;3;1
+58;Internacional;Vasco da Gama;63;Vasco da Gama;3;2
+58;Internacional;Vasco da Gama;71;Internacional;4;2
+58;Internacional;Vasco da Gama;75;Internacional;5;2
+58;Internacional;Vasco da Gama;83;Vasco da Gama;5;3
+59;Botafogo;Fluminense;84;Botafogo;1;0
+60;Atlético/MG;Criciúma;10;Atlético/MG;1;0
+60;Atlético/MG;Criciúma;25;Criciúma;1;1
+60;Atlético/MG;Criciúma;47;Atlético/MG;2;1
+60;Atlético/MG;Criciúma;82;Atlético/MG;3;1
+60;Atlético/MG;Criciúma;90;Criciúma;3;2
+61;Santos;Portuguesa;1;Santos;1;0
+61;Santos;Portuguesa;10;Santos;2;0
+61;Santos;Portuguesa;75;Santos;3;0
+61;Santos;Portuguesa;87;Portuguesa;3;1
+61;Santos;Portuguesa;90;Santos;4;1
+62;Fluminense;Internacional;19;Internacional;0;1
+62;Fluminense;Internacional;33;Internacional;0;2
+62;Fluminense;Internacional;35;Fluminense;1;2
+62;Fluminense;Internacional;40;Internacional;1;3
+62;Fluminense;Internacional;52;Fluminense;2;3
+63;Ponte Preta;Bahia;None;None;0;0
+64;Vitória;São Paulo;9;São Paulo;0;1
+64;Vitória;São Paulo;20;Vitória;1;1
+64;Vitória;São Paulo;28;Vitória;2;1
+64;Vitória;São Paulo;35;São Paulo;2;2
+64;Vitória;São Paulo;56;Vitória;3;2
+65;Grêmio;Botafogo;12;Grêmio;1;0
+65;Grêmio;Botafogo;19;Botafogo;1;1
+65;Grêmio;Botafogo;33;Grêmio;2;1
+66;Coritiba;Atlético/PR;56;Coritiba;1;0
+67;Corinthians;Atlético/MG;35;Atlético/MG;0;1
+68;Cruzeiro;Náutico;9;Cruzeiro;1;0
+68;Cruzeiro;Náutico;53;Cruzeiro;2;0
+68;Cruzeiro;Náutico;69;Cruzeiro;3;0
+69;Vasco da Gama;Flamengo;29;Flamengo;0;1
+70;Criciúma;Goiás;None;None;0;0
+71;Criciúma;Grêmio;25;Criciúma;1;0
+71;Criciúma;Grêmio;37;Grêmio;1;1
+71;Criciúma;Grêmio;74;Criciúma;2;1
+72;São Paulo;Cruzeiro;51;Cruzeiro;0;1
+72;São Paulo;Cruzeiro;78;Cruzeiro;0;2
+72;São Paulo;Cruzeiro;81;Cruzeiro;0;3
+73;Botafogo;Náutico;49;Botafogo;1;0
+73;Botafogo;Náutico;77;Botafogo;2;0
+74;Santos;Coritiba;20;Santos;1;0
+74;Santos;Coritiba;40;Coritiba;1;1
+74;Santos;Coritiba;64;Santos;2;1
+74;Santos;Coritiba;87;Coritiba;2;2
+75;Vitória;Bahia;None;None;0;0
+76;Atlético/PR;Corinthians;5;Atlético/PR;1;0
+76;Atlético/PR;Corinthians;25;Corinthians;1;1
+77;Internacional;Flamengo;90;Internacional;1;0
+78;Fluminense;Vasco da Gama;16;Vasco da Gama;0;1
+78;Fluminense;Vasco da Gama;46;Vasco da Gama;0;2
+78;Fluminense;Vasco da Gama;55;Fluminense;1;2
+78;Fluminense;Vasco da Gama;81;Vasco da Gama;1;3
+79;Goiás;Portuguesa;39;Portuguesa;0;1
+79;Goiás;Portuguesa;44;Goiás;1;1
+79;Goiás;Portuguesa;65;Goiás;2;1
+80;Atlético/MG;Ponte Preta;6;Atlético/MG;1;0
+80;Atlético/MG;Ponte Preta;23;Atlético/MG;2;0
+80;Atlético/MG;Ponte Preta;71;Atlético/MG;3;0
+80;Atlético/MG;Ponte Preta;83;Atlético/MG;4;0
+81;Vasco da Gama;Criciúma;8;Vasco da Gama;1;0
+81;Vasco da Gama;Criciúma;55;Vasco da Gama;2;0
+81;Vasco da Gama;Criciúma;61;Criciúma;2;1
+81;Vasco da Gama;Criciúma;71;Criciúma;2;2
+81;Vasco da Gama;Criciúma;73;Vasco da Gama;3;2
+82;Portuguesa;Atlético/PR;7;Atlético/PR;0;1
+82;Portuguesa;Atlético/PR;12;Portuguesa;1;1
+82;Portuguesa;Atlético/PR;21;Portuguesa;2;1
+82;Portuguesa;Atlético/PR;63;Atlético/PR;2;2
+82;Portuguesa;Atlético/PR;90;Atlético/PR;2;3
+83;Ponte Preta;Santos;49;Ponte Preta;1;0
+84;Cruzeiro;Atlético/MG;17;Atlético/MG;0;1
+84;Cruzeiro;Atlético/MG;31;Cruzeiro;1;1
+84;Cruzeiro;Atlético/MG;42;Cruzeiro;2;1
+84;Cruzeiro;Atlético/MG;52;Cruzeiro;3;1
+84;Cruzeiro;Atlético/MG;57;Cruzeiro;4;1
+85;Náutico;Internacional;72;Náutico;1;0
+85;Náutico;Internacional;89;Náutico;2;0
+85;Náutico;Internacional;90;Náutico;3;0
+86;Grêmio;Fluminense;50;Grêmio;1;0
+86;Grêmio;Fluminense;84;Grêmio;2;0
+87;Corinthians;São Paulo;None;None;0;0
+88;Coritiba;Vitória;8;Vitória;0;1
+88;Coritiba;Vitória;45;Coritiba;1;1
+89;Flamengo;Botafogo;21;Botafogo;0;1
+89;Flamengo;Botafogo;90;Flamengo;1;1
+90;Bahia;Goiás;1;Bahia;1;0
+90;Bahia;Goiás;32;Bahia;2;0
+90;Bahia;Goiás;33;Goiás;2;1
+91;Fluminense;Cruzeiro;77;Fluminense;1;0
+92;Atlético/MG;Atlético/PR;80;Atlético/MG;1;0
+92;Atlético/MG;Atlético/PR;85;Atlético/PR;1;1
+92;Atlético/MG;Atlético/PR;87;Atlético/PR;1;2
+93;Portuguesa;Criciúma;68;Portuguesa;1;0
+93;Portuguesa;Criciúma;90;Criciúma;1;1
+94;Coritiba;Ponte Preta;3;Ponte Preta;0;1
+94;Coritiba;Ponte Preta;23;Coritiba;1;1
+94;Coritiba;Ponte Preta;26;Coritiba;2;1
+94;Coritiba;Ponte Preta;46;Ponte Preta;2;2
+94;Coritiba;Ponte Preta;49;Ponte Preta;2;3
+94;Coritiba;Ponte Preta;55;Coritiba;3;3
+94;Coritiba;Ponte Preta;58;Coritiba;4;3
+94;Coritiba;Ponte Preta;88;Coritiba;5;3
+95;Corinthians;Grêmio;33;Corinthians;1;0
+95;Corinthians;Grêmio;80;Corinthians;2;0
+96;Bahia;Flamengo;28;Bahia;1;0
+96;Bahia;Flamengo;45;Bahia;2;0
+96;Bahia;Flamengo;76;Bahia;3;0
+97;Botafogo;Vitória;31;Botafogo;1;0
+97;Botafogo;Vitória;79;Botafogo;2;0
+98;Goiás;Vasco da Gama;15;Vasco da Gama;0;1
+98;Goiás;Vasco da Gama;88;Goiás;1;1
+99;Náutico;São Paulo;72;São Paulo;0;1
+100;Internacional;Santos;27;Santos;0;1
+100;Internacional;Santos;67;Santos;0;2
+100;Internacional;Santos;75;Internacional;1;2
+101;São Paulo;Bahia;14;São Paulo;1;0
+101;São Paulo;Bahia;53;Bahia;1;1
+101;São Paulo;Bahia;87;Bahia;1;2
+102;Cruzeiro;Coritiba;11;Cruzeiro;1;0
+103;Ponte Preta;Fluminense;49;Fluminense;0;1
+103;Ponte Preta;Fluminense;85;Ponte Preta;1;1
+104;Flamengo;Atlético/MG;7;Flamengo;1;0
+104;Flamengo;Atlético/MG;13;Flamengo;2;0
+104;Flamengo;Atlético/MG;75;Flamengo;3;0
+105;Atlético/PR;Goiás;43;Atlético/PR;1;0
+105;Atlético/PR;Goiás;90;Atlético/PR;2;0
+106;Grêmio;Internacional;18;Grêmio;1;0
+106;Grêmio;Internacional;20;Internacional;1;1
+107;Criciúma;Corinthians;10;Corinthians;0;1
+107;Criciúma;Corinthians;25;Corinthians;0;2
+108;Vitória;Portuguesa;63;Portuguesa;0;1
+108;Vitória;Portuguesa;70;Vitória;1;1
+108;Vitória;Portuguesa;85;Vitória;2;1
+109;Vasco da Gama;Botafogo;22;Botafogo;0;1
+109;Vasco da Gama;Botafogo;30;Botafogo;0;2
+109;Vasco da Gama;Botafogo;44;Vasco da Gama;1;2
+109;Vasco da Gama;Botafogo;46;Vasco da Gama;2;2
+109;Vasco da Gama;Botafogo;48;Botafogo;2;3
+110;Santos;Náutico;82;Náutico;0;1
+110;Santos;Náutico;84;Santos;1;1
+111;São Paulo;Internacional;13;Internacional;0;1
+112;Vitória;Fluminense;5;Vitória;1;0
+112;Vitória;Fluminense;84;Fluminense;1;1
+113;Criciúma;Cruzeiro;23;Cruzeiro;0;1
+113;Criciúma;Cruzeiro;69;Criciúma;1;1
+113;Criciúma;Cruzeiro;82;Cruzeiro;1;2
+114;Atlético/PR;Bahia;80;Atlético/PR;1;0
+115;Flamengo;Portuguesa;67;Flamengo;1;0
+115;Flamengo;Portuguesa;90;Portuguesa;1;1
+116;Santos;Corinthians;3;Corinthians;0;1
+116;Santos;Corinthians;54;Santos;1;1
+117;Goiás;Náutico;26;Goiás;1;0
+117;Goiás;Náutico;34;Náutico;1;1
+117;Goiás;Náutico;52;Goiás;2;1
+118;Atlético/MG;Botafogo;18;Botafogo;0;1
+118;Atlético/MG;Botafogo;28;Atlético/MG;1;1
+118;Atlético/MG;Botafogo;58;Botafogo;1;2
+118;Atlético/MG;Botafogo;90;Atlético/MG;2;2
+119;Grêmio;Coritiba;9;Coritiba;0;1
+120;Vasco da Gama;Ponte Preta;56;Vasco da Gama;1;0
+120;Vasco da Gama;Ponte Preta;84;Ponte Preta;1;1
+121;Botafogo;Goiás;51;Botafogo;1;0
+121;Botafogo;Goiás;68;Goiás;1;1
+122;Náutico;Atlético/MG;None;None;0;0
+123;Coritiba;Vasco da Gama;5;Vasco da Gama;0;1
+124;Corinthians;Vitória;7;Corinthians;1;0
+124;Corinthians;Vitória;51;Corinthians;2;0
+125;Fluminense;Flamengo;16;Fluminense;1;0
+125;Fluminense;Flamengo;25;Flamengo;1;1
+125;Fluminense;Flamengo;31;Flamengo;1;2
+125;Fluminense;Flamengo;80;Flamengo;1;3
+125;Fluminense;Flamengo;90;Fluminense;2;3
+126;Cruzeiro;Santos;None;None;0;0
+127;Bahia;Grêmio;68;Grêmio;0;1
+127;Bahia;Grêmio;77;Grêmio;0;2
+127;Bahia;Grêmio;89;Grêmio;0;3
+128;Portuguesa;São Paulo;37;Portuguesa;1;0
+128;Portuguesa;São Paulo;46;São Paulo;1;1
+128;Portuguesa;São Paulo;78;Portuguesa;2;1
+129;Internacional;Atlético/PR;1;Atlético/PR;0;1
+129;Internacional;Atlético/PR;14;Internacional;1;1
+129;Internacional;Atlético/PR;74;Atlético/PR;1;2
+129;Internacional;Atlético/PR;87;Internacional;2;2
+130;Ponte Preta;Criciúma;6;Ponte Preta;1;0
+130;Ponte Preta;Criciúma;29;Ponte Preta;2;0
+130;Ponte Preta;Criciúma;55;Criciúma;2;1
+130;Ponte Preta;Criciúma;61;Ponte Preta;3;1
+131;Criciúma;Náutico;10;Criciúma;1;0
+131;Criciúma;Náutico;31;Criciúma;2;0
+131;Criciúma;Náutico;39;Criciúma;3;0
+132;Santos;Vasco da Gama;75;Santos;1;0
+132;Santos;Vasco da Gama;90;Vasco da Gama;1;1
+133;Atlético/MG;Bahia;18;Atlético/MG;1;0
+133;Atlético/MG;Bahia;55;Atlético/MG;2;0
+134;Coritiba;Portuguesa;58;Portuguesa;0;1
+134;Coritiba;Portuguesa;90;Coritiba;1;1
+135;Vitória;Ponte Preta;22;Ponte Preta;0;1
+135;Vitória;Ponte Preta;52;Vitória;1;1
+135;Vitória;Ponte Preta;62;Vitória;2;1
+135;Vitória;Ponte Preta;87;Vitória;3;1
+136;Goiás;Flamengo;14;Goiás;1;0
+136;Goiás;Flamengo;50;Flamengo;1;1
+137;Grêmio;Cruzeiro;57;Grêmio;1;0
+137;Grêmio;Cruzeiro;60;Grêmio;2;0
+137;Grêmio;Cruzeiro;66;Cruzeiro;2;1
+137;Grêmio;Cruzeiro;72;Grêmio;3;1
+138;Fluminense;Corinthians;None;None;0;0
+139;São Paulo;Atlético/PR;17;São Paulo;1;0
+139;São Paulo;Atlético/PR;37;Atlético/PR;1;1
+140;Botafogo;Internacional;9;Botafogo;1;0
+140;Botafogo;Internacional;32;Internacional;1;1
+140;Botafogo;Internacional;33;Internacional;1;2
+140;Botafogo;Internacional;64;Botafogo;2;2
+140;Botafogo;Internacional;74;Botafogo;3;2
+140;Botafogo;Internacional;90;Internacional;3;3
+141;Cruzeiro;Vitória;10;Cruzeiro;1;0
+141;Cruzeiro;Vitória;58;Cruzeiro;2;0
+141;Cruzeiro;Vitória;68;Vitória;2;1
+141;Cruzeiro;Vitória;73;Cruzeiro;3;1
+141;Cruzeiro;Vitória;78;Cruzeiro;4;1
+141;Cruzeiro;Vitória;84;Cruzeiro;5;1
+142;Náutico;Fluminense;70;Fluminense;0;1
+143;Vasco da Gama;Grêmio;5;Grêmio;0;1
+143;Vasco da Gama;Grêmio;25;Vasco da Gama;1;1
+143;Vasco da Gama;Grêmio;36;Grêmio;1;2
+143;Vasco da Gama;Grêmio;50;Grêmio;1;3
+143;Vasco da Gama;Grêmio;86;Vasco da Gama;2;3
+144;Flamengo;São Paulo;None;None;0;0
+145;Corinthians;Coritiba;88;Corinthians;1;0
+146;Ponte Preta;Goiás;17;Goiás;0;1
+147;Portuguesa;Botafogo;65;Botafogo;0;1
+147;Portuguesa;Botafogo;70;Portuguesa;1;1
+147;Portuguesa;Botafogo;71;Botafogo;1;2
+147;Portuguesa;Botafogo;76;Botafogo;1;3
+148;Bahia;Santos;None;None;0;0
+149;Atlético/PR;Criciúma;44;Criciúma;0;1
+149;Atlético/PR;Criciúma;62;Atlético/PR;1;1
+149;Atlético/PR;Criciúma;72;Atlético/PR;2;1
+150;Internacional;Atlético/MG;None;None;0;0
+151;Flamengo;Grêmio;7;Grêmio;0;1
+152;Ponte Preta;Cruzeiro;22;Cruzeiro;0;1
+152;Ponte Preta;Cruzeiro;71;Cruzeiro;0;2
+153;Santos;Vitória;8;Santos;1;0
+153;Santos;Vitória;55;Santos;2;0
+154;Criciúma;Coritiba;34;Criciúma;1;0
+154;Criciúma;Coritiba;35;Criciúma;2;0
+154;Criciúma;Coritiba;60;Coritiba;2;1
+155;Bahia;Náutico;56;Bahia;1;0
+155;Bahia;Náutico;76;Bahia;2;0
+156;Vasco da Gama;Corinthians;3;Corinthians;0;1
+156;Vasco da Gama;Corinthians;54;Vasco da Gama;1;1
+157;São Paulo;Fluminense;27;São Paulo;1;0
+157;São Paulo;Fluminense;45;São Paulo;2;0
+157;São Paulo;Fluminense;90;Fluminense;2;1
+158;Atlético/MG;Portuguesa;36;Portuguesa;0;1
+158;Atlético/MG;Portuguesa;54;Atlético/MG;1;1
+158;Atlético/MG;Portuguesa;88;Atlético/MG;2;1
+159;Atlético/PR;Botafogo;46;Atlético/PR;1;0
+159;Atlético/PR;Botafogo;56;Atlético/PR;2;0
+160;Internacional;Goiás;27;Internacional;1;0
+160;Internacional;Goiás;36;Goiás;1;1
+160;Internacional;Goiás;72;Goiás;1;2
+160;Internacional;Goiás;75;Goiás;1;3
+160;Internacional;Goiás;77;Internacional;2;3
+160;Internacional;Goiás;85;Internacional;3;3
+161;Goiás;Atlético/MG;None;None;0;0
+162;Portuguesa;Bahia;1;Portuguesa;1;0
+162;Portuguesa;Bahia;4;Portuguesa;2;0
+162;Portuguesa;Bahia;6;Portuguesa;3;0
+162;Portuguesa;Bahia;55;Bahia;3;1
+162;Portuguesa;Bahia;59;Portuguesa;4;1
+162;Portuguesa;Bahia;72;Bahia;4;2
+163;Náutico;Atlético/PR;4;Atlético/PR;0;1
+163;Náutico;Atlético/PR;18;Atlético/PR;0;2
+163;Náutico;Atlético/PR;41;Náutico;1;2
+163;Náutico;Atlético/PR;79;Atlético/PR;1;3
+163;Náutico;Atlético/PR;89;Atlético/PR;1;4
+164;Grêmio;Ponte Preta;60;Grêmio;1;0
+165;Fluminense;Santos;12;Santos;0;1
+165;Fluminense;Santos;28;Santos;0;2
+166;Coritiba;Internacional;None;None;0;0
+167;Botafogo;São Paulo;None;None;0;0
+168;Corinthians;Flamengo;23;Corinthians;1;0
+168;Corinthians;Flamengo;34;Corinthians;2;0
+168;Corinthians;Flamengo;74;Corinthians;3;0
+168;Corinthians;Flamengo;83;Corinthians;4;0
+169;Vitória;Criciúma;16;Criciúma;0;1
+170;Cruzeiro;Vasco da Gama;1;Cruzeiro;1;0
+170;Cruzeiro;Vasco da Gama;18;Vasco da Gama;1;1
+170;Cruzeiro;Vasco da Gama;31;Cruzeiro;2;1
+170;Cruzeiro;Vasco da Gama;38;Cruzeiro;3;1
+170;Cruzeiro;Vasco da Gama;40;Vasco da Gama;3;2
+170;Cruzeiro;Vasco da Gama;43;Vasco da Gama;3;3
+170;Cruzeiro;Vasco da Gama;66;Cruzeiro;4;3
+170;Cruzeiro;Vasco da Gama;86;Cruzeiro;5;3
+171;Goiás;Grêmio;13;Goiás;1;0
+171;Goiás;Grêmio;70;Goiás;2;0
+172;Atlético/PR;Santos;6;Atlético/PR;1;0
+172;Atlético/PR;Santos;37;Atlético/PR;2;0
+172;Atlético/PR;Santos;41;Santos;2;1
+173;Flamengo;Vitória;22;Flamengo;1;0
+173;Flamengo;Vitória;43;Flamengo;2;0
+173;Flamengo;Vitória;90;Vitória;2;1
+174;Portuguesa;Ponte Preta;40;Portuguesa;1;0
+174;Portuguesa;Ponte Preta;48;Portuguesa;2;0
+174;Portuguesa;Ponte Preta;90;Ponte Preta;2;1
+175;Internacional;Corinthians;54;Internacional;1;0
+176;Bahia;Cruzeiro;24;Cruzeiro;0;1
+176;Bahia;Cruzeiro;39;Cruzeiro;0;2
+176;Bahia;Cruzeiro;68;Bahia;1;2
+176;Bahia;Cruzeiro;89;Cruzeiro;1;3
+177;Atlético/MG;Fluminense;13;Fluminense;0;1
+177;Atlético/MG;Fluminense;45;Atlético/MG;1;1
+177;Atlético/MG;Fluminense;72;Fluminense;1;2
+177;Atlético/MG;Fluminense;82;Atlético/MG;2;2
+178;Náutico;Vasco da Gama;47;Vasco da Gama;0;1
+178;Náutico;Vasco da Gama;51;Vasco da Gama;0;2
+178;Náutico;Vasco da Gama;90;Vasco da Gama;0;3
+179;Botafogo;Coritiba;13;Botafogo;1;0
+179;Botafogo;Coritiba;39;Botafogo;2;0
+179;Botafogo;Coritiba;49;Botafogo;3;0
+179;Botafogo;Coritiba;57;Coritiba;3;1
+180;São Paulo;Criciúma;22;Criciúma;0;1
+180;São Paulo;Criciúma;42;Criciúma;0;2
+180;São Paulo;Criciúma;69;São Paulo;1;2
+181;Santos;Goiás;50;Santos;1;0
+182;Fluminense;Bahia;65;Fluminense;1;0
+183;Ponte Preta;Internacional;25;Ponte Preta;1;0
+183;Ponte Preta;Internacional;29;Internacional;1;1
+183;Ponte Preta;Internacional;60;Internacional;1;2
+183;Ponte Preta;Internacional;71;Internacional;1;3
+184;Vitória;Atlético/MG;16;Vitória;1;0
+184;Vitória;Atlético/MG;85;Atlético/MG;1;1
+185;Grêmio;Portuguesa;51;Grêmio;1;0
+185;Grêmio;Portuguesa;57;Grêmio;2;0
+185;Grêmio;Portuguesa;69;Portuguesa;2;1
+185;Grêmio;Portuguesa;76;Portuguesa;2;2
+185;Grêmio;Portuguesa;86;Grêmio;3;2
+186;Coritiba;São Paulo;32;Coritiba;1;0
+186;Coritiba;São Paulo;45;Coritiba;2;0
+187;Cruzeiro;Flamengo;53;Cruzeiro;1;0
+188;Corinthians;Náutico;None;None;0;0
+189;Vasco da Gama;Atlético/PR;None;None;0;0
+190;Criciúma;Botafogo;3;Criciúma;1;0
+190;Criciúma;Botafogo;53;Botafogo;1;1
+190;Criciúma;Botafogo;90;Botafogo;1;2
+191;Atlético/PR;Fluminense;17;Atlético/PR;1;0
+191;Atlético/PR;Fluminense;45;Fluminense;1;1
+192;Bahia;Criciúma;8;Criciúma;0;1
+192;Bahia;Criciúma;35;Criciúma;0;2
+192;Bahia;Criciúma;71;Bahia;1;2
+192;Bahia;Criciúma;85;Bahia;2;2
+193;Goiás;Cruzeiro;27;Goiás;1;0
+193;Goiás;Cruzeiro;38;Cruzeiro;1;1
+193;Goiás;Cruzeiro;71;Cruzeiro;1;2
+194;Náutico;Grêmio;25;Grêmio;0;1
+194;Náutico;Grêmio;80;Grêmio;0;2
+195;Botafogo;Corinthians;89;Botafogo;1;0
+196;Portuguesa;Vasco da Gama;11;Portuguesa;1;0
+196;Portuguesa;Vasco da Gama;75;Portuguesa;2;0
+197;Internacional;Vitória;8;Vitória;0;1
+197;Internacional;Vitória;26;Internacional;1;1
+197;Internacional;Vitória;28;Internacional;2;1
+197;Internacional;Vitória;73;Vitória;2;2
+198;Atlético/MG;Coritiba;22;Atlético/MG;1;0
+198;Atlético/MG;Coritiba;25;Atlético/MG;2;0
+198;Atlético/MG;Coritiba;39;Atlético/MG;3;0
+199;Flamengo;Santos;19;Flamengo;1;0
+199;Flamengo;Santos;54;Flamengo;2;0
+199;Flamengo;Santos;56;Santos;2;1
+200;São Paulo;Ponte Preta;47;São Paulo;1;0
+201;Cruzeiro;Atlético/PR;35;Cruzeiro;1;0
+202;Fluminense;Portuguesa;34;Portuguesa;0;1
+202;Fluminense;Portuguesa;60;Fluminense;1;1
+202;Fluminense;Portuguesa;72;Fluminense;2;1
+203;Ponte Preta;Flamengo;67;Ponte Preta;1;0
+203;Ponte Preta;Flamengo;86;Flamengo;1;1
+204;Criciúma;Internacional;89;Internacional;0;1
+205;Vasco da Gama;São Paulo;30;São Paulo;0;1
+205;Vasco da Gama;São Paulo;70;São Paulo;0;2
+206;Coritiba;Bahia;20;Bahia;0;1
+206;Coritiba;Bahia;52;Bahia;0;2
+206;Coritiba;Bahia;64;Coritiba;1;2
+206;Coritiba;Bahia;90;Coritiba;2;2
+207;Corinthians;Goiás;56;Goiás;0;1
+207;Corinthians;Goiás;78;Corinthians;1;1
+207;Corinthians;Goiás;84;Goiás;1;2
+208;Santos;Botafogo;39;Botafogo;0;1
+208;Santos;Botafogo;56;Botafogo;0;2
+208;Santos;Botafogo;67;Santos;1;2
+209;Grêmio;Atlético/MG;61;Atlético/MG;0;1
+210;Vitória;Náutico;14;Náutico;0;1
+210;Vitória;Náutico;20;Vitória;1;1
+210;Vitória;Náutico;70;Vitória;2;1
+211;Grêmio;Santos;72;Grêmio;1;0
+211;Grêmio;Santos;85;Santos;1;1
+212;Vasco da Gama;Vitória;8;Vasco da Gama;1;0
+212;Vasco da Gama;Vitória;80;Vitória;1;1
+212;Vasco da Gama;Vitória;90;Vitória;1;2
+213;Criciúma;Fluminense;39;Criciúma;1;0
+213;Criciúma;Fluminense;43;Fluminense;1;1
+213;Criciúma;Fluminense;71;Fluminense;1;2
+214;Coritiba;Goiás;6;Coritiba;1;0
+214;Coritiba;Goiás;37;Goiás;1;1
+214;Coritiba;Goiás;69;Goiás;1;2
+214;Coritiba;Goiás;73;Coritiba;2;2
+215;Cruzeiro;Botafogo;45;Cruzeiro;1;0
+215;Cruzeiro;Botafogo;81;Cruzeiro;2;0
+215;Cruzeiro;Botafogo;87;Cruzeiro;3;0
+216;Ponte Preta;Corinthians;42;Ponte Preta;1;0
+216;Ponte Preta;Corinthians;90;Ponte Preta;2;0
+217;São Paulo;Atlético/MG;26;São Paulo;1;0
+218;Flamengo;Atlético/PR;1;Flamengo;1;0
+218;Flamengo;Atlético/PR;7;Flamengo;2;0
+218;Flamengo;Atlético/PR;20;Atlético/PR;2;1
+218;Flamengo;Atlético/PR;53;Atlético/PR;2;2
+218;Flamengo;Atlético/PR;77;Atlético/PR;2;3
+218;Flamengo;Atlético/PR;80;Atlético/PR;2;4
+219;Bahia;Internacional;50;Bahia;1;0
+219;Bahia;Internacional;87;Bahia;2;0
+220;Portuguesa;Náutico;7;Portuguesa;1;0
+220;Portuguesa;Náutico;34;Portuguesa;2;0
+220;Portuguesa;Náutico;40;Portuguesa;3;0
+221;Fluminense;Coritiba;30;Coritiba;0;1
+221;Fluminense;Coritiba;50;Fluminense;1;1
+222;Vitória;Grêmio;None;None;0;0
+223;Internacional;Portuguesa;84;Portuguesa;0;1
+224;Náutico;Flamengo;None;None;0;0
+225;Goiás;São Paulo;89;Goiás;1;0
+226;Corinthians;Cruzeiro;None;None;0;0
+227;Botafogo;Bahia;30;Botafogo;1;0
+227;Botafogo;Bahia;81;Bahia;1;1
+227;Botafogo;Bahia;85;Bahia;1;2
+228;Santos;Criciúma;19;Santos;1;0
+228;Santos;Criciúma;41;Santos;2;0
+228;Santos;Criciúma;78;Criciúma;2;1
+229;Atlético/MG;Vasco da Gama;2;Atlético/MG;1;0
+229;Atlético/MG;Vasco da Gama;18;Atlético/MG;2;0
+229;Atlético/MG;Vasco da Gama;72;Vasco da Gama;2;1
+230;Atlético/PR;Ponte Preta;10;Atlético/PR;1;0
+231;Náutico;Coritiba;50;Náutico;1;0
+231;Náutico;Coritiba;76;Náutico;2;0
+231;Náutico;Coritiba;83;Náutico;3;0
+232;Goiás;Fluminense;36;Goiás;1;0
+232;Goiás;Fluminense;52;Fluminense;1;1
+232;Goiás;Fluminense;84;Fluminense;1;2
+233;Botafogo;Ponte Preta;42;Ponte Preta;0;1
+234;Bahia;Vasco da Gama;None;None;0;0
+235;São Paulo;Grêmio;68;Grêmio;0;1
+236;Flamengo;Criciúma;4;Flamengo;1;0
+236;Flamengo;Criciúma;17;Flamengo;2;0
+236;Flamengo;Criciúma;23;Flamengo;3;0
+236;Flamengo;Criciúma;45;Criciúma;3;1
+236;Flamengo;Criciúma;77;Flamengo;4;1
+237;Portuguesa;Corinthians;7;Portuguesa;1;0
+237;Portuguesa;Corinthians;12;Portuguesa;2;0
+237;Portuguesa;Corinthians;31;Portuguesa;3;0
+237;Portuguesa;Corinthians;80;Portuguesa;4;0
+238;Internacional;Cruzeiro;4;Cruzeiro;0;1
+238;Internacional;Cruzeiro;5;Internacional;1;1
+238;Internacional;Cruzeiro;52;Cruzeiro;1;2
+239;Atlético/MG;Santos;14;Santos;0;1
+239;Atlético/MG;Santos;17;Atlético/MG;1;1
+239;Atlético/MG;Santos;36;Atlético/MG;2;1
+239;Atlético/MG;Santos;87;Atlético/MG;3;1
+240;Atlético/PR;Vitória;17;Vitória;0;1
+240;Atlético/PR;Vitória;29;Vitória;0;2
+240;Atlético/PR;Vitória;43;Vitória;0;3
+240;Atlético/PR;Vitória;56;Atlético/PR;1;3
+240;Atlético/PR;Vitória;62;Atlético/PR;2;3
+240;Atlético/PR;Vitória;68;Atlético/PR;3;3
+240;Atlético/PR;Vitória;82;Vitória;3;4
+240;Atlético/PR;Vitória;85;Vitória;3;5
+241;Criciúma;Atlético/MG;41;Atlético/MG;0;1
+241;Criciúma;Atlético/MG;42;Criciúma;1;1
+242;Ponte Preta;Náutico;45;Ponte Preta;1;0
+242;Ponte Preta;Náutico;80;Náutico;1;1
+242;Ponte Preta;Náutico;90;Náutico;1;2
+243;Cruzeiro;Portuguesa;5;Cruzeiro;1;0
+243;Cruzeiro;Portuguesa;15;Cruzeiro;2;0
+243;Cruzeiro;Portuguesa;27;Cruzeiro;3;0
+243;Cruzeiro;Portuguesa;29;Cruzeiro;4;0
+244;Grêmio;Atlético/PR;43;Grêmio;1;0
+245;Fluminense;Botafogo;2;Fluminense;1;0
+245;Fluminense;Botafogo;13;Botafogo;1;1
+246;Vitória;Goiás;15;Vitória;1;0
+246;Vitória;Goiás;34;Goiás;1;1
+246;Vitória;Goiás;87;Vitória;2;1
+247;Corinthians;Bahia;20;Corinthians;1;0
+247;Corinthians;Bahia;40;Corinthians;2;0
+248;Coritiba;Flamengo;45;Flamengo;0;1
+248;Coritiba;Flamengo;49;Flamengo;0;2
+249;Santos;São Paulo;22;Santos;1;0
+249;Santos;São Paulo;59;Santos;2;0
+249;Santos;São Paulo;90;Santos;3;0
+250;Vasco da Gama;Internacional;9;Vasco da Gama;1;0
+250;Vasco da Gama;Internacional;18;Internacional;1;1
+250;Vasco da Gama;Internacional;42;Vasco da Gama;2;1
+250;Vasco da Gama;Internacional;75;Vasco da Gama;3;1
+251;Botafogo;Grêmio;36;Grêmio;0;1
+252;São Paulo;Vitória;5;São Paulo;1;0
+252;São Paulo;Vitória;33;Vitória;1;1
+252;São Paulo;Vitória;65;São Paulo;2;1
+252;São Paulo;Vitória;69;Vitória;2;2
+252;São Paulo;Vitória;87;São Paulo;3;2
+253;Atlético/MG;Corinthians;None;None;0;0
+254;Náutico;Cruzeiro;9;Cruzeiro;0;1
+254;Náutico;Cruzeiro;28;Náutico;1;1
+254;Náutico;Cruzeiro;52;Cruzeiro;1;2
+254;Náutico;Cruzeiro;58;Cruzeiro;1;3
+254;Náutico;Cruzeiro;76;Cruzeiro;1;4
+255;Internacional;Fluminense;79;Internacional;1;0
+256;Flamengo;Vasco da Gama;32;Flamengo;1;0
+256;Flamengo;Vasco da Gama;53;Vasco da Gama;1;1
+257;Atlético/PR;Coritiba;30;Coritiba;0;1
+257;Atlético/PR;Coritiba;42;Atlético/PR;1;1
+257;Atlético/PR;Coritiba;45;Atlético/PR;2;1
+258;Bahia;Ponte Preta;21;Ponte Preta;0;1
+258;Bahia;Ponte Preta;34;Bahia;1;1
+259;Goiás;Criciúma;3;Criciúma;0;1
+259;Goiás;Criciúma;30;Goiás;1;1
+260;Portuguesa;Santos;15;Portuguesa;1;0
+260;Portuguesa;Santos;59;Portuguesa;2;0
+260;Portuguesa;Santos;66;Portuguesa;3;0
+261;Grêmio;Criciúma;35;Criciúma;0;1
+261;Grêmio;Criciúma;56;Grêmio;1;1
+261;Grêmio;Criciúma;89;Criciúma;1;2
+262;Coritiba;Santos;62;Coritiba;1;0
+263;Bahia;Vitória;16;Bahia;1;0
+263;Bahia;Vitória;25;Bahia;2;0
+264;Ponte Preta;Atlético/MG;35;Ponte Preta;1;0
+264;Ponte Preta;Atlético/MG;78;Ponte Preta;2;0
+265;Náutico;Botafogo;9;Náutico;1;0
+265;Náutico;Botafogo;25;Botafogo;1;1
+265;Náutico;Botafogo;39;Botafogo;1;2
+265;Náutico;Botafogo;90;Botafogo;1;3
+266;Vasco da Gama;Fluminense;11;Vasco da Gama;1;0
+267;Corinthians;Atlético/PR;None;None;0;0
+268;Cruzeiro;São Paulo;77;São Paulo;0;1
+268;Cruzeiro;São Paulo;80;São Paulo;0;2
+269;Portuguesa;Goiás;36;Goiás;0;1
+269;Portuguesa;Goiás;51;Goiás;0;2
+269;Portuguesa;Goiás;82;Portuguesa;1;2
+270;Flamengo;Internacional;28;Flamengo;1;0
+270;Flamengo;Internacional;71;Flamengo;2;0
+270;Flamengo;Internacional;81;Internacional;2;1
+271;Vitória;Coritiba;11;Vitória;1;0
+271;Vitória;Coritiba;45;Coritiba;1;1
+271;Vitória;Coritiba;70;Vitória;2;1
+272;Fluminense;Grêmio;38;Grêmio;0;1
+272;Fluminense;Grêmio;90;Fluminense;1;1
+273;Santos;Ponte Preta;44;Santos;1;0
+273;Santos;Ponte Preta;68;Santos;2;0
+273;Santos;Ponte Preta;90;Ponte Preta;2;1
+274;Criciúma;Vasco da Gama;16;Criciúma;1;0
+274;Criciúma;Vasco da Gama;19;Vasco da Gama;1;1
+274;Criciúma;Vasco da Gama;23;Criciúma;2;1
+274;Criciúma;Vasco da Gama;49;Vasco da Gama;2;2
+274;Criciúma;Vasco da Gama;53;Criciúma;3;2
+275;Internacional;Náutico;18;Internacional;1;0
+275;Internacional;Náutico;27;Náutico;1;1
+275;Internacional;Náutico;45;Internacional;2;1
+275;Internacional;Náutico;69;Internacional;3;1
+275;Internacional;Náutico;82;Internacional;4;1
+276;São Paulo;Corinthians;None;None;0;0
+277;Atlético/MG;Cruzeiro;86;Atlético/MG;1;0
+278;Atlético/PR;Portuguesa;2;Atlético/PR;1;0
+279;Goiás;Bahia;4;Goiás;1;0
+279;Goiás;Bahia;31;Goiás;2;0
+279;Goiás;Bahia;38;Goiás;3;0
+279;Goiás;Bahia;68;Bahia;3;1
+280;Botafogo;Flamengo;12;Flamengo;0;1
+280;Botafogo;Flamengo;42;Botafogo;1;1
+280;Botafogo;Flamengo;63;Botafogo;2;1
+281;Cruzeiro;Fluminense;17;Cruzeiro;1;0
+282;Santos;Internacional;None;None;0;0
+283;São Paulo;Náutico;30;São Paulo;1;0
+283;São Paulo;Náutico;65;São Paulo;2;0
+283;São Paulo;Náutico;73;São Paulo;3;0
+284;Criciúma;Portuguesa;9;Portuguesa;0;1
+284;Criciúma;Portuguesa;13;Portuguesa;0;2
+284;Criciúma;Portuguesa;70;Criciúma;1;2
+284;Criciúma;Portuguesa;90;Portuguesa;1;3
+285;Ponte Preta;Coritiba;30;Ponte Preta;1;0
+286;Flamengo;Bahia;51;Flamengo;1;0
+286;Flamengo;Bahia;78;Bahia;1;1
+286;Flamengo;Bahia;85;Flamengo;2;1
+287;Atlético/PR;Atlético/MG;84;Atlético/PR;1;0
+288;Grêmio;Corinthians;49;Grêmio;1;0
+289;Vasco da Gama;Goiás;36;Goiás;0;1
+289;Vasco da Gama;Goiás;67;Goiás;0;2
+290;Vitória;Botafogo;77;Vitória;1;0
+291;Fluminense;Ponte Preta;81;Ponte Preta;0;1
+291;Fluminense;Ponte Preta;84;Fluminense;1;1
+292;Náutico;Santos;1;Santos;0;1
+292;Náutico;Santos;21;Santos;0;2
+292;Náutico;Santos;24;Santos;0;3
+292;Náutico;Santos;26;Santos;0;4
+292;Náutico;Santos;50;Náutico;1;4
+292;Náutico;Santos;89;Santos;1;5
+293;Corinthians;Criciúma;59;Corinthians;1;0
+294;Bahia;São Paulo;23;São Paulo;0;1
+295;Internacional;Grêmio;4;Internacional;1;0
+295;Internacional;Grêmio;40;Grêmio;1;1
+295;Internacional;Grêmio;52;Grêmio;1;2
+295;Internacional;Grêmio;60;Internacional;2;2
+296;Goiás;Atlético/PR;18;Goiás;1;0
+296;Goiás;Atlético/PR;26;Goiás;2;0
+296;Goiás;Atlético/PR;90;Goiás;3;0
+297;Atlético/MG;Flamengo;57;Atlético/MG;1;0
+298;Botafogo;Vasco da Gama;5;Botafogo;1;0
+298;Botafogo;Vasco da Gama;7;Botafogo;2;0
+298;Botafogo;Vasco da Gama;53;Vasco da Gama;2;1
+298;Botafogo;Vasco da Gama;68;Vasco da Gama;2;2
+299;Coritiba;Cruzeiro;41;Coritiba;1;0
+299;Coritiba;Cruzeiro;61;Cruzeiro;1;1
+299;Coritiba;Cruzeiro;72;Coritiba;2;1
+300;Portuguesa;Vitória;18;Vitória;0;1
+300;Portuguesa;Vitória;62;Portuguesa;1;1
+301;Botafogo;Atlético/MG;51;Botafogo;1;0
+302;Cruzeiro;Criciúma;12;Cruzeiro;1;0
+302;Cruzeiro;Criciúma;18;Cruzeiro;2;0
+302;Cruzeiro;Criciúma;33;Criciúma;2;1
+302;Cruzeiro;Criciúma;41;Criciúma;2;2
+302;Cruzeiro;Criciúma;45;Criciúma;2;3
+302;Cruzeiro;Criciúma;57;Cruzeiro;3;3
+302;Cruzeiro;Criciúma;75;Cruzeiro;4;3
+302;Cruzeiro;Criciúma;84;Cruzeiro;5;3
+303;Bahia;Atlético/PR;47;Bahia;1;0
+303;Bahia;Atlético/PR;57;Atlético/PR;1;1
+304;Ponte Preta;Vasco da Gama;16;Vasco da Gama;0;1
+304;Ponte Preta;Vasco da Gama;79;Ponte Preta;1;1
+304;Ponte Preta;Vasco da Gama;89;Ponte Preta;2;1
+305;Internacional;São Paulo;9;São Paulo;0;1
+305;Internacional;São Paulo;32;Internacional;1;1
+305;Internacional;São Paulo;43;São Paulo;1;2
+305;Internacional;São Paulo;47;Internacional;2;2
+305;Internacional;São Paulo;53;São Paulo;2;3
+306;Corinthians;Santos;28;Corinthians;1;0
+306;Corinthians;Santos;61;Santos;1;1
+307;Portuguesa;Flamengo;None;None;0;0
+308;Coritiba;Grêmio;1;Coritiba;1;0
+308;Coritiba;Grêmio;4;Coritiba;2;0
+308;Coritiba;Grêmio;34;Coritiba;3;0
+308;Coritiba;Grêmio;58;Coritiba;4;0
+309;Fluminense;Vitória;23;Vitória;0;1
+309;Fluminense;Vitória;27;Fluminense;1;1
+309;Fluminense;Vitória;57;Fluminense;2;1
+309;Fluminense;Vitória;62;Vitória;2;2
+309;Fluminense;Vitória;64;Vitória;2;3
+310;Náutico;Goiás;2;Goiás;0;1
+310;Náutico;Goiás;40;Goiás;0;2
+311;Vasco da Gama;Coritiba;26;Vasco da Gama;1;0
+311;Vasco da Gama;Coritiba;72;Vasco da Gama;2;0
+311;Vasco da Gama;Coritiba;81;Coritiba;2;1
+312;São Paulo;Portuguesa;8;São Paulo;1;0
+312;São Paulo;Portuguesa;41;Portuguesa;1;1
+312;São Paulo;Portuguesa;77;São Paulo;2;1
+313;Atlético/MG;Náutico;10;Atlético/MG;1;0
+313;Atlético/MG;Náutico;22;Atlético/MG;2;0
+313;Atlético/MG;Náutico;57;Atlético/MG;3;0
+313;Atlético/MG;Náutico;66;Atlético/MG;4;0
+313;Atlético/MG;Náutico;74;Atlético/MG;5;0
+314;Goiás;Botafogo;87;Goiás;1;0
+315;Santos;Cruzeiro;54;Cruzeiro;0;1
+316;Grêmio;Bahia;None;None;0;0
+317;Vitória;Corinthians;52;Corinthians;0;1
+317;Vitória;Corinthians;60;Vitória;1;1
+318;Atlético/PR;Internacional;44;Atlético/PR;1;0
+319;Criciúma;Ponte Preta;33;Criciúma;1;0
+319;Criciúma;Ponte Preta;54;Ponte Preta;1;1
+320;Flamengo;Fluminense;89;Flamengo;1;0
+321;Bahia;Atlético/MG;None;None;0;0
+322;Portuguesa;Coritiba;None;None;0;0
+323;Flamengo;Goiás;50;Flamengo;1;0
+323;Flamengo;Goiás;62;Goiás;1;1
+324;Internacional;Botafogo;33;Internacional;1;0
+324;Internacional;Botafogo;47;Botafogo;1;1
+324;Internacional;Botafogo;50;Internacional;2;1
+325;Cruzeiro;Grêmio;33;Cruzeiro;1;0
+325;Cruzeiro;Grêmio;78;Cruzeiro;2;0
+325;Cruzeiro;Grêmio;85;Cruzeiro;3;0
+326;Atlético/PR;São Paulo;11;Atlético/PR;1;0
+326;Atlético/PR;São Paulo;27;Atlético/PR;2;0
+326;Atlético/PR;São Paulo;57;Atlético/PR;3;0
+327;Ponte Preta;Vitória;17;Vitória;0;1
+327;Ponte Preta;Vitória;29;Vitória;0;2
+327;Ponte Preta;Vitória;44;Vitória;0;3
+328;Corinthians;Fluminense;90;Corinthians;1;0
+329;Náutico;Criciúma;70;Criciúma;0;1
+330;Vasco da Gama;Santos;22;Santos;0;1
+330;Vasco da Gama;Santos;26;Santos;0;2
+330;Vasco da Gama;Santos;28;Vasco da Gama;1;2
+330;Vasco da Gama;Santos;77;Vasco da Gama;2;2
+331;Goiás;Ponte Preta;23;Goiás;1;0
+331;Goiás;Ponte Preta;25;Goiás;2;0
+332;Grêmio;Vasco da Gama;51;Grêmio;1;0
+333;Criciúma;Atlético/PR;6;Criciúma;1;0
+333;Criciúma;Atlético/PR;28;Criciúma;2;0
+333;Criciúma;Atlético/PR;60;Atlético/PR;2;1
+334;Botafogo;Portuguesa;None;None;0;0
+335;Coritiba;Corinthians;64;Corinthians;0;1
+336;São Paulo;Flamengo;48;São Paulo;1;0
+336;São Paulo;Flamengo;61;São Paulo;2;0
+337;Vitória;Cruzeiro;36;Cruzeiro;0;1
+337;Vitória;Cruzeiro;50;Vitória;1;1
+337;Vitória;Cruzeiro;70;Cruzeiro;1;2
+337;Vitória;Cruzeiro;76;Cruzeiro;1;3
+338;Santos;Bahia;36;Santos;1;0
+338;Santos;Bahia;65;Santos;2;0
+338;Santos;Bahia;70;Santos;3;0
+339;Atlético/MG;Internacional;37;Atlético/MG;1;0
+339;Atlético/MG;Internacional;65;Internacional;1;1
+339;Atlético/MG;Internacional;66;Atlético/MG;2;1
+340;Fluminense;Náutico;16;Fluminense;1;0
+340;Fluminense;Náutico;50;Fluminense;2;0
+341;Botafogo;Atlético/PR;27;Botafogo;1;0
+341;Botafogo;Atlético/PR;36;Botafogo;2;0
+341;Botafogo;Atlético/PR;77;Botafogo;3;0
+341;Botafogo;Atlético/PR;81;Botafogo;4;0
+342;Coritiba;Criciúma;29;Criciúma;0;1
+342;Coritiba;Criciúma;69;Coritiba;1;1
+342;Coritiba;Criciúma;70;Criciúma;1;2
+343;Vitória;Santos;20;Vitória;1;0
+343;Vitória;Santos;83;Vitória;2;0
+344;Cruzeiro;Ponte Preta;5;Ponte Preta;0;1
+344;Cruzeiro;Ponte Preta;74;Cruzeiro;1;1
+344;Cruzeiro;Ponte Preta;83;Cruzeiro;2;1
+344;Cruzeiro;Ponte Preta;90;Ponte Preta;2;2
+345;Fluminense;São Paulo;17;São Paulo;0;1
+345;Fluminense;São Paulo;24;Fluminense;1;1
+345;Fluminense;São Paulo;88;Fluminense;2;1
+346;Corinthians;Vasco da Gama;None;None;0;0
+347;Náutico;Bahia;82;Bahia;0;1
+348;Portuguesa;Atlético/MG;45;Portuguesa;1;0
+348;Portuguesa;Atlético/MG;64;Portuguesa;2;0
+349;Goiás;Internacional;21;Internacional;0;1
+349;Goiás;Internacional;25;Goiás;1;1
+349;Goiás;Internacional;71;Goiás;2;1
+349;Goiás;Internacional;81;Goiás;3;1
+350;Grêmio;Flamengo;60;Grêmio;1;0
+350;Grêmio;Flamengo;85;Flamengo;1;1
+350;Grêmio;Flamengo;87;Grêmio;2;1
+351;Criciúma;Vitória;12;Criciúma;1;0
+351;Criciúma;Vitória;52;Vitória;1;1
+352;Vasco da Gama;Cruzeiro;3;Vasco da Gama;1;0
+352;Vasco da Gama;Cruzeiro;32;Vasco da Gama;2;0
+352;Vasco da Gama;Cruzeiro;64;Cruzeiro;2;1
+353;Atlético/MG;Goiás;23;Atlético/MG;1;0
+353;Atlético/MG;Goiás;33;Atlético/MG;2;0
+353;Atlético/MG;Goiás;43;Goiás;2;1
+353;Atlético/MG;Goiás;66;Atlético/MG;3;1
+353;Atlético/MG;Goiás;72;Atlético/MG;4;1
+354;Flamengo;Corinthians;18;Flamengo;1;0
+355;Ponte Preta;Grêmio;15;Ponte Preta;1;0
+355;Ponte Preta;Grêmio;54;Grêmio;1;1
+356;Santos;Fluminense;64;Santos;1;0
+357;Atlético/PR;Náutico;25;Atlético/PR;1;0
+357;Atlético/PR;Náutico;26;Atlético/PR;2;0
+357;Atlético/PR;Náutico;46;Náutico;2;1
+357;Atlético/PR;Náutico;52;Atlético/PR;3;1
+357;Atlético/PR;Náutico;59;Atlético/PR;4;1
+357;Atlético/PR;Náutico;62;Atlético/PR;5;1
+357;Atlético/PR;Náutico;71;Atlético/PR;6;1
+358;Internacional;Coritiba;None;None;0;0
+359;São Paulo;Botafogo;3;São Paulo;1;0
+359;São Paulo;Botafogo;27;Botafogo;1;1
+360;Bahia;Portuguesa;44;Bahia;1;0
+361;Fluminense;Atlético/MG;21;Atlético/MG;0;1
+361;Fluminense;Atlético/MG;36;Fluminense;1;1
+361;Fluminense;Atlético/MG;53;Fluminense;2;1
+361;Fluminense;Atlético/MG;82;Atlético/MG;2;2
+362;Corinthians;Internacional;None;None;0;0
+363;Coritiba;Botafogo;38;Coritiba;1;0
+363;Coritiba;Botafogo;68;Coritiba;2;0
+363;Coritiba;Botafogo;83;Botafogo;2;1
+364;Cruzeiro;Bahia;14;Bahia;0;1
+364;Cruzeiro;Bahia;85;Cruzeiro;1;1
+364;Cruzeiro;Bahia;89;Bahia;1;2
+365;Ponte Preta;Portuguesa;15;Portuguesa;0;1
+365;Ponte Preta;Portuguesa;64;Portuguesa;0;2
+366;Criciúma;São Paulo;2;Criciúma;1;0
+367;Vasco da Gama;Náutico;5;Vasco da Gama;1;0
+367;Vasco da Gama;Náutico;86;Vasco da Gama;2;0
+368;Vitória;Flamengo;43;Vitória;1;0
+368;Vitória;Flamengo;45;Flamengo;1;1
+368;Vitória;Flamengo;46;Vitória;2;1
+368;Vitória;Flamengo;59;Flamengo;2;2
+368;Vitória;Flamengo;61;Vitória;3;2
+368;Vitória;Flamengo;79;Vitória;4;2
+369;Santos;Atlético/PR;27;Atlético/PR;0;1
+369;Santos;Atlético/PR;76;Santos;1;1
+369;Santos;Atlético/PR;78;Santos;2;1
+370;Grêmio;Goiás;16;Grêmio;1;0
+371;Flamengo;Cruzeiro;13;Flamengo;1;0
+371;Flamengo;Cruzeiro;61;Cruzeiro;1;1
+372;Náutico;Corinthians;52;Náutico;1;0
+373;Portuguesa;Grêmio;None;None;0;0
+374;Botafogo;Criciúma;9;Botafogo;1;0
+374;Botafogo;Criciúma;22;Botafogo;2;0
+374;Botafogo;Criciúma;42;Botafogo;3;0
+375;Internacional;Ponte Preta;None;None;0;0
+376;Goiás;Santos;5;Santos;0;1
+376;Goiás;Santos;44;Santos;0;2
+376;Goiás;Santos;76;Santos;0;3
+377;São Paulo;Coritiba;27;Coritiba;0;1
+378;Atlético/MG;Vitória;3;Vitória;0;1
+378;Atlético/MG;Vitória;5;Vitória;0;2
+378;Atlético/MG;Vitória;46;Atlético/MG;1;2
+378;Atlético/MG;Vitória;89;Atlético/MG;2;2
+379;Bahia;Fluminense;42;Bahia;1;0
+379;Bahia;Fluminense;55;Fluminense;1;1
+379;Bahia;Fluminense;82;Fluminense;1;2
+380;Atlético/PR;Vasco da Gama;4;Atlético/PR;1;0
+380;Atlético/PR;Vasco da Gama;40;Vasco da Gama;1;1
+380;Atlético/PR;Vasco da Gama;43;Atlético/PR;2;1
+380;Atlético/PR;Vasco da Gama;63;Atlético/PR;3;1
+380;Atlético/PR;Vasco da Gama;81;Atlético/PR;4;1
+380;Atlético/PR;Vasco da Gama;85;Atlético/PR;5;1

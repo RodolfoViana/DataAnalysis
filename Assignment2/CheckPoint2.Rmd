@@ -2,7 +2,7 @@
 title: "CheckPoint2"
 author: "Rodolfo Viana"
 date: "04-05-2015"
-output: pdf_document
+output: html_document
 ---
 
 Para a realização dessa atividade eu utilizei os dados sobre os gastos dos parlamentares disponíveis no site de transparência do congresso nacional do ano de 2015.
@@ -73,7 +73,7 @@ ggplot(data.frame(samplesMeans), aes(samplesMeans)) +
   labs(x='Média das amostras', y='Ocorrência') + ggtitle("10 Amostras")
 ```
 
-É possível notas que a maioria dos valores não ficaram tão próximos da média da população. Por esse motivo irei repetir o experimento, dessa vez aumentar o número de amostras mantendo o número de observações de dentro das amostras contante (tamanho 100).
+É possível notas que a maioria dos valores não ficaram tão próximos da média da população. Por esse motivo irei repetir o experimento, dessa vez aumentando o número de amostras mantendo o número de observações de dentro das amostras constante (tamanho 100).
 
 Para a média de 20 amostras temos:
 
@@ -134,7 +134,7 @@ g3
 ```
 
 
-É possível notar que quanto maior for o número das amostras mais próximo a distribuição se parece com a distribuição normal (confirmando assim o teorema do limite central). Sendo o valor com maior número de ocorrência o valor bastante próximo do valor da média da população (247.40). Para uma melhor visualização da evolução observe os três gráficos abaixo. 
+É possível notar que quanto maior for o número das amostras mais próximo a distribuição se parece com a distribuição normal (confirmando assim o teorema do limite central). Sendo o valor com maior número de ocorrência bastante próximo do valor da média da população (247.40). Para uma melhor visualização da evolução observe os três gráficos abaixo. 
 
 
 ```{r,  message=FALSE, fig.align='center', warning=FALSE}

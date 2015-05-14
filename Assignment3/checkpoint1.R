@@ -43,15 +43,17 @@ ggplot(toPlot, aes(x = tempo_id, y=mean, colour = tempo_id )) +
   geom_point() +
   geom_errorbar(aes(ymin=lower, ymax=upper), width=.1)
 
-t.test
+t.test(primeiroTempo$tempo_gol, segundoTempo$tempo_gol, alternative = "two.sided")$p.value
+
+x <- t.test(segundoTempo$tempo_gol, alternative = "two.sided")
+
 
 --------------------------------------------------------------------------------------
 
+wilcox.test(primeiroTempo$tempo_gol, segundoTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE)$p.value
 
 medianaPrimeiroTempo <- wilcox.test(primeiroTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE) 
-medianaSegundoTempo <- wilcox.test(segundoTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE) 
-jogos <- wilcox.test(primeiroTempo$tempo_gol, segundoTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE) 
-
+medianaSegundoTempo <- wilcox.test(segundoTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE)  
 
 ic_1 = c(medianaPrimeiroTempo$conf.int[1],medianaPrimeiroTempo$conf.int[2])
 ic_2 = c(medianaSegundoTempo$conf.int[1],medianaSegundoTempo$conf.int[2])
@@ -63,12 +65,6 @@ toPlot = mutate(toPlot, upper = ifelse(toPlot$tempo_id == 1,ic_1[2],ic_2[2]))
 ggplot(toPlot, aes(x = tempo_id, y=median, colour = tempo_id )) + 
   geom_point() +
   geom_errorbar(aes(ymin=lower, ymax=upper), width=.1)
-
-
-
-median(primeiroTempo$tempo_gol)
-median(segundoTempo$tempo_gol)
-
 
 
 

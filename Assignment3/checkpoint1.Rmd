@@ -8,8 +8,6 @@ output: html_document
 Utilizando uma amostra dos gols do campeonato brasileiro de 2013, gostariamos de saber se existe diferença siginificativa entre o momento em que o gol acontece no primeiro e segundo tempo das partidas. Utilizando a média do momento dos gols obtemos os seguintes resultados:
 
 
-
-
 ```{r, warning=FALSE, fig.align='center', message=FALSE}
 library(dplyr)
 library(ggplot2)
@@ -31,14 +29,17 @@ segundoTempo <- fileSemNone %>%
 
 segundoTempo$tempo_gol <- segundoTempo$tempo_gol - 45
 
-se = sd(primeiroTempo$tempo_gol) / sqrt(nrow(primeiroTempo))
-lower = mean(primeiroTempo$tempo_gol) - 1.96 * se
-upper = mean(primeiroTempo$tempo_gol) + 1.96 * se
-ic_1 = c(lower,upper)
-se1 = sd(segundoTempo$tempo_gol) / sqrt(nrow(segundoTempo))
-lower = mean(segundoTempo$tempo_gol) - 1.96 * se1
-upper = mean(segundoTempo$tempo_gol) + 1.96 * se1
-ic_2 = c(lower,upper)
+t.test(primeiroTempo$tempo_gol, segundoTempo$tempo_gol, alternative = "two.sided")$p.value
+```
+
+Temos como hipótese nula que a média do momento dos gols no primeiro e segundo tempo são iguais. Como o p valor ficou maior que 0.05 então não podemos refutar a hipotese nula. Podemos então afirmar com 95% de confiança que a diferença entre o momento em que o gol acontece no primeiro e segundo tempo das partidas não é significativa. Para uma melhor visualização foi criado um gráfico com a média das duas amostras junto com intervalo de confiança. 
+
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+testPrimeiroTempo <- t.test(primeiroTempo$tempo_gol)
+testSegundoTempo <- t.test(segundoTempo$tempo_gol)
+ic_1 = c(testPrimeiroTempo$conf.int[1],testPrimeiroTempo$conf.int[2])
+ic_2 = c(testSegundoTempo$conf.int[1],testSegundoTempo$conf.int[2])
 
 samples = rbind(primeiroTempo,segundoTempo)
 
@@ -52,20 +53,22 @@ ggplot(toPlot, aes(x = tempo_id, y=mean, colour = tempo_id )) +
   theme(panel.background=element_blank())
 ```
 
-
-
-
-Olhando para o gráfico, podemos afirmar com 95% de confiança que a diferença entre o momento em que o gol acontece no primeiro e segundo tempo das partidas não é significativa. 
+Olhando para o gráfico podemos afirmar que com 95% de confiança acreditamos que a média do momento dos gols no primeiro e segundo tempo se encontra dentro do intervalo de confiança. Com isso não é possivel afirmar que existe diferenças entre os dois momentos. 
 
 Utilizando a mediana do momento do gol obtemos os seguintes resultados:
 
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+wilcox.test(primeiroTempo$tempo_gol, segundoTempo$tempo_gol, alternative = "two.sided")$p.value
+```
+
+Temos como hipótese nula que a mediana do momento dos gols no primeiro e segundo tempo são iguais. Como o p valor ficou maior que 0.05 então não podemos refutar a hipotese nula. Podemos então afirmar com 95% de confiança que a diferença entre o momento em que o gol acontece no primeiro e segundo tempo das partidas não é significativa. 
+
+Assim como no exemplo anterior, foi criado um gráfico para uma melhor visualização com a mediana das duas amostras junto com o intervalo de confiança. 
 
 
 ```{r, warning=FALSE, fig.align='center', message=FALSE}
-
 medianaPrimeiroTempo <- wilcox.test(primeiroTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE) 
 medianaSegundoTempo <- wilcox.test(segundoTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE) 
-jogos <- wilcox.test(primeiroTempo$tempo_gol, segundoTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE) 
 
 ic_1 = c(medianaPrimeiroTempo$conf.int[1],medianaPrimeiroTempo$conf.int[2])
 ic_2 = c(medianaSegundoTempo$conf.int[1],medianaSegundoTempo$conf.int[2])
@@ -81,8 +84,9 @@ ggplot(toPlot, aes(x = tempo_id, y=median, colour = tempo_id )) +
 ```
 
 
-
 Olhando para o gráfico, podemos afirmar com 95% de confiança que a diferença entre o momento em que o gol acontece no primeiro e segundo tempo das partidas não é significativa. 
 
-Como conclusão é possivel notar que temos praticamente o mesmo resultado, tanto utilizando a média ou a mediana. Não existindo diferença na conclusão. Com os intervalos de confiança foi possivel verificar mais claramente que para esse caso não existem diferenças entre o primeiro tempo e o segundo tempo em relação ao momento do gol.
+É possivel notar que foi calculado dois diferentes p_valore (um para a média outro para a mediana) e nos dois casos não foi possivel refutar a hipótese nula. Foi encontrado praticamente o mesmo resultado.
+
+Com os intervalos de confiança foi possivel verificar mais claramente que para esse caso não existem diferenças entre o primeiro tempo e o segundo tempo em relação ao momento do gol.
 

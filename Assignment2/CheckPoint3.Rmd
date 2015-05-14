@@ -5,25 +5,21 @@ date: "06-05-2015"
 output: html_document
 ---
 
-
-Em busca de saber o comportamento dos alunos de Programação 1 da Universidade Federal de Campina Grande, foram feitas analises nas submissões das atividades que os alunos submetem ao longo do período. Como a população dos alunos de programação 1 é muito grande, utilizei uma amostra para fazer inferências em relação aos alunos de programação 1 e as atividades. Para este estudo, coletamos as submissões dos alunos de Programação I da Universidade Federal de Campina Grande (UFCG) durante o período letivo 2014.2. No total, há 15148 submissões de 101 alunos para 427 questões.
-
-
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 library(ggplot2)
 library(Hmisc)
-#library("Rmisc", quietly = T)
 
 file <- read.table("students.data", header=TRUE)
 ```
 
+Em busca de saber o comportamento dos alunos de Programação 1 da Universidade Federal de Campina Grande, foram feitas analises nas submissões das atividades que os alunos submetem ao longo do período. Como a população dos alunos de programação 1 é muito grande, utilizei uma amostra para fazer inferências em relação aos alunos de programação 1 e as atividades. Para este estudo, coletamos as submissões dos alunos de Programação I da Universidade Federal de Campina Grande (UFCG) durante o período letivo 2014.2. No total, há 15148 submissões de 101 alunos para 427 questões.
 
 Ao longo da disciplina, cada aluno dita o seu ritimo. O aluno resolve questões e a medida que vai acertando vai subindo de nível e recebendo mais questões. A correção das atividade é feita de forma automática. Após a submissão de uma atividade o aluno é informado se a resposta enviada é a correta ou não, caso não seja a resposta esperada, o aluno pode reenviar quantas vezes achar necessário. 
 
 Por essa razão, existem questões que possuem um grande número de submissões. Então achei importante descobrir a média de submissões das 5 questões com maior número de submissões. 
 
-As questões que possuim mais subsmissões são: 
+Às questões que possuim mais subsmissões são: 
 
 
 ```{r, fig.align='center'}
@@ -44,9 +40,9 @@ ggplot(newdata, aes(x=reorder(Questao, -Frequencia), y=Frequencia, fill = Freque
 ```
 
 
-Após descobrir as 5 questões que possuem o maior número de submissões, foi calculado a média do número de submissões da amostra para essas 5 questões. Com 95% de precissão temos o seguinte resultado.
+Após descobrir às 5 questões que possuem o maior número de submissões, foi calculado a média do número de submissões da amostra para essas 5 questões. Com 95% de precissão temos o seguinte resultado.
 
-```{r}
+```{r, fig.align='center'}
 condition <- newdata$Questao
 
 subset <- file %>%
@@ -81,7 +77,7 @@ alunos <- file %>%
   table() %>%
   as.data.frame()
 
-colnames(alunos) <- c("Aluno", "Submissoes")
+colnames(alunos) <- c("Aluno", "Submissões")
 alunosOrder <- alunos[order(-alunos$Submissoes),] 
 
 condicao1 = head(alunosOrder, n=39)$Aluno

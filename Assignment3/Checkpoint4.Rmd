@@ -1,0 +1,220 @@
+---
+title: "CheckPoint4"
+author: "Rodolfo Viana"
+date: "18-05-2015"
+output: html_document
+---
+
+Existe diferença significativa entre a média de tempo dos gols de times do 
+estado do Rio de Janeiro com os times do estado de São Paulo?
+
+Existe uma grande rivalidade entre os times do estado de São Paulo e os times do estado do Rio de Janeiro, por essa razão foi investigado se a média dos gols dos times dos dois estados é significativamente diferente ou não.
+
+No ano de 2013 tinhamos quatro times do Rio de Janeiro: Vasco da Gama, Fluminense, Botafogo, Flamengo.
+e 5 times do estado de São Paulo: Corinthians, Ponte Preta, Santos, São Paulo, Portuguesa
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+
+file <- read.csv("~/Projetos/DataAnalysis/Assignment3/brasileiro2013.csv", sep=";", header=TRUE)
+
+timesRJ <- c("Vasco da Gama", "Fluminense", "Botafogo", "Flamengo")
+timesSP <- c("Corinthians", "Ponte Preta", "Santos", "São Paulo", "Portuguesa")
+
+file$time_a <- as.character(file$time_a)
+file$time_b <- as.character(file$time_b)
+
+#fileRj_a <- file %>%
+#  filter(time_a %in% timesRJ | time_b %in% timesRJ)
+
+fileRj_a <- file %>%
+  filter(time_a %in% timesRJ) %>%
+  as.data.table()
+
+fileRj_b <- file %>%
+  filter(time_b %in% timesRJ) %>%
+  as.data.table()
+
+fileSP_a <- file %>%
+  filter(time_a %in% timesSP) %>%
+  as.data.table()
+    
+fileSP_b <- file %>%
+  filter(time_b %in% timesSP) %>%
+  as.data.table()
+
+golsRj_a <- fileRj_a[, .SD[.N], by=id_jogo]$placar_time_a
+golsRj_b <- fileRj_b[, .SD[.N], by=id_jogo]$placar_time_b
+golsRj <- c(golsRj_a, golsRj_b)
+
+golsSP_a <- fileSP_a[, .SD[.N], by=id_jogo]$placar_time_a
+golsSP_b <- fileSP_b[, .SD[.N], by=id_jogo]$placar_time_b
+golsSP <- c(golsSP_a, golsSP_b)
+```
+
+Com base nessa amostra temos essa distribuição de gols para os times do estado do Rio de Janeiro:
+
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+hist(golsRj, main="Frequência dos gols do Rio")
+```
+
+Temos essa distribuição dos gols dos times do estado de São Paulo:
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+hist(golsSP, main="Frequência dos gols de SP")
+```
+
+A média dos gols dos times do estado do Rio de Janeiro é mais alta do que a média dos gols dos times de São Paulo, será que podemos afimar que elas são diferentes? 
+Para verificar isso utilizamos o t.test 
+
+```{r}
+t.test(golsSP, golsRj, alternative = "two.sided")$p.value
+```
+
+Temos como hipótese nula que a média dos gols dos times do estado do Rio de Janeiro é igual a média dos gols dos times do estado de São Paulo. Como o p valor ficou maior que 0.05 então não podemos refutar a hipotese nula.Para uma melhor visualização foi criado um gráfico com a média das duas amostras junto com intervalo de confiança. 
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+testRj <- t.test(golsRj)
+testSP <- t.test(golsSP)
+ic_1 = c(testRj$conf.int[1],testRj$conf.int[2])
+ic_2 = c(testSP$conf.int[1],testSP$conf.int[2])
+
+toPlot <- data.frame(estado = c("RJ","SP"), media = c(mean(golsRj), mean(golsSP)))
+toPlot = mutate(toPlot, lower = ifelse(toPlot$estado == "RJ",ic_1[1],ic_2[1]))
+toPlot = mutate(toPlot, upper = ifelse(toPlot$estado == "RJ",ic_1[2],ic_2[2]))
+
+ggplot(toPlot, aes(x = estado, y=media, colour = estado )) + 
+  geom_point() +
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=.1) +
+  labs(y='Média dos gols', x='Estado') +
+  theme(panel.background=element_blank())
+```
+
+Logo, não encontramos nenhuma diferença significativa entre a média dos gols dos times do estado do Rio de Janeiro e de São Paulo momento dos gols no primeiro e segundo tempo, com 95% de confiança. 
+
+--------------------------------------------------------
+
+Muitas vezes durante o primeiro turno, muitos times estão focados em outra competição. Também existe times ainda contratando novs jogadores. Por esse motivo talvez a média de gols do primeiro turno seja diferente da méda de gols do segundo turno
+
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+primeiroTurno <- file %>%
+  filter(id_jogo <= 190) %>%
+  as.data.table()
+
+segundoTurno <- file %>%
+  filter(id_jogo > 190) %>%
+  as.data.table()
+
+primeiroTurno <- primeiroTurno[, .SD[.N], by=id_jogo]
+segundoTurno <- segundoTurno[, .SD[.N], by=id_jogo]
+```
+
+Primeiramente vamos analisar a frequência de gols do primeiro turno, mostrada no histograma abaixo:
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+golsPrimeiroTurno = c(primeiroTurno$placar_time_a, primeiroTurno$placar_time_b)
+hist(golsPrimeiroTurno, main="Frequência dos gols do primeiro turno", xlab = "Número de gols")
+
+```
+
+Observe também a frequência de gols do segundo turno:
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+golsSegundoTurno = c(segundoTurno$placar_time_a, segundoTurno$placar_time_b)
+hist(golsSegundoTurno, main="Frequência dos gols do segundo turno", xlab = "Número de gols")
+```
+
+É possivel notar que os dois histogramas são bem parecidos. Então é bem provavel que a média de gols do primeiro turno não seja diferente da média de gols do segundo turno. Para comprovar isso vamos utilizar o t.test
+
+(não utilize o pareado)
+
+
+```{r}
+t.test(golsPrimeiroTurno, golsSegundoTurno, alternative = "two.sided")
+```
+
+
+
+--------------------------------------------------------
+
+Utilizando uma amostra dos gols do campeonato brasileiro de 2013, gostariamos de saber se existe diferença siginificativa entre o momento em que o gol acontece no primeiro e segundo tempo das partidas. Utilizando a média do momento dos gols obtemos os seguintes resultados:
+
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+fileSemNone <- file %>%
+  filter(tempo_gol != "None")
+
+fileSemNone$tempo_gol <- as.numeric(fileSemNone$tempo_gol)
+
+primeiroTempo <- fileSemNone %>%
+  filter(tempo_gol <= 45) %>%
+  mutate(tempo_id = '1')
+
+segundoTempo <- fileSemNone %>%
+  filter(tempo_gol > 45) %>%
+  mutate(tempo_id = '2')
+
+segundoTempo$tempo_gol <- segundoTempo$tempo_gol - 45
+
+t.test(primeiroTempo$tempo_gol, segundoTempo$tempo_gol, alternative = "two.sided")$p.value
+```
+
+Temos como hipótese nula que a média do momento dos gols no primeiro e segundo tempo são iguais. Como o p valor ficou maior que 0.05 então não podemos refutar a hipotese nula. Logo, não encontramos nenhuma diferença significativa entre a média do momento dos gols no primeiro e segundo tempo, com 95% de confiança. Para uma melhor visualização foi criado um gráfico com a média das duas amostras junto com intervalo de confiança. 
+
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+testPrimeiroTempo <- t.test(primeiroTempo$tempo_gol)
+testSegundoTempo <- t.test(segundoTempo$tempo_gol)
+ic_1 = c(testPrimeiroTempo$conf.int[1],testPrimeiroTempo$conf.int[2])
+ic_2 = c(testSegundoTempo$conf.int[1],testSegundoTempo$conf.int[2])
+
+samples = rbind(primeiroTempo,segundoTempo)
+
+toPlot = summarise(group_by(samples, tempo_id), mean = mean(tempo_gol))
+toPlot = mutate(toPlot, lower = ifelse(toPlot$tempo_id == 1,ic_1[1],ic_2[1]))
+toPlot = mutate(toPlot, upper = ifelse(toPlot$tempo_id == 1,ic_1[2],ic_2[2]))
+ggplot(toPlot, aes(x = tempo_id, y=mean, colour = tempo_id )) + 
+  geom_point() +
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=.1) +
+  labs(y='Média do tempo dos gols (em min)', x='Tempo da partida') +
+  theme(panel.background=element_blank())
+```
+
+
+
+Utilizando a mediana do momento do gol obtemos os seguintes resultados:
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+wilcox.test(primeiroTempo$tempo_gol, segundoTempo$tempo_gol, alternative = "two.sided")$p.value
+```
+
+Temos como hipótese nula que a mediana do momento dos gols no primeiro e segundo tempo são iguais. Como o p valor ficou maior que 0.05 então não podemos refutar a hipotese nula. Logo, não encontramos nenhuma diferença significativa entre a mediana do momento dos gols no primeiro e segundo tempo, com 95% de confiança.
+
+Assim como no exemplo anterior, foi criado um gráfico para uma melhor visualização com a mediana das duas amostras junto com o intervalo de confiança. 
+
+
+```{r, warning=FALSE, fig.align='center', message=FALSE}
+medianaPrimeiroTempo <- wilcox.test(primeiroTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE) 
+medianaSegundoTempo <- wilcox.test(segundoTempo$tempo_gol, alternative = "two.sided", conf.int = TRUE) 
+
+ic_1 = c(medianaPrimeiroTempo$conf.int[1],medianaPrimeiroTempo$conf.int[2])
+ic_2 = c(medianaSegundoTempo$conf.int[1],medianaSegundoTempo$conf.int[2])
+
+toPlot = summarise(group_by(samples, tempo_id), median = median(tempo_gol))
+toPlot = mutate(toPlot, lower = ifelse(toPlot$tempo_id == 1,ic_1[1],ic_2[1]))
+toPlot = mutate(toPlot, upper = ifelse(toPlot$tempo_id == 1,ic_1[2],ic_2[2]))
+ggplot(toPlot, aes(x = tempo_id, y=median, colour = tempo_id )) + 
+  geom_point() +
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=.1) +
+  labs(y='Mediana do tempo do gol(min)', x='Tempo da partida') +
+  theme(panel.background=element_blank())
+```
+
+
+É possivel notar que foi calculado dois diferentes p_valore (um para a média outro para a mediana) e nos dois casos não foi possivel refutar a hipótese nula. Foi encontrado praticamente o mesmo resultado.
+
+Com os intervalos de confiança foi possivel verificar mais claramente que para esse caso não existem diferenças entre o primeiro tempo e o segundo tempo em relação ao momento do gol.

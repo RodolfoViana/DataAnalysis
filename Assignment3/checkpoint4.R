@@ -57,6 +57,19 @@ golsSP <- c(golsSP_a, golsSP_b)
 
 hist(golsSP)
 
+Com base nessa amostra temos essa distribuição de gols para os times do estado do Rio de Janeiro:
+  
+  ```{r, warning=FALSE, fig.align='center', message=FALSE}
+hist(golsRj, main="Frequência dos gols do Rio")
+```
+
+Temos essa distribuição dos gols dos times do estado de São Paulo:
+  
+  ```{r, warning=FALSE, fig.align='center', message=FALSE}
+hist(golsSP, main="Frequência dos gols de SP")
+```
+
+
 t.test(golsSP, golsRj, alternative = "two.sided")$p.value
 
 
@@ -102,4 +115,31 @@ t.test(golsPrimeiroTurno, golsSegundoTurno, alternative = "two.sided")
 
 
 ----------------------------------------------------------------------------------------
+  
+Existe diferença significativa entre a média de gols dos times fora e dentro de casa
+
+Eu imagino que os times fazem mais gols dentro de casa do que fora de casa, 
+por esse motivo acredito que a média dos gols será diferente. 
+
+partidasResultados <- as.data.table(file)[, .SD[.N], by=id_jogo]
+
+(quando eu mudo para less eu aceito a h0 então? Mostrando que eles são iguais?)
+
+t.test(partidasResultados$placar_time_a, partidasResultados$placar_time_b, alternative = "two.sided")
+
+dentroDeCasa <- t.test(partidasResultados$placar_time_a)
+foraDeCasa <- t.test(partidasResultados$placar_time_b)
+ic_1 = c(dentroDeCasa$conf.int[1],dentroDeCasa$conf.int[2])
+ic_2 = c(foraDeCasa$conf.int[1],foraDeCasa$conf.int[2])
+
+toPlot <- data.frame(estado = c("Em casa","Fora de Casa"), media = c(mean(partidasResultados$placar_time_a), mean(partidasResultados$placar_time_b)))
+toPlot = mutate(toPlot, lower = ifelse(toPlot$estado == "Em casa",ic_1[1],ic_2[1]))
+toPlot = mutate(toPlot, upper = ifelse(toPlot$estado == "Em casa",ic_1[2],ic_2[2]))
+
+ggplot(toPlot, aes(x = estado, y=media, colour = estado )) + 
+  geom_point() +
+  geom_errorbar(aes(ymin=lower, ymax=upper), width=.1) +
+  labs(y='Média dos gols', x='') +
+  theme(panel.background=element_blank())
+  
 

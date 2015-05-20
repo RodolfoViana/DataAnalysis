@@ -125,7 +125,7 @@ partidasResultados <- as.data.table(file)[, .SD[.N], by=id_jogo]
 
 (quando eu mudo para less eu aceito a h0 então? Mostrando que eles são iguais?)
 
-t.test(partidasResultados$placar_time_a, partidasResultados$placar_time_b, alternative = "two.sided")
+t.test(partidasResultados$placar_time_a, partidasResultados$placar_time_b, alternative = "greater")
 
 dentroDeCasa <- t.test(partidasResultados$placar_time_a)
 foraDeCasa <- t.test(partidasResultados$placar_time_b)

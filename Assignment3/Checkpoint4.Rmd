@@ -56,6 +56,8 @@ ggplot(toPlot, aes(x = tempo_id, y=mean, colour = tempo_id )) +
   theme(panel.background=element_blank())
 ```
 
+--------------------------------------------------------
+
 Utilizando a mediana do momento do gol obtemos os seguintes resultados:
 
 ```{r, warning=FALSE, fig.align='center', message=FALSE}
@@ -96,9 +98,6 @@ timesSP <- c("Corinthians", "Ponte Preta", "Santos", "São Paulo", "Portuguesa")
 
 file$time_a <- as.character(file$time_a)
 file$time_b <- as.character(file$time_b)
-
-#fileRj_a <- file %>%
-#  filter(time_a %in% timesRJ | time_b %in% timesRJ)
 
 fileRj_a <- file %>%
   filter(time_a %in% timesRJ) %>%
@@ -186,10 +185,7 @@ golsSegundoTurno = c(segundoTurno$placar_time_a, segundoTurno$placar_time_b)
 hist(golsSegundoTurno, main="Frequência dos gols do segundo turno", xlab = "Número de gols")
 ```
 
-É possivel notar que os dois histogramas são bem parecidos. É bem provavel que a média de gols do primeiro turno não seja diferente da média de gols do segundo turno. Para comprovar isso vamos utilizar o t.test
-
-(não utilizei o pareado)
-
+É possivel notar que os dois histogramas são bem parecidos. É bem provável que a média de gols do primeiro turno não seja diferente da média de gols do segundo turno. Para comprovar isso vamos utilizar o t.test
 
 ```{r}
 t.test(golsPrimeiroTurno, golsSegundoTurno, alternative = "two.sided")
@@ -206,8 +202,6 @@ Para isso utilizamos o t.test. Tendo como hipótese nula que a média de gols de
 
 ```{r}
 partidasResultados <- as.data.table(file)[, .SD[.N], by=id_jogo]
-
-#(quando eu mudo para less eu aceito a h0 então? Mostrando que eles são iguais?)
 
 t.test(partidasResultados$placar_time_a, partidasResultados$placar_time_b, alternative = "two.sided")
 ```
@@ -233,5 +227,4 @@ ggplot(toPlot, aes(x = estado, y=media, colour = estado )) +
   theme(panel.background=element_blank())
 ```
 
-É possivel notar que as médias dos gols e os seus intervalos de confiança não se cruzam. Se mostrando bem distantes para a média dos gols dos times jogando em casa e fora de casa.
-
+É possivel notar que as médias dos gols e os seus intervalos de confiança não se cruzam, se mostrando bem distantes para a média dos gols dos times jogando em casa e fora de casa.

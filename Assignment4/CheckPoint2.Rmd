@@ -1,0 +1,63 @@
+---
+title: "CheckPoint2"
+author: "Rodolfo Viana"
+date: "01-06-2015"
+output: html_document
+---
+
+Vários cursos pedem que o aluno avalie o professor no final de um período/curso. Porém, algumas pessoas acreditam que algumas característas não relacionadas à docência podem influênciar no resultado. No artigo intitulado “Beauty in the classroom: instructors’ pulchritude and putative pedagogical productivity” (Hamermesh & Parker, 2005) o autor reforça a ideia que professores vistos como tendo uma melhor aparência recebem avaliações mais altas. 
+
+Utilizando os dados das avaliações dos discentes da Universidade do Texas em Austin gostariamos de saber se existe indícios de que a percepção da beleza de um professor impacta na avaliação de sua docência
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+evals <- read.csv("~/Projetos/DataAnalysis/Assignment4/evals.csv", head=TRUE)
+
+mod <- lm(score ~ bty_avg, data = evals)
+summary(mod)
+
+```
+
+Com isso temos indícios de que a beleza influência na avaliação da docência do professor (pois o Pr(>|t|) foi igual à 5.08e-05). Porém acreditamos que existem diversos outros fatores que impactam na avaliação da docência do professor, para se ter uma ideia a beleza, para essa nossa amostra e modelo, influência apenas 3% na avaliação da docência do professor (o R-squared foi igual à 0.03293). 
+
+
+Em busca de encontrar mais fatores que influênciam na avaliação da docência do professor criamos novos modelos. O próximo modelo que vamos avaliar é lavando em consideração a percepção da beleza e a idade.
+
+```{r, echo=FALSE}
+mod2 <- lm(score ~ bty_avg + age, data = evals)
+summary(mod2)
+```
+
+Com esse novo modelo foi observado que a percepção da beleza continua com indícios de que influência na avaliação da docência do professor, porém não podemos dizer o mesmo da idade do professor (pois o Pr(>|t|) foi igual à 0.251396)
+
+O próximo modelo que vamos avaliar é levando em consideração a percepção da beleza e o nível do professor (horista, assistente, titular).
+
+```{r, echo=FALSE}
+mod3 <- lm(score ~ bty_avg + rank, data = evals)
+summary(mod3)
+```
+
+Com esse modelo foi observado que a percepção da beleza continua com indícios de que influência na avaliação da docência do professor, além disso existe indícios de que o nível do professor influência na avaliação do professor. Quando o professor tem o nível de assistente ou titular temos um impacto negativo na avaliação do professor(-0.12623 e -0.16070 respectivamente). Dentre os níveis do professor horista foi mais bem avaliado. Com esse modelo temos uma influência de apenas 4% na avaliação do professor. 
+
+
+Por esse motivo criamos um novo modelo, dessa vez levando em consideração a percepção da beleza, nível da professor e a lingua da universidade frequentada pelo professor (inglês ou não inglês)
+
+```{r, echo=FALSE}
+mod4 <- lm(score ~ bty_avg + rank + language, data = evals)
+summary(mod4)
+
+
+ggpairs(select(evals, bty_avg, rank, language, score))
+```
+
+Com esse modelo temos indicios de que a percepção da beleza cintuna com indícios de que influência na avaliação da docência do professor, além disso para os docêntes que frequentou uma univerdade não inglês temos indícios de que  
+
+
+```{r, echo=FALSE}
+mod4 <- lm(score ~ bty_avg + language, data = evals)
+summary(mod4)
+```
+

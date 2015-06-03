@@ -5,28 +5,25 @@ date: "01-06-2015"
 output: html_document
 ---
 
-Vários cursos pedem que o aluno avalie o professor no final de um período/curso. Porém, algumas pessoas acreditam que algumas característas não relacionadas à docência podem influênciar no resultado. No artigo intitulado “Beauty in the classroom: instructors’ pulchritude and putative pedagogical productivity” (Hamermesh & Parker, 2005) o autor reforça a ideia que professores vistos como tendo uma melhor aparência recebem avaliações mais altas. 
+Vários cursos pedem que os alunos avaliem o professor no final de um período/curso. Porém, algumas pessoas acreditam que algumas característas não relacionadas à docência podem influênciar no resultado. No artigo intitulado “Beauty in the classroom: instructors’ pulchritude and putative pedagogical productivity” (Hamermesh & Parker, 2005) o autor reforça a ideia que professores vistos como tendo uma melhor aparência recebem avaliações mais altas. 
 
-Utilizando os dados das avaliações dos discentes da Universidade do Texas em Austin gostariamos de saber se existe indícios de que a percepção da beleza de um professor impacta na avaliação de sua docência
+Utilizando os dados das avaliações dos discentes da Universidade do Texas em Austin gostariamos de saber se existem indícios de que a percepção da beleza de um professor impacta na avaliação de sua docência
 
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(dplyr)
-library(ggplot2)
 
 evals <- read.csv("~/Projetos/DataAnalysis/Assignment4/evals.csv", head=TRUE)
 
 mod <- lm(score ~ bty_avg, data = evals)
 summary(mod)
-
 ```
 
-Com isso temos indícios de que a beleza influência na avaliação da docência do professor (pois o Pr(>|t|) foi igual à 5.08e-05). Porém acreditamos que existem diversos outros fatores que impactam na avaliação da docência do professor, para se ter uma ideia a beleza, para essa nossa amostra e modelo, influência apenas 3% na avaliação da docência do professor (o R-squared foi igual à 0.03293). 
-
+Com isso temos indícios de que a beleza influência na avaliação da docência do professor (pois o Pr(>|t|) foi igual à 5.08e-05). Porém acreditamos que existem diversos outros fatores que impactam na avaliação da docência do professor, para se ter uma ideia, a beleza para essa nossa amostra e modelo, influência apenas 3% na avaliação da docência do professor (o R-squared foi igual à 0.03293). 
 
 Em busca de encontrar mais fatores que influênciam na avaliação da docência do professor criamos novos modelos. O próximo modelo que vamos avaliar é lavando em consideração a percepção da beleza e a idade.
 
-```{r, echo=FALSE}
+```{r}
 mod2 <- lm(score ~ bty_avg + age, data = evals)
 summary(mod2)
 ```
@@ -35,29 +32,40 @@ Com esse novo modelo foi observado que a percepção da beleza continua com ind�
 
 O próximo modelo que vamos avaliar é levando em consideração a percepção da beleza e o nível do professor (horista, assistente, titular).
 
-```{r, echo=FALSE}
+```{r}
 mod3 <- lm(score ~ bty_avg + rank, data = evals)
 summary(mod3)
 ```
 
-Com esse modelo foi observado que a percepção da beleza continua com indícios de que influência na avaliação da docência do professor, além disso existe indícios de que o nível do professor influência na avaliação do professor. Quando o professor tem o nível de assistente ou titular temos um impacto negativo na avaliação do professor(-0.12623 e -0.16070 respectivamente). Dentre os níveis do professor horista foi mais bem avaliado. Com esse modelo temos uma influência de apenas 4% na avaliação do professor. 
+Com esse modelo foi observado que a percepção da beleza continua com indícios de que influência na avaliação da docência do professor, além disso existe indícios de que o nível do professor influência na avaliação do professor. Quando o professor tem o nível de assistente ou titular temos um impacto negativo na avaliação do professor(-0.12623 e -0.16070 respectivamente). Dentre os níveis do professor horista foi mais bem avaliado. 
 
+Com esse modelo temos uma influência de apenas 4% na avaliação do professor, por esse motivo criamos um novo modelo, dessa vez levando em consideração a percepção da beleza, nível do professor e a lingua da universidade frequentada pelo professor (inglês ou não inglês)
 
-Por esse motivo criamos um novo modelo, dessa vez levando em consideração a percepção da beleza, nível da professor e a lingua da universidade frequentada pelo professor (inglês ou não inglês)
-
-```{r, echo=FALSE}
+```{r}
 mod4 <- lm(score ~ bty_avg + rank + language, data = evals)
 summary(mod4)
-
-
-ggpairs(select(evals, bty_avg, rank, language, score))
 ```
 
-Com esse modelo temos indicios de que a percepção da beleza cintuna com indícios de que influência na avaliação da docência do professor, além disso para os docêntes que frequentou uma univerdade não inglês temos indícios de que  
+Com esse modelo temos indícios de que a percepção da beleza influência na avaliação da docência do professor, além disso para os docêntes que frequentaram uma univerdade não inglês temos indícios de que influência negativamente na avaliação da docência do professor. Além disso agora temos indícios de que o nível do professor não influência na avaliação da docência do professor (Pr(>|t|) igual à à 0.0628 e 0.0980). 
+
+Nesse modelo temos o R-squared igual à 4%. O que siginifica que as variáveis escolhidas explicam em 4% a variável resposta. 
+
+Antes de escolher uma nova variável para o nosso modelos, foi feito uma análise com 3 variáveis. Para que dessa forma talvez aumente significativamente o valor de R-squared. As variáveis escolhidas foram pic_outfit (roupa do professor na foto avaliada: informal, formal), pic_color (cor da foto avaliada: colorida, preto e branco) e por último gender (sexo do professor: feminino, masculino).
 
 
-```{r, echo=FALSE}
-mod4 <- lm(score ~ bty_avg + language, data = evals)
-summary(mod4)
+```{r, warning=FALSE, message=FALSE, fig.align='center'}
+library(GGally)
+ggpairs(select(evals, pic_outfit, pic_color, gender, score))
 ```
+
+O gráfico acima possui diversas informações, para essa parte do problemas focamos apenas na busca de alguma variável que tenha alguma impacto na variável score. Por essa razão escolhemos a variável pic_color por ser a varável que possui maior diferença no valor do 1,2,3,4 quartil.
+
+```{r}
+mod5 <- lm(score ~ bty_avg + language + pic_color, data = evals)
+summary(mod5)
+```
+
+Com esse modelo temos que é alta a significância de que é pouco provável o fato de que não exista nenhuma relação entre as variáveis lingua da universidade frequentada pelo professor, cor da foto avaliada e percepção da beleza com a avaliação da docência do professor.
+
+Nesse modelo temos o R-squared igual à 5%. O que siginifica que as variáveis escolhidas explicam em 5% a variável resposta. O que é considerado um valor baixo e ao mesmo tempo esperado, pois é considerado que a avaliação da docência do professor é algo bem complexo, que naturalmente não vai ser explicado completamente apenas com as variáveis disponíveis no nosso conjunto de dados. 
 

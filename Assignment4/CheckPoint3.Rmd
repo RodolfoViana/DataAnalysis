@@ -42,6 +42,10 @@ Como o dataset é bastante grande, para esse experimento vamos utilizar apenas 2
 
 
 ```{r}
+rstudio --max-men-size=2048M
+
+droplevels 
+
 require(ggplot2)
 theme_set(theme_bw())
 require(dplyr)
@@ -62,6 +66,21 @@ teste$SESSION <- as.factor(teste$SESSION)
 teste$MONTH <- as.factor(teste$MONTH)
 teste$ITEM <- as.factor(teste$ITEM)
 teste$IS_BUY <- as.factor(teste$IS_BUY)
+
+# By default R comes with few datasets. 
+data = mtcars
+dim(data)  # 32 11
+ 
+#Sample Indexes
+indexes = sample(1:nrow(data), size=0.2*nrow(data))
+ 
+# Split data
+test = data[indexes,]
+dim(test)  # 6 11
+train = data[-indexes,]
+dim(train) # 26 11
+
+
 ```
 
 Fazendo uma análise simples olhando apanas para os dados é possível tirar algumas conclusões. São elas:
@@ -87,7 +106,6 @@ weekday <- as.data.frame(summary(treino$WEEKDAY))
 weekday["Dia_da_semana"] <- c("Sexta", "Segunda", "Sábado", "Domingo", "Quinta", "Terça", "Quarta") 
 colnames(weekday) <- c("Quantidade", "Dia_da_semana")
 
-
 ggplot(weekday, aes(x=Dia_da_semana, y=Quantidade)) + 
   geom_bar(stat="identity") + 
   labs(y='Quantidade de clicks') +
@@ -100,7 +118,7 @@ Por essa razão, o nosso primeiro modelo será criado utilizando apenas as vari�
 
 ```{r}
 bm <- glm(IS_BUY ~ WEEKDAY, 
-          data = select(treino, WEEKDAY, IS_BUY), 
+          data = treino, 
           family = "binomial")
 
 summary(bm)
@@ -111,24 +129,25 @@ exp(bm$coefficients)
 É possível identificar que em relação a Sexta-Feira o Sábado e o Domingo são os dias que mais tem chance de ocorrer uma compra.
 
 ```{r}
-predictions <- predict(bm, type = "response") > .05
-verdadeiras_compras <- treino$IS_BUY == 1
- 
+predictions <- predict(bm, type = "response", newdata = teste) > 0.05
+verdadeiras_compras <- teste$IS_BUY == 1
+
 table(predictions, verdadeiras_compras)
 ```
 
-Como o problema é bastante desbalanceado (95% para não compras e 5% para compras) é importante que o o erro falso positivo seja o menor possível. No modelo acima ele errou (8950*100/8950+21423) 3.3% nas previsão de compras. Ele devia ter classificado como compra e classificou como não compra. 
+Como o problema é bastante desbalanceado (95% para não compras e 5% para compras) é importante que o o erro falso positivo seja o menor possível. No modelo acima ele errou 25% nas previsão de compras. Ele devia ter classificado como compra e classificou como não compra. 
 
 Em busca de melhorar esse número, criamos outro modelo. Dessa vez considerando a categoria e o dia da semana. 
 
 
 ```{r}
-bm2 <- glm(IS_BUY ~ WEEKDAY + CATEGORY, 
-          data = select(treino, WEEKDAY, IS_BUY, CATEGORY), 
+bm2 <- glm(IS_BUY ~ SOLDABILITY + WEEKDAY + MONTH, 
+          data = teste,
           family = "binomial")
 
 summary(bm2)
 exp(bm2$coefficients)
+
 
 ```
 

@@ -117,6 +117,20 @@ verdadeiras_compras <- treino$IS_BUY == 1
 table(predictions, verdadeiras_compras)
 ```
 
+Como o problema é bastante desbalanceado (95% para não compras e 5% para compras) é importante que o o erro falso positivo seja o menor possível. No modelo acima ele errou (8950*100/8950+21423) 3.3% nas previsão de compras. Ele devia ter classificado como compra e classificou como não compra. 
+
+Em busca de melhorar esse número, criamos outro modelo. Dessa vez considerando a categoria e o dia da semana. 
+
+
+```{r}
+bm2 <- glm(IS_BUY ~ WEEKDAY + CATEGORY, 
+          data = select(treino, WEEKDAY, IS_BUY, CATEGORY), 
+          family = "binomial")
+
+summary(bm2)
+exp(bm2$coefficients)
+
+```
 
 Defina uma métrica de sucesso para seu classificador que você considera que faça sentido para o contexto de emails (falsos positivos e falsos negativos têm o mesmo peso?) e avalie seu modelo. O que funcionou bem e o que seriam as próximas melhoras a fazer?
 

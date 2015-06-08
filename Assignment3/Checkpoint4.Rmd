@@ -5,7 +5,7 @@ date: "18-05-2015"
 output: html_document
 ---
 
-Utilizando uma amostra dos gols do campeonato brasileiro de 2013, gostariamos de saber se existe diferença siginificativa entre o momento em que o gol acontece no primeiro e segundo tempo das partidas. Utilizando a média do momento dos gols obtemos os seguintes resultados:
+Utilizando como uma amostra os gols do campeonato brasileiro de 2013, gostariamos de saber se existe diferença siginificativa entre o momento em que o gol acontece no primeiro e segundo tempo das partidas. Utilizando a média do momento dos gols obtemos os seguintes resultados:
 
 
 ```{r, warning=FALSE, fig.align='center', message=FALSE}

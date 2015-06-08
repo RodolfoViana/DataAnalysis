@@ -1,0 +1,122 @@
+---
+title: "Checkpoint3"
+author: "Rodolfo Viana"
+date: "04-06-2015"
+output: html_document
+---
+
+Utilizando os dados disponíveis no [RecySys challenge 2015](http://2015.recsyschallenge.com/challenge.html) tentamos classificar uma sessão como compradora ou não. 
+
+Os dados disponíveis são encontrados [aqui](http://2015.recsyschallenge.com/). No dataset inicial temos os seguintes atributos:
+
+1. Session ID – o ID de uma sessão. Uma sessão possui um ou mais clicks
+2. Timestamp – o tempo em que o click aconteceu
+3. Item ID – o ID de um item
+4. Category – a categoria do item
+6. Buy – informação se o item foi comprado ou não
+
+Como esses atributos eram atributos básicos começamos a pensar/criar novos atributos antes de montar um modelo de classificação. Atualmente temos os seguintes atributos: 
+
+1. SESSION - id da sessão
+2. DAY - dia do acesso
+3. MONTH - mês do acesso
+4. TIME - hora do acesso, com minutos representados por quartis: {q1, q2, q3, q4}, exemplo a hora 14:48 é representada como 14.q4 
+5. ITEM - id do item
+6. CATEGORY - id da categoria
+7. WEEKDAY - dia da semana do acesso
+8. CLICKED - quantidade de vezes que o item foi clicado (somando todos os usuários)
+9. BOUGHT - quantidade de vezes que o item foi comprado (somando todos os usuários)
+10. SOLDABILITY - razão de CLICKED por BOUGHT, multiplicado por 100
+11. SAME_CAT - quantidade de produtos da categoria do click que também foi clicado pela sessão
+12. SOLD_MEAN - média de vendabilidade dos item clicados pela sessão
+13. SOLD_MEAN_DIFF - diferença, SOLDABILITY (do item) menos SOLD_MEAN (da sessão) 
+14. SOLD_MEDIAN - mediana das vendabilidades dos itens clicados pela sessão
+15. SESSION_SIZE - número de clicks que a sessão deu
+16. IS_BUY - 0 para para não compra e 1 para compra
+17. CATEG_MOST - categoria de maior ocorrência do item
+18. SESSION_DURATION - duração, em segundos, da sessão
+19. RELATIVE_TIME = diferença de tempo entre o click e o primeiro click da sessão
+20. RELATIVE_TIME_PROP = razão relative_time / session_duration
+
+Como o dataset é bastante grande, para esse experimento vamos utilizar apenas 2% do dataset. Essa amostra foi retirada de forma aleatória. Utilizaremos 1/3 dessa amostra para teste e 2/3 para treino do classificador.
+
+
+```{r}
+require(ggplot2)
+theme_set(theme_bw())
+require(dplyr)
+
+treino <- read.csv("~/Projetos/DataAnalysis/Assignment4/treino.csv")
+teste <- read.csv("~/Projetos/DataAnalysis/Assignment4/teste.csv")
+
+colnames(treino) <- c("SESSION", "DAY", "MONTH", "TIME", "ITEM", "CATEGORY", "WEEKDAY", "CLICKED", "BOUGHT", "SOLDABILITY", "SAME_CAT", "SOLD_MEAN", "SOLD_MEAN_DIFF", "SOLD_MEDIAN", "SESSION_SIZE", "CATEG_MOST", "IS_BUY","SESSION_DURATION", "RELATIVE_TIME", "RELATIVE_TIME_PROP")
+
+colnames(teste) <- c("SESSION", "DAY", "MONTH", "TIME", "ITEM", "CATEGORY", "WEEKDAY", "CLICKED", "BOUGHT", "SOLDABILITY", "SAME_CAT", "SOLD_MEAN", "SOLD_MEAN_DIFF", "SOLD_MEDIAN", "SESSION_SIZE", "CATEG_MOST", "IS_BUY", "SESSION_DURATION", "RELATIVE_TIME", "RELATIVE_TIME_PROP")
+
+treino$SESSION <- as.factor(treino$SESSION)
+treino$MONTH <- as.factor(treino$MONTH)
+treino$ITEM <- as.factor(treino$ITEM)
+treino$IS_BUY <- as.factor(treino$IS_BUY)
+
+teste$SESSION <- as.factor(teste$SESSION)
+teste$MONTH <- as.factor(teste$MONTH)
+teste$ITEM <- as.factor(teste$ITEM)
+teste$IS_BUY <- as.factor(teste$IS_BUY)
+```
+
+Fazendo uma análise simples olhando apanas para os dados é possível tirar algumas conclusões. São elas:
+
+```{r}
+isBuy <- as.data.frame(summary(treino$IS_BUY))
+
+isBuy["Compras"] <- c("Não_Compras", "Compras") 
+colnames(isBuy) <- c("Quantidade", "Compras")
+
+ggplot(isBuy, aes(x=Compras, y=Quantidade)) + 
+  geom_bar(stat="identity") + 
+  labs(y='Quantidade de clicks com compra') +
+  theme(panel.background=element_blank())
+```
+
+
+Existem muito mais clicks com não compra do que com compras. Mostrando que os dados estão desbalanceados. 5.5% são os clicks com compras e o restante para clicks com não compras.
+
+```{r}
+weekday <- as.data.frame(summary(treino$WEEKDAY))
+
+weekday["Dia_da_semana"] <- c("Sexta", "Segunda", "Sábado", "Domingo", "Quinta", "Terça", "Quarta") 
+colnames(weekday) <- c("Quantidade", "Dia_da_semana")
+
+
+ggplot(weekday, aes(x=Dia_da_semana, y=Quantidade)) + 
+  geom_bar(stat="identity") + 
+  labs(y='Quantidade de clicks') +
+  theme(panel.background=element_blank())
+```
+
+Nas segundas e nos domingos é possível identificar um maior número de clicks em relação aos outros dias. Talvez essa seja uma informação relavante para o nosso classificador. 
+
+Por essa razão, o nosso primeiro modelo será criado utilizando apenas as variáveis WEEKDAY.
+
+```{r}
+bm <- glm(IS_BUY ~ WEEKDAY, 
+          data = select(treino, WEEKDAY, IS_BUY), 
+          family = "binomial")
+
+summary(bm)
+exp(bm$coefficients)
+
+```
+
+É possível identificar que em relação a Sexta-Feira o Sábado e o Domingo são os dias que mais tem chance de ocorrer uma compra.
+
+```{r}
+predictions <- predict(bm, type = "response") > .05
+verdadeiras_compras <- treino$IS_BUY == 1
+ 
+table(predictions, verdadeiras_compras)
+```
+
+
+Defina uma métrica de sucesso para seu classificador que você considera que faça sentido para o contexto de emails (falsos positivos e falsos negativos têm o mesmo peso?) e avalie seu modelo. O que funcionou bem e o que seriam as próximas melhoras a fazer?
+

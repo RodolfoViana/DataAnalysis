@@ -7,7 +7,7 @@ output: html_document
 
 Utilizando os dados disponíveis no [RecySys challenge 2015](http://2015.recsyschallenge.com/challenge.html) tentamos classificar uma sessão como compradora ou não. 
 
-Os dados disponíveis são encontrados [aqui](http://2015.recsyschallenge.com/). No dataset inicial temos os seguintes atributos:
+Os dados disponíveis podem ser encontrados [aqui](http://2015.recsyschallenge.com/). No dataset inicial temos os seguintes atributos:
 
 1. Session ID – o ID de uma sessão. Uma sessão possui um ou mais clicks
 2. Timestamp – o tempo em que o click aconteceu
@@ -15,7 +15,7 @@ Os dados disponíveis são encontrados [aqui](http://2015.recsyschallenge.com/).
 4. Category – a categoria do item
 6. Buy – informação se o item foi comprado ou não
 
-Como esses atributos eram atributos básicos começamos a pensar/criar novos atributos antes de montar um modelo de classificação. Atualmente temos os seguintes atributos: 
+Como esses atributos eram atributos básicos começamos a criar novos atributos derivados dos atributos anteriores antes de montar um modelo de classificação. Atualmente temos os seguintes atributos: 
 
 1. SESSION - id da sessão
 2. DAY - dia do acesso
@@ -38,55 +38,28 @@ Como esses atributos eram atributos básicos começamos a pensar/criar novos atr
 19. RELATIVE_TIME = diferença de tempo entre o click e o primeiro click da sessão
 20. RELATIVE_TIME_PROP = razão relative_time / session_duration
 
-Como o dataset é bastante grande, para esse experimento vamos utilizar apenas 2% do dataset. Essa amostra foi retirada de forma aleatória. Utilizaremos 1/3 dessa amostra para teste e 2/3 para treino do classificador.
+Como o dataset é bastante grande, para esse experimento vamos utilizar apenas 0.1% do dataset. Essa amostra foi retirada de forma aleatória. 
 
-
-```{r}
-rstudio --max-men-size=2048M
-
-droplevels 
-
+```{r, message=FALSE}
 require(ggplot2)
-theme_set(theme_bw())
 require(dplyr)
 
-treino <- read.csv("~/Projetos/DataAnalysis/Assignment4/treino.csv")
-teste <- read.csv("~/Projetos/DataAnalysis/Assignment4/teste.csv")
+recSys<- read.csv("~/Projetos/DataAnalysis/Assignment4/RecSys.csv")
 
-colnames(treino) <- c("SESSION", "DAY", "MONTH", "TIME", "ITEM", "CATEGORY", "WEEKDAY", "CLICKED", "BOUGHT", "SOLDABILITY", "SAME_CAT", "SOLD_MEAN", "SOLD_MEAN_DIFF", "SOLD_MEDIAN", "SESSION_SIZE", "CATEG_MOST", "IS_BUY","SESSION_DURATION", "RELATIVE_TIME", "RELATIVE_TIME_PROP")
+colnames(recSys) <- c("SESSION", "DAY", "MONTH", "TIME", "ITEM", "CATEGORY", "WEEKDAY", "CLICKED", "BOUGHT", "SOLDABILITY", "SAME_CAT", "SOLD_MEAN", "SOLD_MEAN_DIFF", "SOLD_MEDIAN", "SESSION_SIZE", "CATEG_MOST", "IS_BUY","SESSION_DURATION", "RELATIVE_TIME", "RELATIVE_TIME_PROP")
 
-colnames(teste) <- c("SESSION", "DAY", "MONTH", "TIME", "ITEM", "CATEGORY", "WEEKDAY", "CLICKED", "BOUGHT", "SOLDABILITY", "SAME_CAT", "SOLD_MEAN", "SOLD_MEAN_DIFF", "SOLD_MEDIAN", "SESSION_SIZE", "CATEG_MOST", "IS_BUY", "SESSION_DURATION", "RELATIVE_TIME", "RELATIVE_TIME_PROP")
+recSys$SESSION <- as.factor(recSys$SESSION)
+recSys$MONTH <- as.factor(recSys$MONTH)
+recSys$ITEM <- as.factor(recSys$ITEM)
+recSys$IS_BUY <- as.factor(recSys$IS_BUY)
 
-treino$SESSION <- as.factor(treino$SESSION)
-treino$MONTH <- as.factor(treino$MONTH)
-treino$ITEM <- as.factor(treino$ITEM)
-treino$IS_BUY <- as.factor(treino$IS_BUY)
-
-teste$SESSION <- as.factor(teste$SESSION)
-teste$MONTH <- as.factor(teste$MONTH)
-teste$ITEM <- as.factor(teste$ITEM)
-teste$IS_BUY <- as.factor(teste$IS_BUY)
-
-# By default R comes with few datasets. 
-data = mtcars
-dim(data)  # 32 11
- 
-#Sample Indexes
-indexes = sample(1:nrow(data), size=0.2*nrow(data))
- 
-# Split data
-test = data[indexes,]
-dim(test)  # 6 11
-train = data[-indexes,]
-dim(train) # 26 11
-
-
+summary(recSys)
 ```
 
-Fazendo uma análise simples olhando apanas para os dados é possível tirar algumas conclusões. São elas:
+Olhando apenas para os dados é possível tirar algumas conclusões:
 
-```{r}
-isBuy <- as.data.frame(summary(treino$IS_BUY))
+```{r, fig.align='center'}
+isBuy <- as.data.frame(summary(recSys$IS_BUY))
 
 isBuy["Compras"] <- c("Não_Compras", "Compras") 
 colnames(isBuy) <- c("Quantidade", "Compras")
@@ -97,11 +70,11 @@ ggplot(isBuy, aes(x=Compras, y=Quantidade)) +
   theme(panel.background=element_blank())
 ```
 
+Existem muito mais clicks com não compra do que com compras. Mostrando que os dados estão desbalanceados. 5.5% são os clicks com compras e o restante para clicks com não compras. Além disso, podemos obervar uma diferença no volumes de clicks ao longo dos dias da semana:
 
-Existem muito mais clicks com não compra do que com compras. Mostrando que os dados estão desbalanceados. 5.5% são os clicks com compras e o restante para clicks com não compras.
 
-```{r}
-weekday <- as.data.frame(summary(treino$WEEKDAY))
+```{r, fig.align='center'}
+weekday <- as.data.frame(summary(recSys$WEEKDAY))
 
 weekday["Dia_da_semana"] <- c("Sexta", "Segunda", "Sábado", "Domingo", "Quinta", "Terça", "Quarta") 
 colnames(weekday) <- c("Quantidade", "Dia_da_semana")
@@ -112,9 +85,27 @@ ggplot(weekday, aes(x=Dia_da_semana, y=Quantidade)) +
   theme(panel.background=element_blank())
 ```
 
-Nas segundas e nos domingos é possível identificar um maior número de clicks em relação aos outros dias. Talvez essa seja uma informação relavante para o nosso classificador. 
+Nas segundas e nos domingos é possível identificar um maior número de clicks em relação aos outros dias.
 
-Por essa razão, o nosso primeiro modelo será criado utilizando apenas as variáveis WEEKDAY.
+A grande maioria das sessões possui menos de 10 clicks. Como podemos observar no histograma abaixo:
+
+```{r, fig.align='center'}
+ggplot(recSys, aes(SESSION_SIZE)) + geom_histogram() +  theme_bw()
+```
+
+
+Para melhor avaliar o modelo que será criado, precisamos antes realizar uma divisão nos dados da amostra. Reservando 1/3 da amostra para teste e 2/3 para treino. 
+
+```{r}
+indexes = sample(1:nrow(recSys), size=0.3*nrow(recSys))
+
+teste = recSys[indexes,]
+treino = recSys[-indexes,]
+
+recSys <- NULL
+```
+
+Para o nosso primeiro modelo, vamos inicialmente observar o comportamento do classificador utilizando apenas o dia da semana. 
 
 ```{r}
 bm <- glm(IS_BUY ~ WEEKDAY, 
@@ -123,10 +114,26 @@ bm <- glm(IS_BUY ~ WEEKDAY,
 
 summary(bm)
 exp(bm$coefficients)
-
 ```
 
-É possível identificar que em relação a Sexta-Feira o Sábado e o Domingo são os dias que mais tem chance de ocorrer uma compra.
+É possível identificar que em relação a Sexta-Feira, o Sábado e o Domingo são os dias que mais tem chance de ocorrer uma compra. O sábado tem 1.418 mais chances de ocorrer uma compra do que em uma sexta. Já o domingo tem 1.321 mais chances. 
+
+Para testar o nosso classificador vamos utilizar os dados de teste. 
+
+```{r}
+predictions <- predict(bm, type = "response", newdata = teste) > 0.07
+verdadeiras_compras <- teste$IS_BUY == 1
+
+table(predictions, verdadeiras_compras)
+```
+
+Existem dois tipos de erros que podemos observar na tabela acima. O primeiro erro é o falso positivo, que ocorre quando o modelo prediz que uma saída é verdadeira quando na verdade ela é possitiva. Para o nosso caso é o mesmo que dizer que o modelo achou que um click resultava em compra quando na verdade ele resultava em não compra. 
+
+O segundo erro é o falso negativo, que ocorre quando o modelo prediz que uma saída é falsa quando na verdade ela é possitiva. Para o nosso caso é o mesmo que dizer que o modelo achou que um click não era compra quando na verade ele resultava em compra. 
+
+O nosso objetivo é diminuir ao máximo o segundo tipo de erro. Esse modelo testado errou 84% do clicks de compra. Acertando apenas 26% do clicks de compras. Sendo esse um valor muito baixo. 
+
+Em busca de melhorar esse valor, realizamos um novo teste. Dessa vez modificando o limiar para 0.05
 
 ```{r}
 predictions <- predict(bm, type = "response", newdata = teste) > 0.05
@@ -135,21 +142,34 @@ verdadeiras_compras <- teste$IS_BUY == 1
 table(predictions, verdadeiras_compras)
 ```
 
-Como o problema é bastante desbalanceado (95% para não compras e 5% para compras) é importante que o o erro falso positivo seja o menor possível. No modelo acima ele errou 25% nas previsão de compras. Ele devia ter classificado como compra e classificou como não compra. 
 
-Em busca de melhorar esse número, criamos outro modelo. Dessa vez considerando a categoria e o dia da semana. 
+Nesse modelo temos um erro de 34% dos clicks de compra. O modelo deveria ter classificado como compra e classificou como não compra. 
 
+Em busca de melhorar esse número criamos outro modelo. Dessa vez considerando o máximo de atributos possivel. Devido ao tamanho do dataset decidimos focar em alguns atributos para esse relatório. Os atributos escolhidas foram: SOLDABILITY, WEEKDAY, MONTH, RELATIVE_TIME_PROP, RELATIVE_TIME, SESSION_DURATION, SESSION_SIZE, DAY, BOUGHT. 
 
 ```{r}
-bm2 <- glm(IS_BUY ~ SOLDABILITY + WEEKDAY + MONTH, 
+bm2 <- glm(IS_BUY ~ SOLDABILITY + WEEKDAY + MONTH + RELATIVE_TIME_PROP + RELATIVE_TIME + SESSION_DURATION + SESSION_SIZE + DAY + BOUGHT, 
           data = teste,
           family = "binomial")
 
 summary(bm2)
-exp(bm2$coefficients)
-
-
 ```
 
-Defina uma métrica de sucesso para seu classificador que você considera que faça sentido para o contexto de emails (falsos positivos e falsos negativos têm o mesmo peso?) e avalie seu modelo. O que funcionou bem e o que seriam as próximas melhoras a fazer?
 
+Como os atributos RELATIVE_TIME_PROP, RELATIVE_TIME e DAY se mostraram pouco relevantes, decidimos por tirar esses atributos. 
+
+```{r}
+bm2 <- glm(IS_BUY ~ SOLDABILITY + WEEKDAY + MONTH + SESSION_DURATION + SESSION_SIZE + BOUGHT, 
+          data = teste,
+          family = "binomial")
+summary(bm2)
+
+predictions <- predict(bm2, type = "response", newdata = teste) > 0.05
+verdadeiras_compras <- teste$IS_BUY == 1
+
+table(predictions, verdadeiras_compras)
+```
+
+Para esse novo modelo testado temos um erro de 31% do clicks de compra. Acertando 69% do clicks de compras. Sendo esse um valor muito mais alto em comparação ao nosso primeiro modelo.
+
+Nos próximos passos temos que derivar mais atributos para assim diminuir o valor dos falsos positivos. 

@@ -10,24 +10,33 @@ output: html_document
 ```{r}
 library(dplyr)
 
-training <- read.csv("~/Projetos/DataAnalysis/Assignment5/training.csv")
-training$MATRICULA <- as.factor(training$MATRICULA)
+training <- read.csv("~/Projetos/DataAnalysis/Assignment5/training_sem_acento.csv")
+
+training <- filter(training, PERIODO_RELATIVO == 1)
+
+#Transformação para factor
 training$COD_CURSO <- as.factor(training$COD_CURSO)
 training$MEDIA <- as.numeric(as.character(training$MEDIA))
 training$COD_EVASAO <- as.factor(training$COD_EVASAO)
-levels(training$SITUACAO)[1] = "missing"
-levels(training$PERIODO_INGRESSO)[1] = "missing"
-levels(training$CURSO)[1] = "missing"
-levels(training$CREDITOS)[1] = "missing"
-levels(training$DEPARTAMENTO)[1] = "missing"
-levels(training$DISCIPLINA)[1] = "missing"
+training$CURSO <- as.factor(training$CURSO)
+training$DEPARTAMENTO <- as.factor(training$DEPARTAMENTO)
+training$DISCIPLINA <- as.factor(training$DISCIPLINA)
 
+#Missing
+levels(training$SITUACAO)[1] = NA
+levels(training$PERIODO_INGRESSO)[1] = NA
+levels(training$CURSO)[1] = NA
+levels(training$CREDITOS)[1] = NA
+levels(training$DEPARTAMENTO)[1] = NA
+levels(training$DISCIPLINA)[1] = NA
 
+#Primeiro periodo
 set.seed(12345) 
 primeiro_periodo <- filter(training, PERIODO_RELATIVO == 1)
 
 primeiro_training <- primeiro_periodo[order(runif(nrow(primeiro_periodo))), ]
 
+#Divisao de treino e teste
 training_train <- primeiro_training[1:round(0.9*nrow(primeiro_periodo)), ]
 training_test <- primeiro_training[round(0.9*nrow(primeiro_periodo)):nrow(primeiro_periodo), ]
 prop.table(table(training_train$COD_EVASAO))
@@ -35,11 +44,7 @@ prop.table(table(training_test$COD_EVASAO))
 
 library("C50")
 
-training_train$CURSO <- NULL
-training_train$DEPARTAMENTO <- NULL
-training_train$DISCIPLINA <- NULL
-
-model <- C5.0(training_train[,-11], training_train$COD_EVASAO)
+model <- C5.0(training_train[,-14], training_train$COD_EVASAO)
 model
 summary(model)
 ```
@@ -59,22 +64,19 @@ table(pred, true_eva)
 
 
 ```{r}
-test_first_round_kaggle <- read.csv("~/Projetos/DataAnalysis/Assignment5/test_first_round_kaggle.csv")
+test_first_round_kaggle <- read.csv("~/Projetos/DataAnalysis/Assignment5/test_first_round_kaggle_sem_acento.csv")
 
-test_first_round_kaggle$CURSO <- NULL
-test_first_round_kaggle$DEPARTAMENTO <- NULL
-test_first_round_kaggle$DISCIPLINA <- NULL
-
-test_first_round_kaggle$MATRICULA <- as.factor(test_first_round_kaggle$MATRICULA)
+test_first_round_kaggle$CREDITOS <- as.factor(test_first_round_kaggle$CREDITO)
+test_first_round_kaggle$CURSO <- as.factor(test_first_round_kaggle$CURSO)
+test_first_round_kaggle$DEPARTAMENTO <- as.factor(test_first_round_kaggle$DEPARTAMENTO)
+test_first_round_kaggle$DISCIPLINA <- as.factor(test_first_round_kaggle$DISCIPLINA)
 test_first_round_kaggle$COD_CURSO <- as.factor(test_first_round_kaggle$COD_CURSO)
 test_first_round_kaggle$MEDIA <- as.numeric(as.character(test_first_round_kaggle$MEDIA))
-
+test_first_round_kaggle$PERIODO_RELATIVO <- as.numeric(test_first_round_kaggle$PERIODO_RELATIVO)
 
 pred <- predict(model, test_first_round_kaggle)
 pred
 
 str(test_first_round_kaggle)
-
-
 ```
 

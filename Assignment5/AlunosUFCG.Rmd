@@ -5,9 +5,12 @@ date: "13-06-2015"
 output: html_document
 ---
 
-
+Sys.setlocale(locale = "C")
 
 ```{r}
+# cut -d',' -f2,3 submissao.csv > t
+
+
 library(dplyr)
 
 training <- read.csv("~/Projetos/DataAnalysis/Assignment5/training_sem_acento.csv")
@@ -16,7 +19,6 @@ training <- filter(training, PERIODO_RELATIVO == 1)
 
 #Transformação para factor
 training$COD_CURSO <- as.factor(training$COD_CURSO)
-training$MEDIA <- as.numeric(as.character(training$MEDIA))
 training$COD_EVASAO <- as.factor(training$COD_EVASAO)
 training$CURSO <- as.factor(training$CURSO)
 training$DEPARTAMENTO <- as.factor(training$DEPARTAMENTO)
@@ -44,7 +46,7 @@ prop.table(table(training_test$COD_EVASAO))
 
 library("C50")
 
-model <- C5.0(training_train[,-14], training_train$COD_EVASAO)
+model <- C5.0(training_train[,c(5,7,9,11)], training_train$COD_EVASAO)
 model
 summary(model)
 ```
@@ -56,7 +58,7 @@ training_test$CURSO <- NULL
 training_test$DEPARTAMENTO <- NULL
 training_test$DISCIPLINA <- NULL
 
-pred <- predict(model, training_test)
+pred <- predict(model, training_test[,c(5,7,9,11)])
 
 true_eva <- training_test$COD_EVASAO == 1
 table(pred, true_eva)
@@ -74,8 +76,18 @@ test_first_round_kaggle$COD_CURSO <- as.factor(test_first_round_kaggle$COD_CURSO
 test_first_round_kaggle$MEDIA <- as.numeric(as.character(test_first_round_kaggle$MEDIA))
 test_first_round_kaggle$PERIODO_RELATIVO <- as.numeric(test_first_round_kaggle$PERIODO_RELATIVO)
 
-pred <- predict(model, test_first_round_kaggle)
-pred
+test_first_round_kaggle$PERIODO_INGRESSO <- as.factor(test_first_round_kaggle$PERIODO_INGRESSO)
+
+pred <- predict(model, test_first_round_kaggle[,c(5,7,9, 11)])
+summary(pred)
+
+submissao <- cbind(test_first_round_kaggle["COD_EVASAO"], COD_EVASAO=pred)
+
+test_matriculas <- select(test_first_round_kaggle, MATRICULA)
+submissao <- cbind(df_test["MATRICULA"], COD_EVASAO=prediction)
+
+save(select(test_first_round_kaggle, MATRICULA, COD_EVASAO),file="submissao.csv")
+write.csv(select(test_first_round_kaggle, ID, COD_EVASAO),file="submissao.csv")
 
 str(test_first_round_kaggle)
 ```

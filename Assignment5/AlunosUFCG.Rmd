@@ -5,90 +5,202 @@ date: "13-06-2015"
 output: html_document
 ---
 
-Sys.setlocale(locale = "C")
+Durante os últimos anos a Universidade Federal de Campina Grande observa um número alto de evasão por parte dos alunos. Tentando entender os motivos dessa evasão analisamos uma amostra contendo dados importante. A nossa amostra tem os seguintes atributos:
 
-```{r}
-# cut -d',' -f2,3 submissao.csv > t
+1. MATRICULA: identificador do aluno
+2. PERIODO: identificador do período letivo da universidade (ano.semestre)
+3. COD_CURSO: identificador do curso
+4. CURSO: nome do curso. Cada curso tem seu COD_CURSO
+5. CODIGO: identificador da disciplina que o aluno cursou no periodo
+6. DISCIPLINA: nome da disciplina referente que o aluno cursou no periodo.  
+7. CODIGO: Cada disciplina tem seu
+8. CREDITOS: numero de créditos referente a disciplina
+9. DEPARTAMENTO: departamento que ofertou a disciplina
+10. MEDIA: média do aluno na disciplina (0 a 10). Alunos reprovados por falta numa disciplina recebem 0 e alunos que trancaram a disciplina recebem NA.
+11. STATUS: Aprovado, Reprovado Por Falta, Trancado ou Reprovado. Se refere ao estado final do aluno na disciplina
+12. PERIODO_INGRESSO: período letivo da universidade em que o aluno ingressou no curso.
+13. PERIODO_RELATIVO: número de períodos que o aluno está matriculado na universidade. "1" refere-se ao aluno em seu primeiro periodo, "5" refere-se ao aluno no quinto período.
+14. COD_EVASAO: identificador de evasão do aluno. "0" significa que o aluno continuou ativo na universidade no período seguinte e "1" significa que o aluno desistiu do curso nesse período e não voltou a se matricular no seguinte. 
 
+O nosso objetivo é construir um modelo de classificação que nos diga se o aluno irá evadir ou não. Para o nosso primeiro modelo vamos classificar apenas para os alunos que tem período relativo 1. 
 
+```{r, warning=FALSE, message=FALSE}
 library(dplyr)
 
-training <- read.csv("~/Projetos/DataAnalysis/Assignment5/training_sem_acento.csv")
-
-training <- filter(training, PERIODO_RELATIVO == 1)
+arquivo <- read.csv("~/Projetos/DataAnalysis/Assignment5/training_sem_acento.csv")
 
 #Transformação para factor
-training$COD_CURSO <- as.factor(training$COD_CURSO)
-training$COD_EVASAO <- as.factor(training$COD_EVASAO)
-training$CURSO <- as.factor(training$CURSO)
-training$DEPARTAMENTO <- as.factor(training$DEPARTAMENTO)
-training$DISCIPLINA <- as.factor(training$DISCIPLINA)
+arquivo$COD_EVASAO <- as.factor(arquivo$COD_EVASAO)
+arquivo$DEPARTAMENTO <- as.factor(arquivo$DEPARTAMENTO)
+arquivo$COD_CURSO <- as.factor(arquivo$COD_CURSO)
+arquivo$MEDIA <- as.character(arquivo$MEDIA)
+arquivo$MEDIA[is.na(arquivo$MEDIA)] <- -10
+arquivo$MEDIA <- as.numeric(arquivo$MEDIA)
 
 #Missing
-levels(training$SITUACAO)[1] = NA
-levels(training$PERIODO_INGRESSO)[1] = NA
-levels(training$CURSO)[1] = NA
-levels(training$CREDITOS)[1] = NA
-levels(training$DEPARTAMENTO)[1] = NA
-levels(training$DISCIPLINA)[1] = NA
-
-#Primeiro periodo
-set.seed(12345) 
-primeiro_periodo <- filter(training, PERIODO_RELATIVO == 1)
-
-primeiro_training <- primeiro_periodo[order(runif(nrow(primeiro_periodo))), ]
-
-#Divisao de treino e teste
-training_train <- primeiro_training[1:round(0.9*nrow(primeiro_periodo)), ]
-training_test <- primeiro_training[round(0.9*nrow(primeiro_periodo)):nrow(primeiro_periodo), ]
-prop.table(table(training_train$COD_EVASAO))
-prop.table(table(training_test$COD_EVASAO))
-
-library("C50")
-
-model <- C5.0(training_train[,c(5,7,9,11)], training_train$COD_EVASAO)
-model
-summary(model)
+levels(arquivo$DEPARTAMENTO)[1] = NA
+levels(arquivo$DISCIPLINA)[1] = NA
+levels(arquivo$SITUACAO)[1] = NA
 ```
 
-Testando o modelo
+Antes de criar o modelo é importante dividir o arquivo original em treino e teste (75% treinamento, 25% teste), para assim verificar o F-measure e saber se um modelo criado é melhor do que o modelo anterior. 
 
 ```{r}
-training_test$CURSO <- NULL
-training_test$DEPARTAMENTO <- NULL
-training_test$DISCIPLINA <- NULL
+#Primeiro periodo
+set.seed(12345)
+primeiro_periodo <- filter(arquivo, PERIODO_RELATIVO == 1)
+primeiro_periodo <- primeiro_periodo[order(runif(nrow(primeiro_periodo))), ]
 
-pred <- predict(model, training_test[,c(5,7,9,11)])
+#Divisao de treino e teste
+treino <- primeiro_periodo[1:round(0.75*nrow(primeiro_periodo)), ]
+test <- primeiro_periodo[round(0.75*nrow(primeiro_periodo)):nrow(primeiro_periodo), ]
+```
 
-true_eva <- training_test$COD_EVASAO == 1
+Podemos notar que a proporção entre evasão e não evasão se manteve parecida após a divisão de treino e teste. 
+
+```{r}
+prop.table(table(primeiro_periodo$COD_EVASAO))
+prop.table(table(treino$COD_EVASAO))
+prop.table(table(test$COD_EVASAO))
+```
+
+Inicialmente vamos criar um modelo considerando apenas o período letivo da universidade, código da disciplina cursada, departamento e a situação. 
+
+```{r}
+library("C50")
+
+model <- C5.0(treino[,c(5,7,9,11)], treino$COD_EVASAO)
+model
+summary(model)
+
+pred <- predict(model, test[,c(5,7,9,11)])
+
+true_eva <- test$COD_EVASAO == 1
 table(pred, true_eva)
 ```
 
+Podemos notar que o atributo departamento não tem importância para a criação desse modelo, assim como código da disciplina. Para o primeiro modelo temos: 
+F-measure = 0.61
+
+Tentando melhorar esse valor do F-measure, vamos criamos um novo modelo adicionando o cod_curso e média 
 
 ```{r}
-test_first_round_kaggle <- read.csv("~/Projetos/DataAnalysis/Assignment5/test_first_round_kaggle_sem_acento.csv")
+model <- C5.0(treino[,c(3,5,7,9,10,11)], treino$COD_EVASAO)
+model
+summary(model)
 
-test_first_round_kaggle$CREDITOS <- as.factor(test_first_round_kaggle$CREDITO)
-test_first_round_kaggle$CURSO <- as.factor(test_first_round_kaggle$CURSO)
-test_first_round_kaggle$DEPARTAMENTO <- as.factor(test_first_round_kaggle$DEPARTAMENTO)
-test_first_round_kaggle$DISCIPLINA <- as.factor(test_first_round_kaggle$DISCIPLINA)
-test_first_round_kaggle$COD_CURSO <- as.factor(test_first_round_kaggle$COD_CURSO)
-test_first_round_kaggle$MEDIA <- as.numeric(as.character(test_first_round_kaggle$MEDIA))
-test_first_round_kaggle$PERIODO_RELATIVO <- as.numeric(test_first_round_kaggle$PERIODO_RELATIVO)
+pred <- predict(model, test[,c(3,5,7,9,10,11)])
 
-test_first_round_kaggle$PERIODO_INGRESSO <- as.factor(test_first_round_kaggle$PERIODO_INGRESSO)
-
-pred <- predict(model, test_first_round_kaggle[,c(5,7,9, 11)])
-summary(pred)
-
-submissao <- cbind(test_first_round_kaggle["COD_EVASAO"], COD_EVASAO=pred)
-
-test_matriculas <- select(test_first_round_kaggle, MATRICULA)
-submissao <- cbind(df_test["MATRICULA"], COD_EVASAO=prediction)
-
-save(select(test_first_round_kaggle, MATRICULA, COD_EVASAO),file="submissao.csv")
-write.csv(select(test_first_round_kaggle, ID, COD_EVASAO),file="submissao.csv")
-
-str(test_first_round_kaggle)
+true_eva <- test$COD_EVASAO == 1
+table(pred, true_eva)
 ```
 
+É possivel notar que mesmo adicionando novas variavéis o F-measure não aumentou. 
+Por essa razão criamos novos atributos: 
+
+1. Média geral do período do aluno
+2. Quantidade de cadeiras aprovadas
+3. Quantidade de reprovações
+4. Quantidade de reprovações por falta
+
+```{r}
+#Criando novos atributos para o treino
+treino2 <- treino 
+treino_group <- group_by(treino, MATRICULA)
+
+media <- summarise(treino_group, mean(MEDIA))
+names(media) <- c("MATRICULA", "MEDIATOTAL")
+
+reprovacao <- summarise(group_by(filter(treino, SITUACAO=="Reprovado"), MATRICULA), n())
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+
+aprovado <- summarise(group_by(filter(treino, SITUACAO=="Aprovado"), MATRICULA), n())
+names(aprovado) <- c("MATRICULA", "APROVADO")
+
+reprovado_falta <- summarise(group_by(filter(treino, SITUACAO=="Reprovado por Falta"), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
+
+treino2 <- merge(treino2, media, by = "MATRICULA", all = TRUE)
+treino2 <- merge(treino2, reprovacao, by = "MATRICULA", all = TRUE)
+treino2 <- merge(treino2, aprovado, by = "MATRICULA", all = TRUE)
+treino2 <- merge(treino2, reprovado_falta, by = "MATRICULA", all = TRUE)
+
+#Criando novos atributos para o teste
+test2 <- test 
+test_group <- group_by(test, MATRICULA)
+
+media <- summarise(test_group, mean(MEDIA))
+names(media) <- c("MATRICULA", "MEDIATOTAL")
+test2 <- merge(test2, media, by = "MATRICULA", all = TRUE)
+
+reprovacao <- summarise(group_by(filter(test, SITUACAO=="Reprovado"), MATRICULA), n())
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+test2 <- merge(test2, reprovacao, by = "MATRICULA", all = TRUE)
+
+aprovado <- summarise(group_by(filter(test, SITUACAO=="Aprovado"), MATRICULA), n())
+names(aprovado) <- c("MATRICULA", "APROVADO")
+test2 <- merge(test2, aprovado, by = "MATRICULA", all = TRUE)
+
+reprovado_falta <- summarise(group_by(filter(test, SITUACAO=="Reprovado por Falta"), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
+test2 <- merge(test2, reprovado_falta, by = "MATRICULA", all = TRUE)
+```
+
+Agora com as 4 novas colunas criadas temos mais dados para analisar e ajudar no classificador. Porém ao longo do processo percebenos que a matrix de confusão da nossa versão final é pior da versão com sem a quantidade de aprovações e reprovações por falta. Observe:
+
+```{r}
+model <- C5.0(treino2[,c(3,5,7,9,10,11,15,16,17,18)], treino2$COD_EVASAO)
+pred <- predict(model, test2[,c(3,5,7,9,10,11,15,16,17,18)])
+
+true_eva <- test2$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+Modelo com matrix de confusão melhor:
+
+```{r}
+model <- C5.0(treino2[,c(3,5,7,9,10,11,15,16)], treino2$COD_EVASAO)
+pred <- predict(model, test2[,c(3,5,7,9,10,11,15,16)])
+
+true_eva <- test2$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+Esse foi o modelo que foi usado para fazer a classificação e submissão para o kaggle. 
+
+```{r}
+test_kaggle <- read.csv("~/Projetos/DataAnalysis/Assignment5/test_first_round_kaggle_sem_acento.csv")
+
+#Transformação para factor
+test_kaggle$DEPARTAMENTO <- as.factor(test_kaggle$DEPARTAMENTO)
+test_kaggle$COD_CURSO <- as.factor(test_kaggle$COD_CURSO)
+test_kaggle$MEDIA <- as.character(test_kaggle$MEDIA)
+test_kaggle$MEDIA[is.na(test_kaggle$MEDIA)] <- -10
+test_kaggle$MEDIA <- as.numeric(test_kaggle$MEDIA)
+
+#Missing
+levels(test_kaggle$DEPARTAMENTO)[1] = NA
+levels(test_kaggle$DISCIPLINA)[1] = NA
+levels(test_kaggle$SITUACAO)[1] = NA
+
+test_kaggle$PERIODO_INGRESSO <- as.factor(test_kaggle$PERIODO_INGRESSO)
+
+test_kaggle_group <- group_by(test_kaggle, MATRICULA)
+
+media <- summarise(test_kaggle_group, mean(MEDIA))
+names(media) <- c("MATRICULA", "MEDIATOTAL")
+
+reprovacao <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Reprovado"), MATRICULA), n())
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+
+test_kaggle_group <- merge(test_kaggle_group, media, by = "MATRICULA", all = TRUE)
+test_kaggle_group <- merge(test_kaggle_group, reprovacao, by = "MATRICULA", all = TRUE)
+
+pred <- predict(model, test_kaggle_group[,c(3,5,7,9,10,11,14,15)])
+summary(pred)
+
+test_kaggle_group["COD_EVASAO"] <- pred
+
+write.csv(select(test_kaggle_group, ID, COD_EVASAO),file="submissao2.csv")
+
+```

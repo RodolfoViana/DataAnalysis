@@ -52,7 +52,7 @@ primeiro_periodo <- filter(arquivo, PERIODO_RELATIVO == 1)
 primeiro_periodo <- primeiro_periodo[order(runif(nrow(primeiro_periodo))), ]
 
 #Divisao de treino e teste
-treino <- primeiro_periodo[1:round(0.75*nrow(primeiro_periodo)), ]
+treino <- primeiro_periodo[1:round(1*nrow(primeiro_periodo)), ]
 test <- primeiro_periodo[round(0.75*nrow(primeiro_periodo)):nrow(primeiro_periodo), ]
 ```
 
@@ -191,12 +191,20 @@ media <- summarise(test_kaggle_group, mean(MEDIA))
 names(media) <- c("MATRICULA", "MEDIATOTAL")
 
 reprovacao <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Reprovado"), MATRICULA), n())
-names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+names(reprovacao) <- c("MATRICULA", "REPROVACAO.x")
+
+aprovado <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Aprovado"), MATRICULA), n())
+names(aprovado) <- c("MATRICULA", "APROVADO.x")
+
+reprovado_falta <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Reprovado por Falta"), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA.x")
 
 test_kaggle_group <- merge(test_kaggle_group, media, by = "MATRICULA", all = TRUE)
 test_kaggle_group <- merge(test_kaggle_group, reprovacao, by = "MATRICULA", all = TRUE)
+test_kaggle_group <- merge(test_kaggle_group, aprovado, by = "MATRICULA", all = TRUE)
+test_kaggle_group <- merge(test_kaggle_group, reprovado_falta, by = "MATRICULA", all = TRUE)
 
-pred <- predict(model, test_kaggle_group[,c(3,5,7,9,10,11,14,15)])
+pred <- predict(model, test_kaggle_group[,c(3,5,7,9,10,11,14,15,16,17)])
 summary(pred)
 
 test_kaggle_group["COD_EVASAO"] <- pred

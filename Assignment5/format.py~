@@ -7,8 +7,8 @@ def remove_accents(input_str):
     only_ascii = nkfd_form.encode('ASCII', 'ignore')
     return only_ascii
 
-programacao = codecs.open('test_first_round_kaggle.csv',encoding='latin1')
-f = open('test_first_round_kaggle_sem_acento.csv', 'w')
+programacao = codecs.open('test_second_round_kaggle.csv',encoding='latin1')
+f = open('test_second_round_kaggle_sem_acento.csv', 'w')
 
 
 

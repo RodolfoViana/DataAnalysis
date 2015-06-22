@@ -1,0 +1,247 @@
+---
+title: "AlunosUFCGRound"
+author: "Rodolfo Viana"
+date: "22-06-2015"
+output: html_document
+---
+
+Durante os últimos anos a Universidade Federal de Campina Grande observa um número alto de evasão por parte dos alunos. Tentando entender os motivos dessa evasão analisamos uma amostra contendo dados importante. A nossa amostra tem os seguintes atributos:
+
+1. MATRICULA: identificador do aluno
+2. PERIODO: identificador do período letivo da universidade (ano.semestre)
+3. COD_CURSO: identificador do curso
+4. CURSO: nome do curso. Cada curso tem seu COD_CURSO
+5. CODIGO: identificador da disciplina que o aluno cursou no periodo
+6. DISCIPLINA: nome da disciplina referente que o aluno cursou no periodo.  
+7. CODIGO: Cada disciplina tem seu
+8. CREDITOS: numero de créditos referente a disciplina
+9. DEPARTAMENTO: departamento que ofertou a disciplina
+10. MEDIA: média do aluno na disciplina (0 a 10). Alunos reprovados por falta numa disciplina recebem 0 e alunos que trancaram a disciplina recebem NA.
+11. STATUS: Aprovado, Reprovado Por Falta, Trancado ou Reprovado. Se refere ao estado final do aluno na disciplina
+12. PERIODO_INGRESSO: período letivo da universidade em que o aluno ingressou no curso.
+13. PERIODO_RELATIVO: número de períodos que o aluno está matriculado na universidade. "1" refere-se ao aluno em seu primeiro periodo, "5" refere-se ao aluno no quinto período.
+14. COD_EVASAO: identificador de evasão do aluno. "0" significa que o aluno continuou ativo na universidade no período seguinte e "1" significa que o aluno desistiu do curso nesse período e não voltou a se matricular no seguinte. 
+
+O nosso objetivo é construir um modelo de classificação que nos diga se o aluno irá evadir ou não. Vamos classificar para os alunos que tem período relativo 5. 
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+
+arquivo <- read.csv("~/Projetos/DataAnalysis/Assignment5/training_evasao_sem_acento.csv")
+
+#Transformação para factor
+arquivo$COD_EVASAO <- as.factor(arquivo$COD_EVASAO)
+#arquivo$DEPARTAMENTO <- as.factor(arquivo$DEPARTAMENTO)
+arquivo$COD_CURSO <- as.factor(arquivo$COD_CURSO)
+arquivo$CODIGO <- as.factor(arquivo$CODIGO)
+arquivo$CREDITOS <- as.factor(arquivo$CREDITOS)
+arquivo$MEDIA[is.na(arquivo$MEDIA)] <- -1
+#arquivo$MEDIA <- as.character(arquivo$MEDIA)
+#arquivo$MEDIA <- as.numeric(arquivo$MEDIA)
+```
+
+Antes de criar o modelo é importante dividir o arquivo original em treino e teste (75% treinamento, 25% teste), para assim verificar o F-measure e saber se um modelo criado é melhor do que o modelo anterior. 
+
+```{r}
+#Primeiro periodo
+set.seed(12345)
+arquivo <- filter(arquivo, PERIODO_RELATIVO == 5)
+arquivo <- arquivo[order(runif(nrow(arquivo))), ]
+
+#Divisao de treino e teste
+treino <- arquivo[1:round(0.75*nrow(arquivo)), ]
+test <- arquivo[round(0.75*nrow(arquivo)):nrow(arquivo), ]
+```
+
+Podemos notar que a proporção entre evasão e não evasão se manteve parecida após a divisão de treino e teste. 
+
+```{r}
+prop.table(table(arquivo$COD_EVASAO))
+prop.table(table(treino$COD_EVASAO))
+prop.table(table(test$COD_EVASAO))
+```
+
+Inicialmente vamos criar um modelo considerando apenas o código da disciplina cursada, departamento e a situação. 
+
+```{r}
+library("C50")
+
+model <- C5.0(treino[,c(3,7,9,11)], treino$COD_EVASAO)
+model
+summary(model)
+
+pred <- predict(model, test[,c(3,7,9,11)])
+
+true_eva <- test$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+Podemos notar que não criamos um bom classificador, pois ele classificou todas as saidas como sendo 0. Temos esse erro pois estamos com dados desbalanceados. No nosso arquivo de treino 94% dos dados são de não evasão e 6% dos dados são evasão. 
+
+Por essa razão resolvemos por, nos dados de treino, balancear os dados. 
+
+```{r}
+treino_positivo = filter(treino, COD_EVASAO == 1)
+treino_negativo = filter(treino, COD_EVASAO == 0)
+
+treino_negativo <- treino_negativo[order(runif(nrow(treino_positivo))), ]
+
+novo_treino <- rbind(treino_positivo,treino_negativo)
+novo_treino <- novo_treino[order(runif(nrow(novo_treino))), ]
+```
+
+Criamos novamente o modelo considerando apenas o código da disciplina cursada, departamento e a situação. Dessa vez utilizando os dados de treino balanceados. 
+
+
+```{r}
+model <- C5.0(novo_treino[,c(3,7,9,11)], novo_treino$COD_EVASAO)
+model
+summary(model)
+
+pred <- predict(model, test[,c(3,7,9,11)])
+
+true_eva <- test$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+Com esse temos um F-measure igual a: ()
+
+
+```{r}
+model <- C5.0(treino[,c(3,5,7,9,10,11)], treino$COD_EVASAO)
+model
+summary(model)
+
+pred <- predict(model, test[,c(3,5,7,9,10,11)])
+
+true_eva <- test$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+É possivel notar que mesmo adicionando novas variavéis o F-measure não aumentou. 
+Por essa razão criamos novos atributos: 
+
+1. Média geral do período do aluno
+2. Quantidade de cadeiras aprovadas
+3. Quantidade de reprovações
+4. Quantidade de reprovações por falta
+
+```{r}
+#Criando novos atributos para o treino
+treino2 <- treino 
+treino_group <- group_by(treino, MATRICULA)
+
+media <- summarise(treino_group, mean(MEDIA))
+names(media) <- c("MATRICULA", "MEDIATOTAL")
+
+reprovacao <- summarise(group_by(filter(treino, SITUACAO=="Reprovado"), MATRICULA), n())
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+
+aprovado <- summarise(group_by(filter(treino, SITUACAO=="Aprovado"), MATRICULA), n())
+names(aprovado) <- c("MATRICULA", "APROVADO")
+
+target <- c("Reprovado por Falta", NA)
+reprovado_falta <- summarise(group_by(filter(treino, SITUACAO %in% target), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
+
+treino2 <- merge(treino2, media, by = "MATRICULA", all = TRUE)
+treino2 <- merge(treino2, reprovacao, by = "MATRICULA", all = TRUE)
+treino2 <- merge(treino2, aprovado, by = "MATRICULA", all = TRUE)
+treino2 <- merge(treino2, reprovado_falta, by = "MATRICULA", all = TRUE)
+
+#Criando novos atributos para o teste
+test2 <- test 
+test_group <- group_by(test, MATRICULA)
+
+media <- summarise(test_group, mean(MEDIA))
+names(media) <- c("MATRICULA", "MEDIATOTAL")
+test2 <- merge(test2, media, by = "MATRICULA", all = TRUE)
+
+reprovacao <- summarise(group_by(filter(test, SITUACAO=="Reprovado"), MATRICULA), n())
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+test2 <- merge(test2, reprovacao, by = "MATRICULA", all = TRUE)
+
+aprovado <- summarise(group_by(filter(test, SITUACAO=="Aprovado"), MATRICULA), n())
+names(aprovado) <- c("MATRICULA", "APROVADO")
+test2 <- merge(test2, aprovado, by = "MATRICULA", all = TRUE)
+
+target <- c("Reprovado por Falta", NA)
+reprovado_falta <- summarise(group_by(filter(test, SITUACAO %in% target), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
+test2 <- merge(test2, reprovado_falta, by = "MATRICULA", all = TRUE)
+```
+
+Agora com as 4 novas colunas criadas temos mais dados para analisar e ajudar no classificador. Porém ao longo do processo percebenos que a matrix de confusão da nossa versão final é pior da versão com sem a quantidade de aprovações e reprovações por falta. Observe:
+
+```{r}
+model <- C5.0(treino2[,c(3,5,7,9,10,11,15,16,18)], treino2$COD_EVASAO)
+
+credit_boost10 <- C5.0(treino2[,c(3,5,7,9,10,11,15,16,17,18)], treino2$COD_EVASAO,trials = 15)
+
+pred <- predict(model, test2[,c(3,5,7,9,10,11,15,16,17,18)])
+
+true_eva <- test2$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+Modelo com matrix de confusão melhor:
+
+```{r}
+model <- C5.0(treino2[,c(3,5,7,9,10,11,15,16)], treino2$COD_EVASAO)
+pred <- predict(model, test2[,c(3,5,7,9,10,11,15,16)])
+
+true_eva <- test2$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+Esse foi o modelo que foi usado para fazer a classificação e submissão para o kaggle. 
+
+```{r}
+test_kaggle <- read.csv("~/Projetos/DataAnalysis/Assignment5/test_first_round_kaggle_sem_acento.csv")
+
+#Transformação para factor
+test_kaggle$DEPARTAMENTO <- as.factor(test_kaggle$DEPARTAMENTO)
+test_kaggle$COD_CURSO <- as.factor(test_kaggle$COD_CURSO)
+test_kaggle$MEDIA <- as.character(test_kaggle$MEDIA)
+test_kaggle$MEDIA[is.na(test_kaggle$MEDIA)] <- -10
+test_kaggle$MEDIA <- as.numeric(test_kaggle$MEDIA)
+
+#Missing
+levels(test_kaggle$DEPARTAMENTO)[1] = NA
+levels(test_kaggle$DISCIPLINA)[1] = NA
+levels(test_kaggle$SITUACAO)[1] = NA
+
+test_kaggle$PERIODO_INGRESSO <- as.factor(test_kaggle$PERIODO_INGRESSO)
+
+test_kaggle_group <- group_by(test_kaggle, MATRICULA)
+
+media <- summarise(test_kaggle_group, mean(MEDIA))
+names(media) <- c("MATRICULA", "MEDIATOTAL")
+
+reprovacao <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Reprovado"), MATRICULA), n())
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+
+aprovado <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Aprovado"), MATRICULA), n())
+names(aprovado) <- c("MATRICULA", "APROVADO")
+
+target <- c("Reprovado por Falta", NA)
+filter(dat, name %in% target)
+
+reprovado_falta <- summarise(group_by(filter(test_kaggle_group, SITUACAO %in% target), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
+
+test_kaggle_group <- merge(test_kaggle_group, media, by = "MATRICULA", all = TRUE)
+test_kaggle_group <- merge(test_kaggle_group, reprovacao, by = "MATRICULA", all = TRUE)
+test_kaggle_group <- merge(test_kaggle_group, aprovado, by = "MATRICULA", all = TRUE)
+test_kaggle_group <- merge(test_kaggle_group, reprovado_falta, by = "MATRICULA", all = TRUE)
+
+test_kaggle_group$COD_EVASAO <- NULL
+
+pred <- predict(credit_boost10, test_kaggle_group[,c(3,5,7,9,10,11,14,15,16,17)])
+summary(pred)
+
+test_kaggle_group["COD_EVASAO"] <- pred
+
+write.csv(select(test_kaggle_group, ID, COD_EVASAO),file="submissao6.csv")
+
+```

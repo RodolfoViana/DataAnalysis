@@ -117,7 +117,8 @@ names(reprovacao) <- c("MATRICULA", "REPROVACAO")
 aprovado <- summarise(group_by(filter(treino, SITUACAO=="Aprovado"), MATRICULA), n())
 names(aprovado) <- c("MATRICULA", "APROVADO")
 
-reprovado_falta <- summarise(group_by(filter(treino, SITUACAO=="Reprovado por Falta"), MATRICULA), n())
+target <- c("Reprovado por Falta", NA)
+reprovado_falta <- summarise(group_by(filter(treino, SITUACAO %in% target), MATRICULA), n())
 names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
 
 treino2 <- merge(treino2, media, by = "MATRICULA", all = TRUE)
@@ -141,7 +142,8 @@ aprovado <- summarise(group_by(filter(test, SITUACAO=="Aprovado"), MATRICULA), n
 names(aprovado) <- c("MATRICULA", "APROVADO")
 test2 <- merge(test2, aprovado, by = "MATRICULA", all = TRUE)
 
-reprovado_falta <- summarise(group_by(filter(test, SITUACAO=="Reprovado por Falta"), MATRICULA), n())
+target <- c("Reprovado por Falta", NA)
+reprovado_falta <- summarise(group_by(filter(test, SITUACAO %in% target), MATRICULA), n())
 names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
 test2 <- merge(test2, reprovado_falta, by = "MATRICULA", all = TRUE)
 ```
@@ -149,7 +151,10 @@ test2 <- merge(test2, reprovado_falta, by = "MATRICULA", all = TRUE)
 Agora com as 4 novas colunas criadas temos mais dados para analisar e ajudar no classificador. Porém ao longo do processo percebenos que a matrix de confusão da nossa versão final é pior da versão com sem a quantidade de aprovações e reprovações por falta. Observe:
 
 ```{r}
-model <- C5.0(treino2[,c(3,5,7,9,10,11,15,16,17,18)], treino2$COD_EVASAO)
+model <- C5.0(treino2[,c(3,5,7,9,10,11,15,16,18)], treino2$COD_EVASAO)
+
+credit_boost10 <- C5.0(treino2[,c(3,5,7,9,10,11,15,16,17,18)], treino2$COD_EVASAO,trials = 15)
+
 pred <- predict(model, test2[,c(3,5,7,9,10,11,15,16,17,18)])
 
 true_eva <- test2$COD_EVASAO == 1
@@ -191,24 +196,29 @@ media <- summarise(test_kaggle_group, mean(MEDIA))
 names(media) <- c("MATRICULA", "MEDIATOTAL")
 
 reprovacao <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Reprovado"), MATRICULA), n())
-names(reprovacao) <- c("MATRICULA", "REPROVACAO.x")
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
 
 aprovado <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Aprovado"), MATRICULA), n())
-names(aprovado) <- c("MATRICULA", "APROVADO.x")
+names(aprovado) <- c("MATRICULA", "APROVADO")
 
-reprovado_falta <- summarise(group_by(filter(test_kaggle_group, SITUACAO=="Reprovado por Falta"), MATRICULA), n())
-names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA.x")
+target <- c("Reprovado por Falta", NA)
+filter(dat, name %in% target)
+
+reprovado_falta <- summarise(group_by(filter(test_kaggle_group, SITUACAO %in% target), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
 
 test_kaggle_group <- merge(test_kaggle_group, media, by = "MATRICULA", all = TRUE)
 test_kaggle_group <- merge(test_kaggle_group, reprovacao, by = "MATRICULA", all = TRUE)
 test_kaggle_group <- merge(test_kaggle_group, aprovado, by = "MATRICULA", all = TRUE)
 test_kaggle_group <- merge(test_kaggle_group, reprovado_falta, by = "MATRICULA", all = TRUE)
 
-pred <- predict(model, test_kaggle_group[,c(3,5,7,9,10,11,14,15,16,17)])
+test_kaggle_group$COD_EVASAO <- NULL
+
+pred <- predict(credit_boost10, test_kaggle_group[,c(3,5,7,9,10,11,14,15,16,17)])
 summary(pred)
 
 test_kaggle_group["COD_EVASAO"] <- pred
 
-write.csv(select(test_kaggle_group, ID, COD_EVASAO),file="submissao2.csv")
+write.csv(select(test_kaggle_group, ID, COD_EVASAO),file="submissao6.csv")
 
 ```

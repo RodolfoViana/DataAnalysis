@@ -1,0 +1,130 @@
+---
+title: "Problem6"
+author: "Rodolfo Viana"
+date: "05-07-2015"
+output: html_document
+---
+
+Durante os últimos anos a Universidade Federal de Campina Grande observa um número alto de evasão por parte dos alunos. Tentando entender os motivos dessa evasão analisamos uma amostra contendo dados importante. A nossa amostra tem os seguintes atributos:
+
+1. MATRICULA: identificador do aluno
+2. PERIODO: identificador do período letivo da universidade (ano.semestre)
+3. COD_CURSO: identificador do curso
+4. CURSO: nome do curso. Cada curso tem seu COD_CURSO
+5. CODIGO: identificador da disciplina que o aluno cursou no periodo
+6. DISCIPLINA: nome da disciplina referente que o aluno cursou no periodo.  
+7. CODIGO: Cada disciplina tem seu
+8. CREDITOS: numero de créditos referente a disciplina
+9. DEPARTAMENTO: departamento que ofertou a disciplina
+10. MEDIA: média do aluno na disciplina (0 a 10). Alunos reprovados por falta numa disciplina recebem 0 e alunos que trancaram a disciplina recebem NA.
+11. STATUS: Aprovado, Reprovado Por Falta, Trancado ou Reprovado. Se refere ao estado final do aluno na disciplina
+12. PERIODO_INGRESSO: período letivo da universidade em que o aluno ingressou no curso.
+13. PERIODO_RELATIVO: número de períodos que o aluno está matriculado na universidade. "1" refere-se ao aluno em seu primeiro periodo, "5" refere-se ao aluno no quinto período.
+14. COD_EVASAO: identificador de evasão do aluno. "0" significa que o aluno continuou ativo na universidade no período seguinte e "1" significa que o aluno desistiu do curso nesse período e não voltou a se matricular no seguinte. 
+
+O nosso objetivo é construir um modelo de classificação que nos diga se o aluno irá evadir ou não. Para o nosso primeiro modelo vamos classificar apenas para os alunos que tem período relativo 1. 
+
+```{r, warning=FALSE, message=FALSE}
+library(plyr)
+library(dplyr)
+
+arquivo <- read.csv("~/Projetos/DataAnalysis/Assignment5/training_sem_acento.csv")
+
+#Transformação para factor
+arquivo$COD_EVASAO <- as.factor(arquivo$COD_EVASAO)
+arquivo$DEPARTAMENTO <- as.factor(arquivo$DEPARTAMENTO)
+arquivo$COD_CURSO <- as.factor(arquivo$COD_CURSO)
+arquivo$MEDIA <- as.character(arquivo$MEDIA)
+arquivo$MEDIA[is.na(arquivo$MEDIA)] <- -10
+arquivo$MEDIA <- as.numeric(arquivo$MEDIA)
+
+#Missing
+levels(arquivo$DEPARTAMENTO)[1] = NA
+levels(arquivo$DISCIPLINA)[1] = NA
+levels(arquivo$SITUACAO)[1] = NA
+```
+
+Antes de criar o modelo é importante dividir o arquivo original em treino e teste (75% treinamento, 25% teste), para assim verificar o F-measure e saber se um modelo criado é melhor do que o modelo anterior. 
+
+```{r}
+#Primeiro periodo
+set.seed(12345)
+primeiro_periodo <- filter(arquivo, PERIODO_RELATIVO == 1)
+primeiro_periodo <- primeiro_periodo[order(runif(nrow(primeiro_periodo))), ]
+
+#Divisao de treino e teste
+treino <- primeiro_periodo[1:round(1*nrow(primeiro_periodo)), ]
+test <- primeiro_periodo[round(0.75*nrow(primeiro_periodo)):nrow(primeiro_periodo), ]
+```
+
+Podemos notar que a proporção entre evasão e não evasão se manteve parecida após a divisão de treino e teste. 
+
+```{r}
+prop.table(table(primeiro_periodo$COD_EVASAO))
+prop.table(table(treino$COD_EVASAO))
+prop.table(table(test$COD_EVASAO))
+```
+
+Devemos agora decidir qual classificador iremos utilizar, **SVM, kNN, árvores/florestas aleatórias**. Para ajudar na nossa escolha utilizamos a biblioteca caret. Foram utilizados os mesmo atributos do que foi entregue no problema 5. (período letivo da universidade, código da disciplina cursada, departamento e a situação)
+
+```{r}
+library(caret)
+library(e1071)
+library("C50")
+
+treino_labels = treino[, 14] ## Classes das instâncias de treino
+test_labels = test[, 14] ## Classes das instâncias de teste
+treino = treino[-14] ## Exclui variável alvo
+
+#Transformação para numeric
+treino$PERIODO <- as.numeric(treino$PERIODO)
+treino$DISCIPLINA <- as.numeric(treino$DISCIPLINA)
+treino$DEPARTAMENTO <- as.numeric(treino$DEPARTAMENTO)
+treino$SITUACAO <- as.numeric(treino$SITUACAO)
+treino$MEDIA <- as.numeric(treino$MEDIA)
+
+best_tree_model = train(treino[c(5,7,9,11)], treino_labels, method="C5.0", preProcess=c("range"))
+accuracy_tree = max(best_tree_model$resample$Accuracy)
+
+best_tree_model
+```
+
+Podemos observar que utilizando árvore/floresta o caret encontrou a melhor solução como sendo utilizando  trials = 20, model = rules and winnow = TRUE. 
+
+Vamos agora utilizar o caret para encontrar a melhor solução utilizando o kNN como classificador. 
+
+```{r}
+best_knn_model <- train(treino[c(5,7,9,11)], treino_labels,
+                 method = "knn",
+                 preProcess = c("range"))
+
+accuracy_knn = max(best_knn_model$resample$Accuracy)
+best_knn_model
+```
+
+Podemos observar que utilizando kNN o caret encontrou a melhor solução como sendo utilizando  k = 9.
+
+Vamos agora utilizar o caret para encontrar a melhor solução para o SVM como classificardor. 
+
+```{r}
+library("kernlab")
+
+best_svm_model <- train(treino[c(5,7,9,11)], treino_labels,
+                method = "svmRadial",
+                preProcess = c("range"))
+
+accuracy_svn = max(best_svm_model$resample$Accuracy)
+best_svm_model
+```
+
+Podemos observar que utilizando SVM o caret encontrou a melhor solução como sendo utilizando  .
+
+Agora para ajudar na escolha do melhor classificador para esse problema vamos observar a acurácia dos três classificadores:
+
+```{r}
+accuracy_tree
+accuracy_knn
+accuracy_svn
+```
+
+Podemos observar que o classificador tal obteve valor mais alto. Por esse motivo escolhemos esse classificador com oa parâmetros tal e tal para realizar a submissão no kaggle. 

@@ -1,0 +1,250 @@
+---
+title: "CheckPoint3"
+author: "Rodolfo Viana"
+date: "11-07-2015"
+output: html_document
+---
+
+Durante os últimos anos a Universidade Federal de Campina Grande observa um número alto de evasão por parte dos alunos. Tentando entender os motivos dessa evasão analisamos uma amostra contendo dados importante. A nossa amostra tem os seguintes atributos:
+
+1. MATRICULA: identificador do aluno
+2. PERIODO: identificador do período letivo da universidade (ano.semestre)
+3. COD_CURSO: identificador do curso
+4. CURSO: nome do curso. Cada curso tem seu COD_CURSO
+5. CODIGO: identificador da disciplina que o aluno cursou no periodo
+6. DISCIPLINA: nome da disciplina referente que o aluno cursou no periodo.  
+7. CODIGO: Cada disciplina tem seu
+8. CREDITOS: numero de créditos referente a disciplina
+9. DEPARTAMENTO: departamento que ofertou a disciplina
+10. MEDIA: média do aluno na disciplina (0 a 10). Alunos reprovados por falta numa disciplina recebem 0 e alunos que trancaram a disciplina recebem NA.
+11. STATUS: Aprovado, Reprovado Por Falta, Trancado ou Reprovado. Se refere ao estado final do aluno na disciplina
+12. PERIODO_INGRESSO: período letivo da universidade em que o aluno ingressou no curso.
+13. PERIODO_RELATIVO: número de períodos que o aluno está matriculado na universidade. "1" refere-se ao aluno em seu primeiro periodo, "5" refere-se ao aluno no quinto período.
+14. COD_EVASAO: identificador de evasão do aluno. "0" significa que o aluno continuou ativo na universidade no período seguinte e "1" significa que o aluno desistiu do curso nesse período e não voltou a se matricular no seguinte. 
+
+O nosso objetivo é construir um modelo de classificação que nos diga se o aluno irá evadir ou não. Vamos classificar apenas para os alunos que tem período relativo 5. 
+
+```{r, warning=FALSE, message=FALSE}
+library(plyr)
+library(dplyr)
+
+arquivo <- read.csv("~/Projetos/DataAnalysis/Assignment5/training_evasao_sem_acento.csv")
+
+#Transformação para factor
+arquivo$COD_EVASAO <- as.factor(arquivo$COD_EVASAO)
+arquivo$COD_CURSO <- as.factor(arquivo$COD_CURSO)
+arquivo$CODIGO <- as.factor(arquivo$CODIGO)
+arquivo$CREDITOS <- as.factor(arquivo$CREDITOS)
+arquivo$MEDIA[is.na(arquivo$MEDIA)] <- -1
+```
+
+Antes de criar o modelo é importante dividir o arquivo original em treino e teste (75% treinamento, 25% teste), para assim verificar o F-measure e saber se um modelo criado é melhor do que o modelo anterior. 
+
+```{r}
+#Primeiro periodo
+set.seed(12345)
+arquivo <- filter(arquivo, PERIODO_RELATIVO == 5)
+arquivo <- arquivo[order(runif(nrow(arquivo))), ]
+
+#Divisao de treino e teste
+treino <- arquivo[1:round(0.75*nrow(arquivo)), ]
+test <- arquivo[round(0.75*nrow(arquivo)):nrow(arquivo), ]
+```
+
+Podemos notar que a proporção entre evasão e não evasão se manteve parecida após a divisão de treino e teste. 
+
+```{r}
+prop.table(table(arquivo$COD_EVASAO))
+prop.table(table(treino$COD_EVASAO))
+prop.table(table(test$COD_EVASAO))
+```
+
+Devemos agora decidir qual classificador iremos utilizar, **SVM, kNN, árvores/florestas aleatórias**. Para ajudar na nossa escolha utilizamos a biblioteca caret. Foram utilizados os mesmo atributos do que foi entregue no problema 5. (período letivo da universidade, código da disciplina cursada, departamento e a situação)
+
+```{r}
+library(caret)
+library(e1071)
+library("C50")
+
+treino_labels = treino[, 14] ## Classes das instâncias de treino
+test_labels = test[, 14] ## Classes das instâncias de teste
+treino = treino[-14] ## Exclui variável alvo
+
+#Transformação para numeric
+treino$PERIODO <- as.numeric(treino$PERIODO)
+treino$DISCIPLINA <- as.numeric(treino$DISCIPLINA)
+treino$DEPARTAMENTO <- as.numeric(treino$DEPARTAMENTO)
+treino$SITUACAO <- as.numeric(treino$SITUACAO)
+treino$MEDIA <- as.numeric(treino$MEDIA)
+
+best_tree_model = train(treino[c(5,7,9,11)], treino_labels, method="C5.0", preProcess=c("range"))
+accuracy_tree = max(best_tree_model$resample$Accuracy)
+
+best_tree_model
+```
+
+Podemos observar que utilizando árvore/floresta o caret encontrou a melhor solução como sendo utilizando  trials = 20, model = rules and winnow = TRUE. 
+
+Vamos agora utilizar o caret para encontrar a melhor solução utilizando o kNN como classificador. 
+
+```{r}
+best_knn_model <- train(treino[c(5,7,9,11)], treino_labels,
+                 method = "knn",
+                 preProcess = c("range"))
+
+accuracy_knn = max(best_knn_model$resample$Accuracy)
+best_knn_model
+```
+
+Podemos observar que utilizando kNN o caret encontrou a melhor solução como sendo utilizando  k = 9.
+
+```{r}
+#Vamos agora utilizar o caret para encontrar a melhor solução para o SVM como classificardor. 
+#library("kernlab")
+#best_svm_model <- train(treino[c(5,7,9,11)], treino_labels,
+#                method = "svmRadial",
+#                preProcess = c("range"))
+
+#accuracy_svn = max(best_svm_model$resample$Accuracy)
+#best_svm_model
+```
+
+
+Agora para ajudar na escolha do melhor classificador para esse problema vamos observar a acurácia dos dois classificadores:
+
+```{r}
+accuracy_tree
+accuracy_knn
+```
+
+Podemos observar que a floresta obteve valor mais alto. Por esse motivo escolhemos esse classificador com os parâmetros trials = 20, model = rules and winnow = TRUE para realizar a submissão no kaggle. 
+
+Agora que já temos o nosso modelo ideial vamos criar novos atributos para melhorar o nosso classificador:
+
+1. Média geral do período do aluno
+2. Quantidade de cadeiras aprovadas
+3. Quantidade de reprovações
+4. Quantidade de reprovações por falta
+
+```{r}
+#Criando novos atributos para o treino
+treino_group <- group_by(treino, MATRICULA)
+media <- summarise(treino_group, mean(MEDIA))
+names(media) <- c("MATRICULA", "MEDIATOTAL")
+
+reprovacao <- summarise(group_by(filter(treino, SITUACAO=="Reprovado"), MATRICULA), n())
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+
+aprovado <- summarise(group_by(filter(treino, SITUACAO=="Aprovado"), MATRICULA), n())
+names(aprovado) <- c("MATRICULA", "APROVADO")
+
+target <- c("Reprovado por Falta", NA)
+reprovado_falta <- summarise(group_by(filter(treino, SITUACAO %in% target), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
+
+target <- c("Reprovado por Falta", "Reprovado", "Trancado")
+n_aprovado <- summarise(group_by(filter(treino, SITUACAO %in% target), MATRICULA), n())
+names(n_aprovado) <- c("MATRICULA", "NAPROVADO")
+
+
+#Merge dos novos atributos
+treino <- merge(treino, media, by = "MATRICULA", all = TRUE)
+treino <- merge(treino, reprovacao, by = "MATRICULA", all = TRUE)
+treino <- merge(treino, aprovado, by = "MATRICULA", all = TRUE)
+treino <- merge(treino, reprovado_falta, by = "MATRICULA", all = TRUE)
+treino <- merge(treino, n_aprovado, by = "MATRICULA", all = TRUE)
+
+#Transformando NA em 0
+treino[is.na(treino)] <- 0
+
+#Criando novos atributos para o teste
+test_group <- group_by(test, MATRICULA)
+media <- summarise(test_group, mean(MEDIA))
+names(media) <- c("MATRICULA", "MEDIATOTAL")
+
+reprovacao <- summarise(group_by(filter(test, SITUACAO=="Reprovado"), MATRICULA), n())
+names(reprovacao) <- c("MATRICULA", "REPROVACAO")
+
+aprovado <- summarise(group_by(filter(test, SITUACAO=="Aprovado"), MATRICULA), n())
+names(aprovado) <- c("MATRICULA", "APROVADO")
+
+target <- c("Reprovado por Falta", NA)
+reprovado_falta <- summarise(group_by(filter(test, SITUACAO %in% target), MATRICULA), n())
+names(reprovado_falta) <- c("MATRICULA", "REPROVADOFALTA")
+
+target <- c("Reprovado por Falta", "Reprovado", "Trancado")
+n_aprovado <- summarise(group_by(filter(test, SITUACAO %in% target), MATRICULA), n())
+names(n_aprovado) <- c("MATRICULA", "NAPROVADO")
+
+
+test <- merge(test, media, by = "MATRICULA", all = TRUE)
+test <- merge(test, reprovacao, by = "MATRICULA", all = TRUE)
+test <- merge(test, aprovado, by = "MATRICULA", all = TRUE)
+test <- merge(test, reprovado_falta, by = "MATRICULA", all = TRUE)
+test <- merge(test, n_aprovado, by = "MATRICULA", all = TRUE)
+
+#Transformação para numeric
+test$PERIODO <- as.numeric(test$PERIODO)
+test$DISCIPLINA <- as.numeric(test$DISCIPLINA)
+test$DEPARTAMENTO <- as.numeric(test$DEPARTAMENTO)
+test$SITUACAO <- as.numeric(test$SITUACAO)
+test$MEDIA <- as.numeric(test$MEDIA)
+
+test[is.na(test)] <- 0
+```
+
+Agora com as 4 novas colunas criadas temos mais dados para analisar e ajudar no classificador. 
+
+```{r}
+model <- C5.0(treino[,c(3,5,7,9,10,11,14,15,16,17,18)], treino_labels, trials = 20, model = rules, winnow = TRUE)
+
+model
+summary(model)
+pred <- predict(model, test[,c(3,5,7,9,10,11,15,16,17,18,19)])
+
+true_eva <- test$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+Podemos notar que não criamos um bom classificador, pois ele classificou todas as saidas como sendo 0. Temos esse erro pois estamos com dados desbalanceados. No nosso arquivo de treino 94% dos dados são de não evasão e 6% dos dados são evasão. 
+
+Por essa razão resolvemos por, nos dados de treino, balancear os dados. 
+
+```{r}
+
+treino <- cbind(treino, treino_labels)
+
+treino_positivo = filter(treino, treino_labels == 1)
+treino_negativo = filter(treino, treino_labels == 0)
+
+treino_negativo <- treino_negativo[order(runif(nrow(treino_positivo))), ]
+
+novo_treino <- rbind(treino_positivo,treino_negativo)
+novo_treino <- novo_treino[order(runif(nrow(novo_treino))), ]
+prop.table(table(novo_treino$treino_labels))
+```
+
+Vamos criar um novo modelo agora com os dados balanceados:
+
+```{r}
+model <- C5.0(novo_treino[,c(3,5,7,9,10,11,14,15,16,17,18)], novo_treino$treino_labels, trials = 20, model = rules, winnow = TRUE)
+
+model
+summary(model)
+pred <- predict(model, test[,c(3,5,7,9,10,11,15,16,17,18,19)])
+
+true_eva <- test$COD_EVASAO == 1
+table(pred, true_eva)
+```
+
+Temos agora um f-measure com o valor de:
+
+```{r}
+precision <- 41/41+43
+recall <- 41/(41+546)
+
+fmeasure2 <- 2*precision*recall/(precision+recall)
+fmeasure2
+```
+
+Se mostrando melhor do que o modelo anterior, porém com valor de f-measure ainda muito baixo. 

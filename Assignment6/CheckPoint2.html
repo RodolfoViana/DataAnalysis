@@ -211,45 +211,20 @@ best_knn_model</code></pre>
 ## Accuracy was used to select the optimal model using  the largest value.
 ## The final value used for the model was k = 9.</code></pre>
 <p>Podemos observar que utilizando kNN o caret encontrou a melhor solução como sendo utilizando k = 9.</p>
-<p>Vamos agora utilizar o caret para encontrar a melhor solução para o SVM como classificardor.</p>
-<pre class="r"><code>library(&quot;kernlab&quot;)
+<pre class="r"><code>#Vamos agora utilizar o caret para encontrar a melhor solução para o SVM como classificardor. 
+#library(&quot;kernlab&quot;)
+#best_svm_model &lt;- train(treino[c(5,7,9,11)], treino_labels,
+#                method = &quot;svmRadial&quot;,
+#                preProcess = c(&quot;range&quot;))
 
-best_svm_model &lt;- train(treino[c(5,7,9,11)], treino_labels,
-                method = &quot;svmRadial&quot;,
-                preProcess = c(&quot;range&quot;))
-
-accuracy_svn = max(best_svm_model$resample$Accuracy)
-best_svm_model</code></pre>
-<pre><code>## Support Vector Machines with Radial Basis Function Kernel 
-## 
-## 13544 samples
-##     4 predictors
-##     2 classes: '0', '1' 
-## 
-## Pre-processing: re-scaling to [0, 1] 
-## Resampling: Bootstrapped (25 reps) 
-## 
-## Summary of sample sizes: 13544, 13544, 13544, 13544, 13544, 13544, ... 
-## 
-## Resampling results across tuning parameters:
-## 
-##   C     Accuracy   Kappa      Accuracy SD  Kappa SD  
-##   0.25  0.9231807  0.5810282  0.003140179  0.01783267
-##   0.50  0.9231484  0.5813449  0.002927445  0.01728710
-##   1.00  0.9232198  0.5831416  0.002775565  0.01631470
-## 
-## Tuning parameter 'sigma' was held constant at a value of 0.3441423
-## Accuracy was used to select the optimal model using  the largest value.
-## The final values used for the model were sigma = 0.3441423 and C = 1.</code></pre>
-<p>Podemos observar que utilizando SVM o caret encontrou a melhor solução como sendo utilizando .</p>
-<p>Agora para ajudar na escolha do melhor classificador para esse problema vamos observar a acurácia dos três classificadores:</p>
+#accuracy_svn = max(best_svm_model$resample$Accuracy)
+#best_svm_model</code></pre>
+<p>Agora para ajudar na escolha do melhor classificador para esse problema vamos observar a acurácia dos dois classificadores:</p>
 <pre class="r"><code>accuracy_tree</code></pre>
 <pre><code>## [1] 0.9309859</code></pre>
 <pre class="r"><code>accuracy_knn</code></pre>
 <pre><code>## [1] 0.9284433</code></pre>
-<pre class="r"><code>accuracy_svn</code></pre>
-<pre><code>## [1] 0.9287425</code></pre>
-<p>Podemos observar que o classificador tal obteve valor mais alto. Por esse motivo escolhemos esse classificador com oa parâmetros tal e tal para realizar a submissão no kaggle.</p>
+<p>Podemos observar que a floresta obteve valor mais alto. Por esse motivo escolhemos esse classificador com os parâmetros trials = 20, model = rules and winnow = TRUE para realizar a submissão no kaggle.</p>
 
 
 </div>

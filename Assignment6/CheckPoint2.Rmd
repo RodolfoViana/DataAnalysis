@@ -104,27 +104,23 @@ best_knn_model
 
 Podemos observar que utilizando kNN o caret encontrou a melhor solução como sendo utilizando  k = 9.
 
-Vamos agora utilizar o caret para encontrar a melhor solução para o SVM como classificardor. 
-
 ```{r}
-library("kernlab")
+#Vamos agora utilizar o caret para encontrar a melhor solução para o SVM como classificardor. 
+#library("kernlab")
+#best_svm_model <- train(treino[c(5,7,9,11)], treino_labels,
+#                method = "svmRadial",
+#                preProcess = c("range"))
 
-best_svm_model <- train(treino[c(5,7,9,11)], treino_labels,
-                method = "svmRadial",
-                preProcess = c("range"))
-
-accuracy_svn = max(best_svm_model$resample$Accuracy)
-best_svm_model
+#accuracy_svn = max(best_svm_model$resample$Accuracy)
+#best_svm_model
 ```
 
-Podemos observar que utilizando SVM o caret encontrou a melhor solução como sendo utilizando  .
 
-Agora para ajudar na escolha do melhor classificador para esse problema vamos observar a acurácia dos três classificadores:
+Agora para ajudar na escolha do melhor classificador para esse problema vamos observar a acurácia dos dois classificadores:
 
 ```{r}
 accuracy_tree
 accuracy_knn
-accuracy_svn
 ```
 
-Podemos observar que o classificador tal obteve valor mais alto. Por esse motivo escolhemos esse classificador com oa parâmetros tal e tal para realizar a submissão no kaggle. 
+Podemos observar que a floresta obteve valor mais alto. Por esse motivo escolhemos esse classificador com os parâmetros trials = 20, model = rules and winnow = TRUE para realizar a submissão no kaggle. 

@@ -18,7 +18,7 @@ Analisando os dados do arquivo movies.dat temos:
 library(plyr)
 library(dplyr)
 
-movies <- read.delim("~/Projetos/DataAnalysis/Assignment7/hetrec2011-movielens-2k-v2/movies.dat")
+movies <- read.delim("~/Projetos/DataAnalysis/Assignment7/hetrec2011-movielens-2k-v2/movies_m.dat")
 
 # Data set
 head(movies)
@@ -48,11 +48,6 @@ movies_data <- movies %>%
   left_join(movie_countries, c("id" = "movieID")) %>%
   left_join(movie_directors, c("id" = "movieID"))
 
-movies_data$rtAudienceScore <- as.numeric(as.character(movies$rtAudienceScore))
-
-is.na(movies_data$rtAudienceScore)
-sum(is.na(movies_data$rtAudienceScore))
-
 head(movies_data)
 ```
 
@@ -61,7 +56,6 @@ Antes de criar o modelo é importante verificar se existe algum filme que possui
 ```{r}
 movies_data$rtAudienceScore <- as.numeric(as.character(movies$rtAudienceScore))
 
-is.na(movies_data$rtAudienceScore)
 sum(is.na(movies_data$rtAudienceScore))
 
 movies_data <- movies_data[complete.cases(movies_data),]
@@ -74,6 +68,20 @@ amos agora criar o nosso primeiro modelo, com base na tabela criada. Para isso, 
 ```{r}
 require(caret)
 
+#Dados originais 
+movies_data2 <- movies_data
+
+movies_data$title <- as.numeric(movies_data$title)
+movies_data$country <- as.numeric(movies_data$country)
+movies_data$directorID <- as.numeric(movies_data$directorID)
+movies_data$directorName <- as.numeric(movies_data$directorName)
+
+#Modificação necessaria para conseguir rodar no meu pc
+set.seed(12345)
+movies_data <- movies_data[order(runif(nrow(movies_data))), ]
+movies_data <- movies_data[1:round(0.10*nrow(movies_data)), ]
+rownames(movies_data) <- NULL
+
 split<-createDataPartition(y = movies_data$rtAudienceScore, 
                            p = 0.7, 
                            list = FALSE)
@@ -85,7 +93,7 @@ movies_data.teste <- movies_data[-split,]
 ctrl <- trainControl(method = "cv", number = 10)
 
 lmFit <- train(rtAudienceScore ~. , 
-               data = movies_data.treino, 
+               data = movies_data, 
                method = "lm", 
                trControl = ctrl,
                metric = "RMSE")

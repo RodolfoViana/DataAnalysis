@@ -5,7 +5,13 @@ date: "10-02-2016"
 output: html_document
 ---
 
+Qual o produto com maior concentração de sódio, cafeina e proteina?
 
+Os produtos em geral possuim maior concentração de Sódio, Cafeina ou Proteina ?
+
+Essa concentração considerando apenas o brasil é diferente ?
+
+Qual subistancia está mais co-relacionada em relação a quantidade nos produtos ? Sódio, Cafeina ou Proteina 
 
 ```{r}
 library(dplyr)
@@ -13,6 +19,6 @@ library(dplyr)
 
 
 ```{r}
-#FoodFacts <- read.csv("~/Projetos/world-food-facts/FoodFacts.csv")
+file <- read.csv("~/Projetos/DataAnalysis/FoodFacts/food_facts.csv", sep=";")
 
 ```

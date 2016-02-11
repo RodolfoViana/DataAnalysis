@@ -1,0 +1,18 @@
+---
+title: "Food Facts"
+author: "Rodolfo Viana"
+date: "10-02-2016"
+output: html_document
+---
+
+
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+#FoodFacts <- read.csv("~/Projetos/world-food-facts/FoodFacts.csv")
+
+```

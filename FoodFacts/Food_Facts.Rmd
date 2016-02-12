@@ -5,20 +5,100 @@ date: "10-02-2016"
 output: html_document
 ---
 
+Qual a distruibuição de sódio, cafeina e proteina nos produtos?
+
 Qual o produto com maior concentração de sódio, cafeina e proteina?
+
+Qual possui maior variância ?
+
+
+
 
 Os produtos em geral possuim maior concentração de Sódio, Cafeina ou Proteina ?
 
 Essa concentração considerando apenas o brasil é diferente ?
 
+Diferença de cafeina na coca cola vendida ao redor do mundo ?
+
 Qual subistancia está mais co-relacionada em relação a quantidade nos produtos ? Sódio, Cafeina ou Proteina 
+
+
 
 ```{r}
 library(dplyr)
+library(ggplot2)
 ```
 
 
 ```{r}
-file <- read.csv("~/Projetos/DataAnalysis/FoodFacts/food_facts.csv", sep=";")
+file <- read.csv("food_facts.csv", sep=";")
 
+colnames(file)
+
+str(file)
+
+file2 <- head(file, 3000)
+
+file2$sodium_100g <- as.character(file2$sodium_100g)
+file2$sodium_100g[is.na(file2$sodium_100g)] <- 0
+file2$sodium_100g <- gsub(",", ".", file2$sodium_100g)
+file2$sodium_100g <- as.numeric(file2$sodium_100g)
+
+file2$caffeine_100g <- as.character(file2$caffeine_100g)
+file2$caffeine_100g[is.na(file2$caffeine_100g)] <- 0
+file2$caffeine_100g <- gsub(",", ".", file2$caffeine_100g)
+file2$caffeine_100g <- as.numeric(file2$caffeine_100g)
+
+file2$proteins_100g <- as.character(file2$proteins_100g)
+file2$proteins_100g[is.na(file2$proteins_100g)] <- 0
+file2$proteins_100g <- gsub(",", ".", file2$proteins_100g)
+file2$proteins_100g <- as.numeric(file2$proteins_100g)
+
+max_sodium <- filter(file2, sodium_100g == max(sodium_100g))
+max_caffeine <- filter(file2, caffeine_100g == max(caffeine_100g))
+max_proteins <- filter(file2, proteins_100g == max(proteins_100g))
+
+ggplot(file2, aes(sodium_100g)) + geom_boxplot()
+
+boxplot(file2$sodium_100g)
+ggplot(file2, aes(1, sodium_100g)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+         axis.text.x=element_blank(),
+        axis.title.x=element_blank(),
+        legend.position="none")
+
+ggplot(file2, aes(1, sodium_100g)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  scale_y_continuous(limits = c(0, 0.1)) + 
+  theme(axis.ticks = element_blank(),
+         axis.text.x=element_blank(),
+        axis.title.x=element_blank(),
+        legend.position="none")
+
+
+ggplot(file2, aes(1, caffeine_100g)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+         axis.text.x = element_blank(),
+        axis.title.x = element_blank())
+
+ggplot(file2, aes(1, proteins_100g)) + 
+  geom_boxplot() + 
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+         axis.text.x=element_blank(),
+        axis.title.x=element_blank(),
+        legend.position="none")
+
+df <- data.frame(tipo = c("sodio", "cafeina", "proteina"), 
+                 variancia = c(var(file2$sodium_100g), var(file2$caffeine_100g), var(file2$proteins_100g)))
+
+ggplot(df, aes(x = tipo, y = variancia)) + 
+  geom_bar(stat = "identity") +
+  theme_classic() + 
+  theme(axis.title.x = element_blank())
 ```

@@ -318,10 +318,30 @@ file_sodium[2,]$product_name
 O alimento encontrado foi um sal vendido nos Estados Unidos
 
 
-Existe diferença na concentração da cafeina na coca cola (ou algum outro produto) vendida ao redor do mundo?
+Existe diferença na concentração da cafeina na coca cola vendida ao redor do mundo?
+
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
+c <- unique(file$product_name)
+v <- filter(file, product_name == "coca cola")
+cc <- filter(file, grepl('coca cola|coke|coca-cola', product_name, ignore.case = TRUE))
+
+# coke
+# "coca cola"
+```
+
+Olhando para os dados, qual é o país que mais produz alimentos? E qual o país que mais recebe alimentos?
+
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
+c <- unique(file$countries_en)
+v <- filter(file, product_name == "coca cola")
+cc <- filter(file, grepl('coca cola|coke|coca-cola', product_name, ignore.case = TRUE))
+
+# coke
+# "coca cola"
+```
 
 Olhando para os dados, qual é o país que tem a melhor alimentação? 
 
 Os produtos em geral possui maior concentração de Sódio, Cafeina ou Proteína?
 
-Olhando para os dados, qual é o país que mais produz alimentos? E qual o país que mais recebe alimentos?
+

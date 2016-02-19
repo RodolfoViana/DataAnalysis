@@ -317,25 +317,38 @@ file_sodium[2,]$product_name
 
 O alimento encontrado foi um sal vendido nos Estados Unidos
 
-Existe diferença na concentração da cafeina na coca cola vendida ao redor do mundo?
+É falado constantemente que os americanos comem de uma maneira muito errada e que seus alimentos possuem altos níveis de sódio, açúcar e cafeina. Por essa razão, observamos a concentração de sódio da coca cola vendida nos Estados Unidos, Canada, Alemanha e Italia para saber se existe uma diferença na concentração de sódio na coca cola ao redor do mundo. 
+
 
 ```{r, message=FALSE, warning=FALSE, fig.align='center'}
-cc <- filter(file, grepl('coca cola|coke|coca-cola', product_name, ignore.case = TRUE)) %>%
-  filter(grepl('France|United States|Canada|Germany|Italy|BrazilCambodia', countries_en, ignore.case = TRUE))  %>%
+coca <- filter(file, grepl('coca cola|coke|coca-cola', product_name, ignore.case = TRUE)) %>%
+  filter(grepl('United States|Canada|Germany|Italy', countries_en, ignore.case = FALSE))  %>%
+  filter(sodium_100g > 0) 
+
+coca$destaque <- coca$countries_en %in% c("United States", "Canada", "Germany", "Italy")
+coca <- filter(coca, destaque == TRUE)
+
+ggplot(coca, aes(x = reorder(countries_en, -sodium_100g), y = sodium_100g)) + 
+  geom_bar(stat = "identity") +
+  theme_classic() + 
+  theme(axis.title.x = element_blank())
+```
+
+É possível perceber que, para os dados cadastrados, nos Estados Unidos temos uma concentração maior de sódio na coca cola em comparação com os outros países
+
+Um concorrente direto do refrigerante da coca cola é a pepsi. Pensando nisso, tivemos a curiosidade de saber se em média a pepsi tinha mais concentração de sódio do que a coca cola
+
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
+pepsi <- filter(file, grepl('pepsi', product_name, ignore.case = TRUE)) %>%
   filter(sodium_100g > 0)
 
+toPlot <- data.frame(tipo = c("Coca-cola", "Pepsi"), media = c(mean(coca$sodium_100g), mean(pepsi$sodium_100g)))
 
-unique(cc$countries_en)
-
-# coke
-# "coca cola"
+ggplot(toPlot, aes(x = tipo, y = media)) + 
+  geom_bar(stat = "identity") +
+  theme_classic() + 
+  theme(axis.title.x = element_blank())
 ```
 
-Qual é mais saúdavel beber coca cola ou pepsi ?
-
-```{r, message=FALSE, warning=FALSE, fig.align='center'}
-pepsi <- filter(file, grepl('pepsi', product_name, ignore.case = TRUE))
-```
-
-
+Podemos observar que, para os dados cadastrados, a Pepsi possui em média maior concentração de sódio do que a coca cola
 

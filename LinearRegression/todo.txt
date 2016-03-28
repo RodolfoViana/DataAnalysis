@@ -1,0 +1,14 @@
+A atividade para este checkpoint será prever o nível do PSA em pacientes através de uma regressão linear, utilizando variáveis de sua escolha. 
+A princípio deve ser feita uma análise descritiva dos dados (utilizando scatter plots)
+
+
+ e uma análise de correlação das variáveis para identificar possíveis redundâncias. A partir disso espera-se que você seja capaz de responder as seguintes perguntas:
+
+* Há evidência de relação entre os preditores e a variável alvo?
+* Havendo relação, quão forte é essa relação?
+* Que variável parece contribuir mais?
+* A relação sugere um modelo de regressão linear?
+
+Para avaliação do modelo, utilize gráficos de diagnóstico (como um gráfico de resíduos) e o RMSE (raiz quadrada do MSE) como métrica de avaliação. 
+
+Use o treino para treinar seu modelo (variável train=TRUE) e use o resto (teste) para calcular o RMSE.

@@ -1,0 +1,140 @@
+---
+title: "Relatorio_1"
+author: "Rodolfo Viana"
+date: "27-03-2016"
+output: html_document
+---
+
+# Câncer de Prostata
+
+Antígeno Prostático Específico (PSA) é uma substância produzida pelas células da glândula prostática. O PSA é encontrado principalmente no sêmen, mas uma pequena quantidade é também encontrada no sangue. A maioria dos homens saudáveis têm níveis menores de 4ng/ml de sangue. Nosso objetivo final será predizer a variável psa a partir dos preditores disponíveis. 
+
+Utilizamos nesse problema os dados referentes a exames em pacientes homens, afim de identificar sintomas de câncer de prostata. O dataset é composto por dez variáveis:
+
+Como campos do dataset, temos:
+
+* vol: volume do câncer
+* weight:  peso do paciente
+* age: idade do paciente
+* bph: hiperplasia prostática benigna
+* svi: invasão das vesículas seminais
+* cp: penetração capsular
+* gleason: escore Gleason
+* pgg45: percentagem escore Gleason 4 ou 5
+* psa: antígeno específico da próstata (esta é a variável resposta).
+
+```{r, message=FALSE, warning=FALSE}
+library(caret)
+library(dplyr)
+library(GGally)
+library(ggplot2)
+
+```
+
+Carregando os dados e dividindo em treino e teste
+
+```{r, message=FALSE, warning=FALSE}
+prostate <- read.delim("~/Projetos/DataAnalysis/LinearRegression/dados/prostate.data")
+
+prostate.train <- filter(prostate, train == TRUE)
+prostate.teste <- filter(prostate, train == FALSE)
+```
+
+A princípio iremos fazer uma análise descritiva dos dados e uma análise de correlação das variáveis para, identificar possíveis redundâncias. 
+
+```{r, message=FALSE, warning=FALSE}
+ggpairs(select(prostate.train, lcavol, lweight, age, lbph, svi, lcp, gleason, pgg45, lpsa))
+```
+
+O gráfico acima possui diversas informações, para essa parte do problemas focamos apenas na busca de alguma variável que tenha alguma impacto na variável lpsa. Estamos buscando a variável que mais tem correlação com a variável lpsa. Por essa razão escolhemos a variável lcavol por ser a varável que possui maior correlação 0.733.
+
+Analisando o lcavol e o lpsa mais de perto temos
+
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
+ggplot(prostate.train, aes(lpsa, lcavol)) +
+  geom_point() + 
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        legend.position="none")
+```
+
+Podemos notar que essas duas variáveis sugere uma relação linear
+
+Iremos agora construir o nosso primeiro modelo. Esse modelo será bem basico com apenas uma variável e vai servir como base para os outros modelos.
+
+```{r, message=FALSE, warning=FALSE}
+mod_1 <- lm(lpsa ~ lcavol, data = prostate.train)
+summary(mod_1)
+```
+
+É possível notar que temos alta a significância de que é pouco provável o fato de que não exista nenhuma relação entre as variáveis lpsa e lcavol. Há evidência de que a relação entre essas duas variáveis seja forte, dado que o R-squared igual à 0,53. O que siginifica que a variável escolhidas explica em 53% a variável resposta (lpsa). 
+
+Após criado o modelo, iremos prever utilizando os dados de teste. Para entender melhor a diferença do que foi previsto e do valor esperado podemos observar o gráfico abaixo:
+
+```{r, message=FALSE, warning=FALSE}
+predicoes = predict.lm(mod_1, prostate.teste)
+
+toPlot <- data.frame(esperado = prostate.teste$lpsa, 
+                     previsto = predicoes)
+
+residuos <- toPlot$esperado - toPlot$previsto
+
+ggplot(toPlot, aes(esperado, previsto)) +
+  geom_point() + 
+  theme_classic() +  
+  theme(axis.ticks = element_blank(),
+        legend.position="none")
+```
+
+Em um modelo ideal todos os pontos estariam formando uma linha na diagonal do gráfico. Podemos notar que, considerando que estamos usando apenas uma variável, temos um modelo considerado razoável. 
+
+```{r, message=FALSE, warning=FALSE}
+RMSE(toPlot$previsto, toPlot$esperado)
+```
+
+RMSE foi de 0.69
+
+É importante também verificar se os resíduos seguem uma distribuição normal com média 0:
+
+```{r, message=FALSE, warning=FALSE}
+qqnorm(residuos)
+qqline(residuos, col = 2,lwd=2,lty=2)
+```
+
+Na maior parte os resíduos seguem uma distribuição normal. 
+
+Iremos agora adicionar mais duas variáveis no nosso modelo e verificar se o nosso modelo fica melhor ou pior. Escolhemos as variáveis lcp e svi utilizando o mesmo critério anterior.
+
+```{r, message=FALSE, warning=FALSE}
+mod_2 <- lm(lpsa ~ lcavol + lcp + svi, data = prostate.train)
+predicoes = predict.lm(mod_2, prostate.teste)
+
+toPlot <- data.frame(esperado = prostate.teste$lpsa, 
+                     previsto = predicoes)
+
+residuos <- toPlot$esperado - toPlot$previsto
+
+RMSE(toPlot$previsto, toPlot$esperado)
+```
+
+Com esse novo modelo temos um RMSE mais baixo do que o anterior. Isso pode ter resultado de uma variável pouco importante para o  modelo.
+
+```{r, message=FALSE, warning=FALSE}
+summary(mod_2)
+```
+
+Verificamos que a variável lcp tem pouca significancia para o modelo. Por isso, criamos um novo modelo sem essa variável. 
+
+```{r, message=FALSE, warning=FALSE}
+mod_3 <- lm(lpsa ~ lcavol + svi, data = prostate.train)
+predicoes = predict.lm(mod_3, prostate.teste)
+
+toPlot <- data.frame(esperado = prostate.teste$lpsa, 
+                     previsto = predicoes)
+
+residuos <- toPlot$esperado - toPlot$previsto
+
+RMSE(toPlot$previsto, toPlot$esperado)
+```
+
+Verifiamos que novamente o modelo criado não é melhor do que o modelo base. 

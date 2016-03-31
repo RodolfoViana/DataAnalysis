@@ -26,23 +26,22 @@ Como campos do dataset, temos:
 ```{r, message=FALSE, warning=FALSE}
 library(caret)
 library(dplyr)
-library(GGally)
 library(ggplot2)
-
 ```
 
 Carregando os dados e dividindo em treino e teste
 
 ```{r, message=FALSE, warning=FALSE}
-prostate <- read.delim("~/Projetos/DataAnalysis/LinearRegression/dados/prostate.data")
+prostate <- read.delim("/home/rodolfolv/Projetos/DataAnalysis/LinearRegression/dados/prostate.data")
 
 prostate.train <- filter(prostate, train == TRUE)
 prostate.teste <- filter(prostate, train == FALSE)
 ```
 
-A princípio iremos fazer uma análise descritiva dos dados e uma análise de correlação das variáveis para, identificar possíveis redundâncias. 
+A princípio iremos fazer uma análise descritiva dos dados e uma análise de correlação das variáveis para identificar possíveis redundâncias. 
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
+library(GGally)
 ggpairs(select(prostate.train, lcavol, lweight, age, lbph, svi, lcp, gleason, pgg45, lpsa))
 ```
 
@@ -71,7 +70,7 @@ summary(mod_1)
 
 Após criado o modelo, iremos prever utilizando os dados de teste. Para entender melhor a diferença do que foi previsto e do valor esperado podemos observar o gráfico abaixo:
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
 predicoes = predict.lm(mod_1, prostate.teste)
 
 toPlot <- data.frame(esperado = prostate.teste$lpsa, 
@@ -96,36 +95,16 @@ RMSE foi de 0.69
 
 É importante também verificar se os resíduos seguem uma distribuição normal com média 0:
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
 qqnorm(residuos)
 qqline(residuos, col = 2,lwd=2,lty=2)
 ```
 
 Na maior parte os resíduos seguem uma distribuição normal. 
 
-Iremos agora adicionar mais duas variáveis no nosso modelo e verificar se o nosso modelo fica melhor ou pior. Escolhemos as variáveis lcp e svi utilizando o mesmo critério anterior.
+Iremos agora adicionar mais uma variáveis no nosso modelo e verificar se o nosso modelo fica melhor ou pior. Escolhemos as variáveis lcp e svi utilizando o mesmo critério anterior.
 
-```{r, message=FALSE, warning=FALSE}
-mod_2 <- lm(lpsa ~ lcavol + lcp + svi, data = prostate.train)
-predicoes = predict.lm(mod_2, prostate.teste)
-
-toPlot <- data.frame(esperado = prostate.teste$lpsa, 
-                     previsto = predicoes)
-
-residuos <- toPlot$esperado - toPlot$previsto
-
-RMSE(toPlot$previsto, toPlot$esperado)
-```
-
-Com esse novo modelo temos um RMSE mais baixo do que o anterior. Isso pode ter resultado de uma variável pouco importante para o  modelo.
-
-```{r, message=FALSE, warning=FALSE}
-summary(mod_2)
-```
-
-Verificamos que a variável lcp tem pouca significancia para o modelo. Por isso, criamos um novo modelo sem essa variável. 
-
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
 mod_3 <- lm(lpsa ~ lcavol + svi, data = prostate.train)
 predicoes = predict.lm(mod_3, prostate.teste)
 
@@ -137,4 +116,26 @@ residuos <- toPlot$esperado - toPlot$previsto
 RMSE(toPlot$previsto, toPlot$esperado)
 ```
 
-Verifiamos que novamente o modelo criado não é melhor do que o modelo base. 
+Com esse novo modelo temos um RMSE mais baixo do que o anterior. O que significa que o nosso modelo errou menos do que o modelo anterior. 
+
+Adicionamos mais uma variável ao nosso modelo. Escolhemos as variáveis lcp utilizando o mesmo critério anterior.
+
+```{r, message=FALSE, warning=FALSE, fig.align='center'}
+mod_2 <- lm(lpsa ~ lcavol + lcp + svi, data = prostate.train)
+predicoes = predict.lm(mod_2, prostate.teste)
+
+toPlot <- data.frame(esperado = prostate.teste$lpsa, 
+                     previsto = predicoes)
+
+residuos <- toPlot$esperado - toPlot$previsto
+
+RMSE(toPlot$previsto, toPlot$esperado)
+```
+
+Com esse novo modelo temos um RMSE mais alto do que o anterior. O que significa que o nosso modelo errou mais que o anterior. Isso pode ter resultado de uma variável pouco importante para o  modelo.
+
+```{r, message=FALSE, warning=FALSE}
+summary(mod_2)
+```
+
+Verificamos que a variável lcp tem pouca significancia para o modelo. Por isso, dos três modelos testados o melhor modelo para esse conjunto de dados é o segundo modelo, utilizando como critério o valor do RMSE e o R-squared. 

@@ -113,7 +113,8 @@ toPlot <- data.frame(esperado = prostate.teste$lpsa,
 
 residuos <- toPlot$esperado - toPlot$previsto
 
-RMSE(toPlot$previsto, toPlot$esperado)
+linear_rmse <- RMSE(toPlot$previsto, toPlot$esperado)
+linear_rmse
 ```
 
 Com esse novo modelo temos um RMSE mais baixo do que o anterior. O que significa que o nosso modelo errou menos do que o modelo anterior. 
@@ -139,3 +140,96 @@ summary(mod_2)
 ```
 
 Verificamos que a variável lcp tem pouca significancia para o modelo. Por isso, dos três modelos testados o melhor modelo para esse conjunto de dados é o segundo modelo, utilizando como critério o valor do RMSE e o R-squared. 
+
+---------------------------------
+
+Iremos agora criar um modelo otimizado utilizando Lasso. O Lasso é uma técnica que, além de controlar o overfitting, aplica a seleção de variáveis que melhor explicam a variável resposta. Para criar esse modelo iremos utilizar a biblioteca caret. 
+
+Primeiramente vamos criar um modelo no caret com todas as variáveis possiveis.  
+
+```{r}
+treino_labels = prostate.train[, 10] ## Classes das instâncias de treino
+treino = prostate.train[-c(1,10,11)] ## Exclui variável alvo
+
+lmFit <- train(treino, treino_labels, method= "lm", metric="RMSE") 
+
+summary(lmFit)
+```
+
+Iremos excluir as variáveis com pouca significância (age, lcp, gleason, pgg45). Além disso, vamos realizar o treino utilizando a cross validation. 
+
+```{r}
+treino_labels = prostate.train[, 10] ## Classes das instâncias de treino
+treino = prostate.train[c(2,3,5,6)] ## Exclui variável alvo
+
+con <- trainControl(method="cv", number=10)
+
+lmFit <- train(treino, treino_labels, method= "lm", metric="RMSE",  trControl = con) 
+
+test <- prostate.teste[c(2,3,5,6)] 
+
+lmfit_prediction <- predict(lmFit, test)
+
+toPlot <- data.frame(esperado = prostate.teste$lpsa, 
+                     previsto = lmfit_prediction)
+
+lmfit_rmse <- RMSE(toPlot$previsto, toPlot$esperado)
+
+summary(lmFit)
+```
+
+
+Para otimizar ainda mais o nosso modelo iremos utilizar Lasso e a validação cruzada.
+Temos então o seguinte resultado de treinamento para a validação cruzada
+
+```{r}
+treino_labels = prostate.train[, 10] ## Classes das instâncias de treino
+treino = prostate.train[c(2,3,5,6)] ## Exclui variável alvo
+
+con <- trainControl(method="cv", number=10)
+
+lassoFit <- train(treino, treino_labels, method= "lasso", metric="RMSE",  trControl = con) 
+
+
+plot(lassoFit)
+```
+
+A função train tentou 10 valores para fraction e achou valor ótimo (RMSE mais baixo).
+
+```{r}
+lassoFit 
+```
+
+
+Depois de criado o modelo iremos agorar gerar a previsão
+
+```{r}
+train <- prostate.teste[c(2,3,5,6)] 
+
+lasso_prediction <- predict(lassoFit, train)
+
+toPlot <- data.frame(esperado = prostate.teste$lpsa, 
+                     previsto = lasso_prediction)
+
+residuos <- toPlot$esperado - toPlot$previsto
+
+lasso_rmse <- RMSE(toPlot$previsto, toPlot$esperado)
+lasso_rmse
+```
+
+
+Comparando o RMSE do melhor modelo utilizando regressão linear x regressão linear com cross validation x lasso
+
+```{r}
+toPlot <- data.frame(RMSE = c(linear_rmse, lmfit_rmse, lasso_rmse), 
+                     Modelo = c("Linear Regression", "Linear Regression CV", "Lasso"))
+
+
+ggplot(toPlot, aes(x=reorder(Modelo, -RMSE), y=RMSE)) + 
+  geom_bar(stat="identity") + 
+  labs(y='Quantidade de submissões', x='Questões') +
+   theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.background=element_blank()) +
+  coord_flip()
+```
+
+O melhor modelo será aquele que possuir o RMSE mais baixo. Utilizando essa metrica o melhor modelo gerado foi o ... 

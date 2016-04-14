@@ -1,0 +1,95 @@
+Tutorial hadoop Spark 
+
+Dentro do hadoop
+
+export HADOOP_CLASSPATH=$JAVA_HOME/lib/tools.jar # Como exportar de vez?
+bin/hadoop com.sun.tools.javac.Main WordCount.java
+jar cf wc.jar WordCount*.class
+
+bin/hadoop jar wc.jar WordCount /home/rodolfo/Projetos/DataAnalysis/Bus_Hadoop/hadoop-2.6.4/input /home/rodolfo/Projetos/DataAnalysis/Bus_Hadoop/hadoop-2.6.4/output
+
+
+----------------
+
+Rodar o Ipython
+
+jupyter notebook
+
+
+----------------
+
+Spark
+
+Vai na pasta do Spark e coloca
+
+export HADOOP_HOME=/home/rodolfo/Projetos/DataAnalysis/Bus_Hadoop/hadoop-2.6.4/
+export PATH=$HADOOP_HOME/bin:$PATH
+export SPARK_DIST_CLASSPATH=$(/home/rodolfo/Projetos/DataAnalysis/Bus_Hadoop/hadoop-2.6.4/bin/hadoop classpath)
+
+export HADOOP_HOME=/home/rodolfo/hadoop-2.6.4/
+export PATH=$HADOOP_HOME/bin:$PATH
+export SPARK_DIST_CLASSPATH=$(/home/rodolfo/hadoop-2.6.4/bin/hadoop classpath)
+
+./bin/pyspark --master local[2]
+
+
+textFile = sc.textFile("doc1­2015102121.txt") 
+def cartaoo(line): 
+     cartao = line.split(',')[3].split(':')[1] 
+     data = line.split(',')[4].split()[0].split(':')[1] 
+     return (cartao + '_' + data, 1) 
+ 
+ 
+def mais3(line): 
+     if (int(line[1]) > 2): 
+        w = line[0].split('_')[0] 
+        return (w) 
+     else: 
+        return '' 
+ 
+ 
+wordCounts = textFile.map(cartaoo) 
+wordCounts.saveAsTextFile('output3') 
+
+{"VEIC":"AA005","LAT":"-25,398433","LON":"-49,211905","DTHR":"20\/10\/2015 18:53:17","COD_LINHA":"812"}
+
+"-25,398448","LON""-25,398323","LON""-25,398595","LON""-25,398325","LON""-25,398426","LON""-25,398416","LON""-25,398405","LON"'
+
+
+
+lines = sc.textFile("dados_2.txt")
+lineLengths = lines.map(lambda s: s.split(':')[1].split(',')[0][1:-1] + "," + s.split(':')[2].split(',')[0][1:] + "." + s.split(':')[2].split(',')[1][0:4] + "," + s.split(':')[3].split(',')[0][1:] + "." + s.split(':')[3].split(',')[1][0:4] + "," + s.split(':')[4].split()[0].split("\/")[0][1:] + "," + s.split(':')[4].split()[0].split("\/")[1] + "," + s.split(':')[4].split()[0].split("\/")[2] + "," + s.split(':')[4].split()[1] + "," + s.split(':')[5] + "," + s.split(':')[7][1:-2])
+lineLengths.saveAsTextFile('output2') 
+
+
+lines = sc.textFile("dados_2.txt")
+
+lines = sc.textFile("dados.teste.txt")
+lineLengths = lines.map(lambda s: s.split(':')[2].split(',')[0][1:])
+l = lineLengths.reduce(lambda a, b: a + b)
+l
+
+
+{"VEIC":"AA005","LAT":"-25,398433","LON":"-49,211905","DTHR":"20\/10\/2015 18:53:17","COD_LINHA":"812"}
+{"VEIC":"AA005","LAT":"-25,398546","LON":"-49,211925","DTHR":"20\/10\/2015 18:43:16","COD_LINHA":"812"}
+{"VEIC":"AA005","LAT":"-25,398448","LON":"-49,21203","DTHR":"20\/10\/2015 18:33:15","COD_LINHA":"812"}
+{"VEIC":"AA005","LAT":"-25,398323","LON":"-49,212036","DTHR":"20\/10\/2015 18:23:14","COD_LINHA":"812"}
+{"VEIC":"AA005","LAT":"-25,398595","LON":"-49,21202","DTHR":"20\/10\/2015 18:16:46","COD_LINHA":"812"}
+{"VEIC":"AA005","LAT":"-25,398325","LON":"-49,211991","DTHR":"20\/10\/2015 18:11:12","COD_LINHA":"812"}
+{"VEIC":"AA005","LAT":"-25,398426","LON":"-49,212041","DTHR":"20\/10\/2015 18:01:11","COD_LINHA":"812"}
+{"VEIC":"AA005","LAT":"-25,398416","LON":"-49,21201","DTHR":"20\/10\/2015 17:51:10","COD_LINHA":"812"}
+{"VEIC":"AA005","LAT":"-25,398405","LON":"-49,211986","DTHR":"20\/10\/2015 17:41:09","COD_LINHA":"812"}
+
+
+## Acessando Spark with R
+
+./bin/sparkR --master local[2]
+
+
+sed 's/$/,/' dados2.txt > dados3.txt 
+sed -i '$ s/.$//' dados3.txt
+sed -i '1s/^/[\n/' dados3.txt
+sed -i '$ s/$/]/' dados3.txt
+
+
+write.df(people, path="people.parquet", source="parquet", mode="overwrite")

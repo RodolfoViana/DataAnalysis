@@ -1,0 +1,73 @@
+---
+title: "Analise-Impeachment"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(reshape)
+```
+
+Impeachment é uma palavra de origem inglesa que significa "impedimento" ou "impugnação", utilizada como um modelo de processo instaurado contra altas autoridades governamentais acusadas de infringir os seus deveres funcionais. Dizer que ocorreu impeachment ao Presidente da República, significa que este não poderá continuar exercendo funções. 
+
+Queremos prever os votos dos deputados referentes ao processo de Impeachment contra a presidência da república, atráves de dados referentes aos deputados. Iremos utilizar um dataset composto de 540 observações (deputados) e 25 variáveis, onde a variável IMPEACHMENT será nossa variável resposta. São elas:
+
+* id_dep: identificador do deputado (é o mesmo identificador para a api da câmara. Ver http://www.camara.leg.br)
+* nome: Nome do deputado sem acentos, pontuações ou espaços.
+* nome_ completo: Nome completo do deputado
+* partido: legenda do partido
+* UF: estado que o deputado foi eleito
+* tema_*: variáveis referentes as votações que constam no portal “Quem me Representa”
+* IMPEACHMENT: voto do impeachment. (variável resposta)
+
+Os dados para realizar a predição foram extraídos do portal www.qmrepresenta.com.br, onde são elencados votações polêmicas da câmara dos deputados e que repercutiram na mídia nacional. Os temas são:
+
+```{r}
+temas <- read.delim("~/Projetos/DataAnalysis/Classification-Impeachment/dados/temas.csv")
+temas$tema
+```
+
+Exploração dos dados
+
+```{r}
+# Carregando os dados
+deputados_impeachment <- read.csv("~/Projetos/DataAnalysis/Classification-Impeachment/dados/deputados_temas_e_impeachment_v1.1.csv", sep=";")
+votacao_impeachment <- read.csv("~/Projetos/DataAnalysis/Classification-Impeachment/dados/imp-votacao.csv")
+
+sum(!complete.cases(deputados_impeachment))
+```
+
+Temos um total de `r sum(!complete.cases(deputados_impeachment))` dados completos. O que signicia que `r nrow(deputados_impeachment) - sum(!complete.cases(deputados_impeachment))` não estão completos, ou seja, nem todos os deputados participaram de todas as votações nos temas polêmicos, o que é um valor bastente alto mais na frente deveremos analisar se isso será um problema para o nosso modelo. 
+
+Vamos olhar variáveis "Tema" para verificar como elas estão distribuidas.
+
+```{r}
+unique(deputados_impeachment$tema_1)
+
+library(ggplot2)
+library(reshape)
+d <- melt(train[,-c(1:5)])
+ggplot(d,aes(x = value)) + 
+  facet_wrap(~variable,scales = "free_x") + 
+  geom_histogram()
+```
+
+Cada tema pode ser votado da seguinte forma:
+* "Sim"
+* "Não"
+* "Não Votou"
+* "Abstenção"
+* "Art. 17 " (presidente da câmara - Eduardo Cunha)
+
+```{r}
+d <- melt(deputados_impeachment[,-c(1:5)])
+ggplot(d, aes(x = value)) + 
+  facet_wrap(~variable,scales = "free_x") + 
+  geom_point()
+
+d
+
+unique(deputados_impeachment$IMPEACHMENT)
+
+```

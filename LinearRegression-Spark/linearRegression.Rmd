@@ -1,0 +1,34 @@
+---
+title: "LinearRegression-Spark"
+author: "Rodolfo Viana"
+date: "13-04-2016"
+output: html_document
+---
+
+
+
+```{r}
+if (nchar(Sys.getenv("SPARK_HOME")) < 1) {
+  Sys.setenv(SPARK_HOME = "/home/rodolfo/spark-1.6.1-bin-without-hadoop")
+}
+library(SparkR, lib.loc = c(file.path(Sys.getenv("SPARK_HOME"), "R", "lib")))
+sc <- sparkR.init()
+
+./bin/sparkR --master local[2]
+
+people <- read.df(sqlContext, "./examples/src/main/resources/people.json", "json")
+head(people)
+http://cran.rstudio.com/src/contrib/jsonlite_0.9.19.tar.gz
+
+
+install.packages("jsonlite", lib = "http://cran.rstudio.com/src/contrib/jsonlite_0.9.19.tar.gz")
+library(jsonlite)
+
+path = "/home/rodolfo/Projetos/DataAnalysis/LinearRegression-Spark/dados/dados3.txt"
+# read url and convert to data.frame
+document <- fromJSON(txt="/home/rodolfo/Projetos/DataAnalysis/LinearRegression-Spark/dados/dados3.txt")
+
+
+```
+
+

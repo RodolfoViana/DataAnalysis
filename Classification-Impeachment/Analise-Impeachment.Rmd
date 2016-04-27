@@ -6,7 +6,6 @@ output: html_document
 ```{r}
 library(dplyr)
 library(ggplot2)
-library(reshape)
 ```
 
 Impeachment é uma palavra de origem inglesa que significa "impedimento" ou "impugnação", utilizada como um modelo de processo instaurado contra altas autoridades governamentais acusadas de infringir os seus deveres funcionais. Dizer que ocorreu impeachment ao Presidente da República, significa que este não poderá continuar exercendo funções. 
@@ -44,29 +43,53 @@ Vamos olhar variáveis "Tema" para verificar como elas estão distribuidas.
 
 ```{r}
 unique(deputados_impeachment$tema_1)
-
-library(ggplot2)
-library(reshape)
-d <- melt(train[,-c(1:5)])
-ggplot(d,aes(x = value)) + 
-  facet_wrap(~variable,scales = "free_x") + 
-  geom_histogram()
 ```
 
 Cada tema pode ser votado da seguinte forma:
+
 * "Sim"
 * "Não"
 * "Não Votou"
 * "Abstenção"
 * "Art. 17 " (presidente da câmara - Eduardo Cunha)
 
-```{r}
-d <- melt(deputados_impeachment[,-c(1:5)])
-ggplot(d, aes(x = value)) + 
-  facet_wrap(~variable,scales = "free_x") + 
-  geom_point()
+A nossa variável resposta, IMPEACHMENT, pode ser da seguinte forma:
 
-d
+* SIM
+* NAO
+* AUSEN
+* ABST
+
+```{r}
+d <- deputados_impeachment[1:10,-c(1:5)]
+ggplot(deputados_impeachment) + 
+  geom_bar() +
+  facet_grid(. ~ IMPEACHMENT)
+  
+
+plot(d)
+
+library(GGally)
+
+ggpairs(d, upper = "blank", lower = "blank", columns = c(1:10)) + theme_bw()
+
+upper = "blank",
+  diag = NULL
+
+theme_bw()
+
+
+c
+colnames(d)
+
+library(readr)
+
+ggplot(deputados_impeachment, aes(x = value)) + 
+  facet_wrap(~variable,scales = "free_x") + 
+  geom_histogram()
+
+
+deputado
 
 unique(deputados_impeachment$IMPEACHMENT)
 
